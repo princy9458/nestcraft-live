@@ -53,76 +53,76 @@ type ShopMegaTab = {
 
 // --- Exact Categories Data based on provided Images ---
 const wsCategories: ShopMegaTab[] = [
-  {
-    key: "sofas",
-    title: "Sofas",
-    columns: [
-      {
-        sections: [
-          {
-            heading: "Sofa",
-            links: [
-              { title: "All Sofas", href: "#" },
-              { title: "Fabric Sofas", href: "#" },
-              { title: "Wooden Sofas", href: "#" },
-              { title: "3 Seater Sofas", href: "#" },
-              { title: "2 Seater Sofas", href: "#" },
-              { title: "1 Seater Sofas", href: "#" },
-              { title: "3+1+1 Sofa Sets", href: "#" },
-              { title: "Sofa Cum Beds", href: "#" },
-              { title: "L Shaped Sofas", href: "#" },
-              { title: "Chaise Loungers", href: "#" },
-              { title: "Outdoor Sofas", href: "#" },
-              { title: "Diwans", href: "#" },
-            ],
-          },
-        ],
-      },
-      {
-        sections: [
-          {
-            heading: "Sofa Cum Bed",
-            links: [
-              { title: "All Sofa Cum Beds", href: "#" },
-              { title: "Wooden Sofa Cum Beds", href: "#" },
-              { title: "Fabric Sofa Cum Beds", href: "#" },
-            ],
-          },
-          {
-            heading: "Recliners",
-            links: [
-              { title: "All Recliners", href: "#" },
-              { title: "1 Seater Recliners", href: "#" },
-              { title: "2 Seater Recliners", href: "#" },
-              { title: "3 Seater Recliners", href: "#" },
-            ],
-          },
-        ],
-      },
-      {
-        sections: [
-          {
-            heading: "Seating",
-            links: [
-              { title: "Lounge Chairs", href: "#" },
-              { title: "Accent Chairs", href: "#" },
-              { title: "Arm Chair", href: "#" },
-              { title: "Wingback Chairs", href: "#" },
-              { title: "Bean Bags", href: "#" },
-              { title: "Loveseats", href: "#" },
-              { title: "Benches", href: "#" },
-              { title: "Ottomans", href: "#" },
-              { title: "Stools", href: "#" },
-            ],
-          },
-        ],
-      },
-    ],
-    promo: {
-      img: "/assets/Image/Sofa.jpg",
-      href: "#",
-    },
-  },
+  // {
+  //   key: "sofas",
+  //   title: "Sofas",
+  //   columns: [
+  //     {
+  //       sections: [
+  //         {
+  //           heading: "Sofa",
+  //           links: [
+  //             { title: "All Sofas", href: "#" },
+  //             { title: "Fabric Sofas", href: "#" },
+  //             { title: "Wooden Sofas", href: "#" },
+  //             { title: "3 Seater Sofas", href: "#" },
+  //             { title: "2 Seater Sofas", href: "#" },
+  //             { title: "1 Seater Sofas", href: "#" },
+  //             { title: "3+1+1 Sofa Sets", href: "#" },
+  //             { title: "Sofa Cum Beds", href: "#" },
+  //             { title: "L Shaped Sofas", href: "#" },
+  //             { title: "Chaise Loungers", href: "#" },
+  //             { title: "Outdoor Sofas", href: "#" },
+  //             { title: "Diwans", href: "#" },
+  //           ],
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       sections: [
+  //         {
+  //           heading: "Sofa Cum Bed",
+  //           links: [
+  //             { title: "All Sofa Cum Beds", href: "#" },
+  //             { title: "Wooden Sofa Cum Beds", href: "#" },
+  //             { title: "Fabric Sofa Cum Beds", href: "#" },
+  //           ],
+  //         },
+  //         {
+  //           heading: "Recliners",
+  //           links: [
+  //             { title: "All Recliners", href: "#" },
+  //             { title: "1 Seater Recliners", href: "#" },
+  //             { title: "2 Seater Recliners", href: "#" },
+  //             { title: "3 Seater Recliners", href: "#" },
+  //           ],
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       sections: [
+  //         {
+  //           heading: "Seating",
+  //           links: [
+  //             { title: "Lounge Chairs", href: "#" },
+  //             { title: "Accent Chairs", href: "#" },
+  //             { title: "Arm Chair", href: "#" },
+  //             { title: "Wingback Chairs", href: "#" },
+  //             { title: "Bean Bags", href: "#" },
+  //             { title: "Loveseats", href: "#" },
+  //             { title: "Benches", href: "#" },
+  //             { title: "Ottomans", href: "#" },
+  //             { title: "Stools", href: "#" },
+  //           ],
+  //         },
+  //       ],
+  //     },
+  //   ],
+  //   promo: {
+  //     img: "/assets/Image/Sofa.jpg",
+  //     href: "#",
+  //   },
+  // },
   {
     key: "living",
     title: "Living",
@@ -362,99 +362,99 @@ const wsCategories: ShopMegaTab[] = [
       },
     ],
   },
-  {
-    key: "mattress",
-    title: "Mattress",
-    columns: [
-      {
-        sections: [
-          {
-            heading: "Mattress By Size",
-            links: [
-              { title: "All Mattresses", href: "#" },
-              { title: "King Size Mattress", href: "#" },
-              { title: "Queen Size Mattress", href: "#" },
-              { title: "Single Bed Mattress", href: "#" },
-              { title: "Double Bed Mattress", href: "#" },
-              { title: "Baby Mattress", href: "#" },
-            ],
-          },
-          {
-            heading: "Penguin Sleep Series",
-            links: [
-              { title: "Ortho Zen Mattress", href: "#" },
-              { title: "Dream Lux Mattress", href: "#" },
-              { title: "Bamboo Bliss Mattress", href: "#" },
-            ],
-          },
-        ],
-      },
-      {
-        sections: [
-          {
-            heading: "Mattress By Material",
-            links: [
-              { title: "Memory Foam Mattress", href: "#" },
-              { title: "Foam Mattress", href: "#" },
-              { title: "Latex Mattress", href: "#" },
-              { title: "Cool Gel Mattress", href: "#" },
-            ],
-          },
-          {
-            heading: "Mattress By Need",
-            links: [
-              { title: "Orthopedic Support", href: "#" },
-              { title: "Natural Living", href: "#" },
-              { title: "Hybrid Comfort", href: "#" },
-              { title: "Compact Living", href: "#" },
-            ],
-          },
-        ],
-      },
-      {
-        sections: [
-          {
-            heading: "Pillow By Material",
-            links: [
-              { title: "All Pillows", href: "#" },
-              { title: "Memory Foam Pillow", href: "#" },
-              { title: "Latex Pillow", href: "#" },
-              { title: "Fiber Pillow", href: "#" },
-            ],
-          },
-          {
-            heading: "Pillow By Need",
-            links: [
-              { title: "Cervical Pillow", href: "#" },
-              { title: "Travel Pillow", href: "#" },
-              { title: "Wedge Pillow", href: "#" },
-              { title: "Cuddle Pillow", href: "#" },
-              { title: "Body Pillow", href: "#" },
-            ],
-          },
-        ],
-      },
-      {
-        sections: [
-          {
-            heading: "Mattress Accessories",
-            links: [
-              { title: "Mattress Toppers", href: "#" },
-              { title: "Mattress Protectors", href: "#" },
-            ],
-          },
-          {
-            heading: "Bundles & Sets",
-            links: [{ title: "Mattress & Bed Set", href: "#" }],
-          },
-        ],
-      },
-    ],
-    promo: {
-      img: "/assets/Image/matterss.jpeg",
-      href: "#",
-    },
-  },
+  // {
+  //   key: "mattress",
+  //   title: "Mattress",
+  //   columns: [
+  //     {
+  //       sections: [
+  //         {
+  //           heading: "Mattress By Size",
+  //           links: [
+  //             { title: "All Mattresses", href: "#" },
+  //             { title: "King Size Mattress", href: "#" },
+  //             { title: "Queen Size Mattress", href: "#" },
+  //             { title: "Single Bed Mattress", href: "#" },
+  //             { title: "Double Bed Mattress", href: "#" },
+  //             { title: "Baby Mattress", href: "#" },
+  //           ],
+  //         },
+  //         {
+  //           heading: "Penguin Sleep Series",
+  //           links: [
+  //             { title: "Ortho Zen Mattress", href: "#" },
+  //             { title: "Dream Lux Mattress", href: "#" },
+  //             { title: "Bamboo Bliss Mattress", href: "#" },
+  //           ],
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       sections: [
+  //         {
+  //           heading: "Mattress By Material",
+  //           links: [
+  //             { title: "Memory Foam Mattress", href: "#" },
+  //             { title: "Foam Mattress", href: "#" },
+  //             { title: "Latex Mattress", href: "#" },
+  //             { title: "Cool Gel Mattress", href: "#" },
+  //           ],
+  //         },
+  //         {
+  //           heading: "Mattress By Need",
+  //           links: [
+  //             { title: "Orthopedic Support", href: "#" },
+  //             { title: "Natural Living", href: "#" },
+  //             { title: "Hybrid Comfort", href: "#" },
+  //             { title: "Compact Living", href: "#" },
+  //           ],
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       sections: [
+  //         {
+  //           heading: "Pillow By Material",
+  //           links: [
+  //             { title: "All Pillows", href: "#" },
+  //             { title: "Memory Foam Pillow", href: "#" },
+  //             { title: "Latex Pillow", href: "#" },
+  //             { title: "Fiber Pillow", href: "#" },
+  //           ],
+  //         },
+  //         {
+  //           heading: "Pillow By Need",
+  //           links: [
+  //             { title: "Cervical Pillow", href: "#" },
+  //             { title: "Travel Pillow", href: "#" },
+  //             { title: "Wedge Pillow", href: "#" },
+  //             { title: "Cuddle Pillow", href: "#" },
+  //             { title: "Body Pillow", href: "#" },
+  //           ],
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       sections: [
+  //         {
+  //           heading: "Mattress Accessories",
+  //           links: [
+  //             { title: "Mattress Toppers", href: "#" },
+  //             { title: "Mattress Protectors", href: "#" },
+  //           ],
+  //         },
+  //         {
+  //           heading: "Bundles & Sets",
+  //           links: [{ title: "Mattress & Bed Set", href: "#" }],
+  //         },
+  //       ],
+  //     },
+  //   ],
+  //   promo: {
+  //     img: "/assets/Image/matterss.jpeg",
+  //     href: "#",
+  //   },
+  // },
   {
     key: "dining",
     title: "Dining",
@@ -757,7 +757,7 @@ const wsCategories: ShopMegaTab[] = [
   },
   {
     key: "decor",
-    title: "Decor & Furnishing",
+    title: "Decor ",
     columns: [
       {
         sections: [
@@ -873,65 +873,65 @@ const wsCategories: ShopMegaTab[] = [
     },
   },
   // --- New: Modular Kitchen & Wardrobe ---
-  {
-    key: "modular",
-    title: "Modular Kitchen & Wardrobe",
-    isModular: true,
-  },
+  // {
+  //   key: "modular",
+  //   title: "Modular Kitchen & Wardrobe",
+  //   isModular: true,
+  // },
   // --- New: WS Luxe ---
-  {
-    key: "NCluxe",
-    title: "NC Luxe",
-    isLuxe: true,
-    columns: [
-      {
-        sections: [
-          {
-            heading: "Luxury Living",
-            links: [
-              { title: "Luxe Sofas", href: "#" },
-              { title: "Luxe Lounge Chairs", href: "#" },
-              { title: "Premium Coffee Tables", href: "#" },
-              { title: "Luxe TV Units", href: "#" },
-            ],
-          },
-          {
-            heading: "Luxury Dining",
-            links: [
-              { title: "Premium Dining Sets", href: "#" },
-              { title: "Marble Dining Tables", href: "#" },
-              { title: "Luxe Dining Chairs", href: "#" },
-            ],
-          },
-        ],
-      },
-      {
-        sections: [
-          {
-            heading: "Luxury Bedroom",
-            links: [
-              { title: "Luxe Beds", href: "#" },
-              { title: "Upholstered Premium Beds", href: "#" },
-              { title: "Luxe Wardrobes", href: "#" },
-              { title: "Premium Bedside Tables", href: "#" },
-            ],
-          },
-          {
-            heading: "Luxury Decor",
-            links: [
-              { title: "Premium Wall Art", href: "#" },
-              { title: "Luxe Chandeliers", href: "#" },
-              { title: "Designer Rugs", href: "#" },
-            ],
-          },
-        ],
-      },
-    ],
-    promo: {
-      img: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80&w=400",
-      href: "#",
-    },
-  },
+  // {
+  //   key: "NCluxe",
+  //   title: "NC Luxe",
+  //   isLuxe: true,
+  //   columns: [
+  //     {
+  //       sections: [
+  //         {
+  //           heading: "Luxury Living",
+  //           links: [
+  //             { title: "Luxe Sofas", href: "#" },
+  //             { title: "Luxe Lounge Chairs", href: "#" },
+  //             { title: "Premium Coffee Tables", href: "#" },
+  //             { title: "Luxe TV Units", href: "#" },
+  //           ],
+  //         },
+  //         {
+  //           heading: "Luxury Dining",
+  //           links: [
+  //             { title: "Premium Dining Sets", href: "#" },
+  //             { title: "Marble Dining Tables", href: "#" },
+  //             { title: "Luxe Dining Chairs", href: "#" },
+  //           ],
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       sections: [
+  //         {
+  //           heading: "Luxury Bedroom",
+  //           links: [
+  //             { title: "Luxe Beds", href: "#" },
+  //             { title: "Upholstered Premium Beds", href: "#" },
+  //             { title: "Luxe Wardrobes", href: "#" },
+  //             { title: "Premium Bedside Tables", href: "#" },
+  //           ],
+  //         },
+  //         {
+  //           heading: "Luxury Decor",
+  //           links: [
+  //             { title: "Premium Wall Art", href: "#" },
+  //             { title: "Luxe Chandeliers", href: "#" },
+  //             { title: "Designer Rugs", href: "#" },
+  //           ],
+  //         },
+  //       ],
+  //     },
+  //   ],
+  //   promo: {
+  //     img: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80&w=400",
+  //     href: "#",
+  //   },
+  // },
 ];
 
 // --- 3-Tier Header Component ---
@@ -1126,7 +1126,7 @@ const Header = ({
         }`}
       >
         <div
-          className="mx-auto px-4 sm:px-[5%] xl:px-[8%] flex items-center justify-between"
+          className="mx-auto px-4 sm:px-[5%] xl:px-[8%] flex items-center justify-start gap-8"
           onMouseLeave={() => setActiveMegaTab(null)}
         >
           {wsCategories.map((tab) => {
