@@ -44,3 +44,8 @@ export const getCartModel = async () => {
   const db = await connectTenantDB();
   return db.collection("carts");
 };
+
+export const getInquiryModel = async () => {
+  const db = await connectTenantDB();
+  return db.collection("inquiries");
+};

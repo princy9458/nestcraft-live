@@ -19,15 +19,33 @@ const ContactPage = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
       const {nestCraftUser}= useSelector((state:RootState)=>state.auth)
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Simulate API call
-    setTimeout(() => {
+    
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setIsSubmitted(true);
+        setFormData({ name: '', email: '', subject: '', message: '' });
+      } else {
+        alert(data.message || "Something went wrong. Please try again.");
+      }
+    } catch (error) {
+      console.error("Submission error:", error);
+      alert("Failed to send message. Please check your connection.");
+    } finally {
       setIsSubmitting(false);
-      setIsSubmitted(true);
-      setFormData({ name: '', email: '', subject: '', message: '' });
-    }, 1500);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -120,7 +138,9 @@ const ContactPage = () => {
                     </div>
                     <span className="text-[11px] font-black uppercase tracking-[2px] text-muted">Email</span>
                   </div>
-                  <p className="text-2xl font-bold tracking-tight">nestcraftmail.com</p>
+                  {/* <p className="text-2xl font-bold tracking-tight">nestcraftmail@gmail.com</p> */}
+                  <a href="mailto:nestcraftmail@gmail.com" className="text-2xl font-bold  tracking-tight "> nestcraftmail@gmail.com</a>
+
                   <div className="w-0 group-hover:w-full h-px bg-secondary transition-all duration-500 mt-2" />
                 </div>
 
@@ -131,7 +151,8 @@ const ContactPage = () => {
                     </div>
                     <span className="text-[11px] font-black uppercase tracking-[2px] text-muted">Phone</span>
                   </div>
-                  <p className="text-2xl font-bold tracking-tight">+91 9810159604</p>
+                  {/* <p className="text-2xl font-bold tracking-tight">+91 9810159604</p> */}
+                  <a href="tel:+919810159604" className="text-2xl font-bold tracking-tight"> +91 9810159604</a>
                   <div className="w-0 group-hover:w-full h-px bg-secondary transition-all duration-500 mt-2" />
                 </div>
 
@@ -264,22 +285,32 @@ const ContactPage = () => {
                     />
                   </div>
 
-                  <button 
+                  {/* <button 
                     type="submit"
                     disabled={isSubmitting}
-                    className="group relative w-full bg-primary text-white h-20 rounded-full overflow-hidden transition-all disabled:opacity-70"
+                    className="group relative w-full bg-primary text-medium text-white h-15 rounded-full overflow-hidden transition-all disabled:opacity-70"
                   >
                     <div className="absolute inset-0 bg-secondary translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
-                    <span className="relative z-10 flex items-center justify-center gap-4 text-[15px] font-black uppercase tracking-[3px]">
+                    <span className="relative z-10 flex items-center justify-center gap-4 text-[14px]  font-black uppercase tracking-[3px] ">
                       {isSubmitting ? (
-                        <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin text-medium" />
                       ) : (
                         <>
-                          Send Message <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
+                         Send Message <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
                         </>
                       )}
                     </span>
+                  </button> */}
+
+
+                  <button 
+                   type="submit"
+                    disabled={isSubmitting}
+                  className="group w-full flex relative h-12 items-center justify-center rounded-full bg-primary px-8 text-[14px] font-semibold uppercase tracking-wider text-white transition-all overflow-hidden scroll-mt-20">
+                    <div className="absolute inset-0 bg-secondary translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
+                    <span className="relative z-10 flex">Send Message <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" /></span>
                   </button>
+
                 </form>
               )}
             </div>
@@ -287,14 +318,46 @@ const ContactPage = () => {
         </div>
       </section>
 
+      {/* FAQ Section */}
+      <section className="py-32 px-[5%] bg-surface/30">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-20">
+            <p className="text-secondary uppercase tracking-[4px] text-sm font-black mb-4">Common Questions</p>
+            <h2 className="text-[42px] font-bold tracking-tight">Need a quick answer?</h2>
+          </div>
+          
+          <div className="space-y-6">
+            {[
+              { q: 'Where is your furniture store located?', a: 'Our premium furniture showroom is located in Raja Park, Jaipur. You are always welcome to visit us, check the quality of our solid wood, and try out our furniture in person before buying.' },
+              { q: 'Do you deliver furniture outside Jaipur?', a: 'Yes, absolutely! While our main store is in Jaipur, we safely deliver our home furniture all across Rajasthan. Whether you live in Jodhpur, Udaipur, or any other city, we will bring your order right to your doorstep.' },
+              { q: 'Can I get customized furniture for my home?', a: 'Yes, we love making custom furniture! If you have a specific design, size, or color in mind, just let us know. We will create the perfect sofa, bed, or dining table that fits your home perfectly.' },
+              { q: 'What type of wood do you use for your furniture?', a: 'We mainly use high-quality solid wood, like pure Sheesham and Teak. These woods are very strong, look beautiful, and are naturally perfect for Rajasthan\'s hot and dry climate.' },
+              { q: 'Is it safe to buy heavy furniture online from your website?', a: 'Yes, it is 100% safe. We use strong, multi-layer packaging to pack every item. Our trusted delivery team handles heavy solid wood furniture with great care so it reaches your home without a single scratch.' },
+              { q: 'How should I clean and take care of my solid wood furniture?', a: 'It is very simple. Just wipe your furniture regularly with a soft, dry cloth. To keep the wood looking new for years, try to keep it away from direct sunlight and avoid putting hot mugs directly on the wooden surface.' }
+            ].map((faq, idx) => (
+              <div key={idx} className="bg-background border border-border p-8 rounded-3xl hover:border-secondary transition-all group">
+                <h4 className="text-xl font-bold mb-3 flex items-center justify-between">
+                  {faq.q}
+                  <ArrowRight size={20} className="text-muted group-hover:text-secondary group-hover:translate-x-1 transition-all" />
+                </h4>
+                <p className="text-muted font-semibold leading-relaxed">
+                  {faq.a}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Map Section - Minimalist */}
       <section className="px-[5%] max-w-7xl mx-auto pb-32">
         <div className="relative h-[600px] rounded-[60px] overflow-hidden border border-border shadow-2xl group">
-          <img 
+          {/* <img 
             src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=80&w=2000" 
             alt="Map" 
             className="w-full h-full object-cover grayscale opacity-40 group-hover:opacity-60 transition-opacity duration-1000"
-          />
+          /> */}
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3558.1622708907225!2d75.82064262512074!3d26.89834471070848!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396db74615ffdb4d%3A0x21afdb4e447341f4!2sNestCraft%20Living!5e0!3m2!1sen!2sin!4v1776761345663!5m2!1sen!2sin" width="100% " height="100%"  loading="lazy" ></iframe>
           <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
           
           <div className="absolute bottom-12 left-12 right-12 flex flex-col md:flex-row justify-between items-end gap-8">

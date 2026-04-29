@@ -489,16 +489,28 @@
             "type": "features",
             "items": [
               {
-                "title": "What materials do you use?",
-                "description": "We use sustainably sourced European Oak, Italian Velvet, and high-grade Belgian linens."
+                "title": "Where is your furniture store located?",
+                "description": "Our premium furniture showroom is located in Raja Park, Jaipur. You are always welcome to visit us, check the quality of our solid wood, and try out our furniture in person before buying."
               },
               {
-                "title": "How long does shipping take?",
-                "description": "Standard pieces ship within 2-3 weeks. Custom bespoke orders typically take 8-10 weeks."
+                "title": "Do you deliver furniture outside Jaipur?",
+                "description": "Yes, absolutely! While our main store is in Jaipur, we safely deliver our home furniture all across Rajasthan. Whether you live in Jodhpur, Udaipur, or any other city, we will bring your order right to your doorstep."
               },
               {
-                "title": "XXXXX",
-                "description": "XXXXX0 weeks."
+                "title": "Can I get customized furniture for my home?",
+                "description": "Yes, we love making custom furniture! If you have a specific design, size, or color in mind, just let us know. We will create the perfect sofa, bed, or dining table that fits your home perfectly."
+              },
+              {
+                "title": "What type of wood do you use for your furniture?",
+                "description": "We mainly use high-quality solid wood, like pure Sheesham and Teak. These woods are very strong, look beautiful, and are naturally perfect for Rajasthan's hot and dry climate."
+              },
+              {
+                "title": "Is it safe to buy heavy furniture online from your website?",
+                "description": "Yes, it is 100% safe. We use strong, multi-layer packaging to pack every item. Our trusted delivery team handles heavy solid wood furniture with great care so it reaches your home without a single scratch."
+              },
+              {
+                "title": "How should I clean and take care of my solid wood furniture?",
+                "description": "It is very simple. Just wipe your furniture regularly with a soft, dry cloth. To keep the wood looking new for years, try to keep it away from direct sunlight and avoid putting hot mugs directly on the wooden surface."
               }
             ]
           }

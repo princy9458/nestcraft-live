@@ -15,6 +15,7 @@ import {
   Sparkles,
   FileText,
   Image,
+  Inbox,
 } from "lucide-react";
 import {
   Sidebar,
@@ -61,6 +62,13 @@ const NAV_ITEMS = [
         icon: ShoppingCart,
         exact: false,
         badge: "3",
+      },
+      {
+        label: "Inbox",
+        href: "/admin/inbox",
+        icon: Inbox,
+        exact: false,
+        badge: null,
       },
     ],
   },

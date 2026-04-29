@@ -45,50 +45,15 @@ const getSection = (content: any[], adminTitle: string) =>
 // --- Homepage Specific Components ---
 
 const Hero = ({ section }: { section: any }) => {
-  if (!section) return null;
-  const carousel = section.columns?.[0]?.[0];
-  if (!carousel || !carousel.items) return <section data-annotate-id="home-hero-section"><MainHeroSlider /></section>;
-
-  const parsedSlides = carousel.items.map((slide: any, idx: number) => {
-    const leftCol = slide.columns?.[0] || [];
-    const rightCol = slide.columns?.[1] || [];
-    
-    const labelBlock = leftCol.find((b: any) => b.level === "h5");
-    const headingBlock = leftCol.find((b: any) => b.level === "h1");
-    const descBlock = leftCol.find((b: any) => b.type === "paragraph");
-    
-    const imgBlock = rightCol.find((b: any) => b.type === "image");
-    const cardsBlock = rightCol.find((b: any) => b.type === "cards");
-    
-    const text = headingBlock?.text || "";
-    const { title, highlight, titleEnd } = extractTitleParts(text);
-    
-    const productCard = cardsBlock?.items?.[0];
-    const productDescParts = productCard?.description?.split("\n\n") || [""];
-    
-    return {
-      id: slide.id || idx + 1,
-      label: labelBlock?.text || "",
-      title,
-      highlight,
-      titleEnd,
-      description: descBlock?.text || "",
-      image: imgBlock?.url || "",
-      product: productCard?.title || "",
-      price: productDescParts[0] || "",
-    };
-  });
-
   return (
     <section data-annotate-id="home-hero-section">
-      <MainHeroSlider initialSlides={parsedSlides} />
+      <MainHeroSlider />
     </section>
   );
 };
 
 const USP = ({ section }: { section: any }) => {
-  if (!section) return null;
-  const features = section.columns?.[0]?.[0];
+  const features = section?.columns?.[0]?.[0];
   const items = features?.items || [
     { title: "Fast Delivery", description: "Doorstep shipping worldwide" },
     { title: "Secure Checkout", description: "Protected payments & data" },
@@ -131,10 +96,13 @@ const USP = ({ section }: { section: any }) => {
 };
 
 const Services = ({ section }: { section: any }) => {
-  if (!section) return null;
-  const col = section.columns?.[0] || [];
+  const col = section?.columns?.[0] || [];
   const heading = col.find((b: any) => b.type === "heading")?.text || "Our Bespoke Services";
-  const cards = col.find((b: any) => b.type === "cards")?.items || [];
+  const cards = col.find((b: any) => b.type === "cards")?.items || [
+    { title: "Interior Design", description: "Expert consultation for your perfect living space." },
+    { title: "Custom Furniture", description: "Handcrafted pieces tailored to your exact needs." },
+    { title: "Home Styling", description: "Premium curation and arrangement for every room." }
+  ];
   const icons = [PenTool, Hammer, Package];
 
   return (
@@ -189,10 +157,14 @@ const Services = ({ section }: { section: any }) => {
 };
 
 const Collections = ({ section }: { section: any }) => {
-  if (!section) return null;
-  const col = section.columns?.[0] || [];
+  const col = section?.columns?.[0] || [];
   const heading = col.find((b: any) => b.type === "heading")?.text || "Our Collections";
-  const items = col.find((b: any) => b.type === "cards")?.items || [];
+  const items = col.find((b: any) => b.type === "cards")?.items || [
+    { title: "Living Room", image: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80", link: "/shop" },
+    { title: "Bedroom", image: "https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&q=80", link: "/shop" },
+    { title: "Dining", image: "https://images.unsplash.com/photo-1577157581154-a31421063ca4?auto=format&fit=crop&q=80", link: "/shop" },
+    { title: "Storage", image: "https://images.unsplash.com/photo-1595428774223-ea526281bb0a?auto=format&fit=crop&q=80", link: "/shop" }
+  ];
 
   return (
     <section
@@ -305,15 +277,14 @@ const ShopByRoom = () => (
 );
 
 const FeaturedBanner = ({ section }: { section: any }) => {
-  if (!section) return null;
-  const leftCol = section.columns?.[0] || [];
-  const rightCol = section.columns?.[1] || [];
+  const leftCol = section?.columns?.[0] || [];
+  const rightCol = section?.columns?.[1] || [];
   
   const imgBlock = leftCol.find((b: any) => b.type === "image");
   const headingBlock = rightCol.find((b: any) => b.type === "heading");
   const pBlock = rightCol.find((b: any) => b.type === "paragraph");
   const btnBlock = rightCol.find((b: any) => b.type === "button");
-  const button = btnBlock?.buttons?.[0];
+  const button = btnBlock?.buttons?.[0] || { label: "Explore Limited Edition", link: "/shop" };
 
   return (
     <section
@@ -500,16 +471,18 @@ const ProductSlider = () => {
 };
 
 const Craft = ({ section }: { section: any }) => {
-  if (!section) return null;
-  const leftCol = section.columns?.[0] || [];
-  const rightCol = section.columns?.[1] || [];
+  const leftCol = section?.columns?.[0] || [];
+  const rightCol = section?.columns?.[1] || [];
   
   const imgBlock = leftCol.find((b: any) => b.type === "image");
   const headingBlock = rightCol.find((b: any) => b.type === "heading");
   const pBlock = rightCol.find((b: any) => b.type === "paragraph");
   const listBlock = rightCol.find((b: any) => b.type === "list");
   const btnBlock = rightCol.find((b: any) => b.type === "button");
-  const buttons = btnBlock?.buttons || [];
+  const buttons = btnBlock?.buttons || [
+    { label: "Material Guide", link: "/about" },
+    { label: "Book Appointment", link: "/contact" }
+  ];
 
   return (
     <section
@@ -593,13 +566,18 @@ const Craft = ({ section }: { section: any }) => {
 };
 
 const Testimonials = ({ section }: { section: any }) => {
-  if (!section) return null;
   const [activePage, setActivePage] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   
-  const col = section.columns?.[0] || [];
+  const col = section?.columns?.[0] || [];
   const heading = col.find((b: any) => b.type === "heading")?.text || "What People Say";
-  const items = col.filter((b: any) => b.type === "testimonial") || [];
+  const items = col.filter((b: any) => b.type === "testimonial").length > 0 
+    ? col.filter((b: any) => b.type === "testimonial")
+    : [
+        { quote: "The craftsmanship is unparalleled. My living room feels like a luxury resort.", author: "Aarav Sharma", role: "Jaipur" },
+        { quote: "Seamless delivery and the solid wood quality is exactly what I was looking for.", author: "Priya Patel", role: "Mumbai" },
+        { quote: "The customization service was incredible. They brought my vision to life.", author: "Vikram Singh", role: "Delhi" }
+      ];
 
   const handleScroll = () => {
     if (scrollRef.current) {
@@ -687,13 +665,16 @@ const Testimonials = ({ section }: { section: any }) => {
 };
 
 const Blog = ({ section }: { section: any }) => {
-  if (!section) return null;
   const [activePage, setActivePage] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   
-  const col = section.columns?.[0] || [];
+  const col = section?.columns?.[0] || [];
   const heading = col.find((b: any) => b.type === "heading")?.text || "The Journal";
-  const items = col.find((b: any) => b.type === "cards")?.items || [];
+  const items = col.find((b: any) => b.type === "cards")?.items || [
+    { title: "Choosing the Right Wood for Jaipur’s Climate", image: "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&q=80&w=1200", description: "Material Guide", link: "/blog" },
+    { title: "Modern Minimalism in Traditional Homes", image: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&q=80&w=1200", description: "Interior Tips", link: "/blog" },
+    { title: "Handcrafted Luxury: The Jaipur Way", image: "https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&q=80&w=1200", description: "Craftsmanship", link: "/blog" }
+  ];
 
   const handleScroll = () => {
     if (scrollRef.current) {
@@ -794,62 +775,7 @@ const Blog = ({ section }: { section: any }) => {
   );
 };
 
-const FAQ = ({ section }: { section: any }) => {
-  if (!section) return null;
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-  const col = section.columns?.[0] || [];
-  const heading = col.find((b: any) => b.type === "heading")?.text || "Frequently Asked Questions";
-  const items = col.find((b: any) => b.type === "features")?.items || [];
-
-  return (
-    <section
-      data-annotate-id="home-faq-section"
-      className="md:py-[120px] md:px-[5%] py-[50px] px-[5%] "
-    >
-      <div className="flex flex-col items-center text-center mb-[60px]">
-        <h2 className="md:text-[38px] text-[28px] font-bold leading-tight tracking-tight mb-4">
-          {heading}
-        </h2>
-        <Link
-          href="/faq"
-          className="text-secondary font-black tracking-[2px] uppercase text-xs border-b border-secondary pb-1"
-        >
-          View All FAQs
-        </Link>
-      </div>
-
-      <div className="max-w-[800px] mx-auto">
-        {items.map((faq: any, idx: number) => (
-          <div
-            key={idx}
-            className="border-b border-border py-[22px] cursor-pointer"
-            onClick={() => setActiveIndex(activeIndex === idx ? null : idx)}
-          >
-            <div className="flex justify-between items-center gap-3.5">
-              <h4 className="font-heading text-[24px] font-bold">{faq.title}</h4>
-              {activeIndex === idx ? (
-                <Minus className="text-secondary" size={22} />
-              ) : (
-                <Plus className="text-secondary" size={22} />
-              )}
-            </div>
-            <motion.div
-              initial={false}
-              animate={{
-                height: activeIndex === idx ? "auto" : 0,
-                marginTop: activeIndex === idx ? 12 : 0,
-              }}
-              className="overflow-hidden text-muted text-[15px] font-semibold"
-            >
-              {faq.description}
-            </motion.div>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-};
 
 const Newsletter = () => {
   const [email, setEmail] = useState("");
@@ -970,6 +896,70 @@ const Newsletter = () => {
   );
 };
 
+const FAQ = ({ section }: { section: any }) => {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  const col = section?.columns?.[0] || [];
+  const heading = col.find((b: any) => b.type === "heading")?.text || "Frequently Asked Questions";
+  const items = col.find((b: any) => b.type === "features")?.items || [
+    { title: 'Where is your furniture store located?', description: 'Our premium furniture showroom is located in Raja Park, Jaipur. You are always welcome to visit us, check the quality of our solid wood, and try out our furniture in person before buying.' },
+    { title: 'Do you deliver furniture outside Jaipur?', description: 'Yes, absolutely! While our main store is in Jaipur, we safely deliver our home furniture all across Rajasthan. Whether you live in Jodhpur, Udaipur, or any other city, we will bring your order right to your doorstep.' },
+    { title: 'Can I get customized furniture for my home?', description: 'Yes, we love making custom furniture! If you have a specific design, size, or color in mind, just let us know. We will create the perfect sofa, bed, or dining table that fits your home perfectly.' },
+    { title: 'What type of wood do you use for your furniture?', description: 'We mainly use high-quality solid wood, like pure Sheesham and Teak. These woods are very strong, look beautiful, and are naturally perfect for Rajasthan\'s hot and dry climate.' },
+    { title: 'Is it safe to buy heavy furniture online from your website?', description: 'Yes, it is 100% safe. We use strong, multi-layer packaging to pack every item. Our trusted delivery team handles heavy solid wood furniture with great care so it reaches your home without a single scratch.' },
+    { title: 'How should I clean and take care of my solid wood furniture?', description: 'It is very simple. Just wipe your furniture regularly with a soft, dry cloth. To keep the wood looking new for years, try to keep it away from direct sunlight and avoid putting hot mugs directly on the wooden surface.' }
+  ];
+
+  return (
+    <section
+      data-annotate-id="home-faq-section"
+      className="md:py-[120px] md:px-[5%] py-[50px] px-[5%] "
+    >
+      <div className="flex flex-col items-center text-center mb-[60px]">
+        <h2 className="md:text-[38px] text-[28px] font-bold leading-tight tracking-tight mb-4">
+          {heading}
+        </h2>
+        <Link
+          href="/faq"
+          className="text-secondary font-black tracking-[2px] uppercase text-xs border-b border-secondary pb-1"
+        >
+          View All FAQs
+        </Link>
+      </div>
+
+      <div className="max-w-[800px] mx-auto">
+        {items.map((faq: any, idx: number) => (
+          <div
+            key={idx}
+            className="border-b border-border py-[22px] cursor-pointer"
+            onClick={() => setActiveIndex(activeIndex === idx ? null : idx)}
+          >
+            <div className="flex justify-between items-center gap-3.5">
+              <h4 className="font-heading text-[20px] font-bold">{faq.title}</h4>
+              {activeIndex === idx ? (
+                
+                <Minus className="text-secondary" size={22} />
+              ) : (
+                <Plus className="text-secondary" size={22} />
+              )}
+            </div>
+            <motion.div
+              initial={false}
+              animate={{
+                height: activeIndex === idx ? "auto" : 0,
+                marginTop: activeIndex === idx ? 12 : 0,
+              }}
+              className="overflow-hidden text-muted text-[15px] font-semibold"
+            >
+              {faq.description}
+            </motion.div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+};
+
 const InstagramGallery = () => (
   <section
     data-annotate-id="home-instagram-gallery-section"
@@ -1047,6 +1037,7 @@ const HomePage = ({ data }: HomePageProps) => {
       <Blog section={getSection(content, "Blog")} />
       <FAQ section={getSection(content, "FAQ")} />
       <Newsletter />
+      
       <InstagramGallery />
 
       {ctaBlock && (

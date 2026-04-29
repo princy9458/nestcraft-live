@@ -4,54 +4,56 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Plus, Minus, Search, MessageCircle, Phone, Mail } from 'lucide-react';
 
-const FAQPage = () => {
+const FAQPage = ({ initialData }: { initialData?: any }) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const faqs = [
+  // Extract FAQs from initialData if available
+  const cmsFaqs = initialData?.content?.flatMap((section: any) => 
+    section.columns?.flatMap((col: any) => 
+      col.filter((item: any) => item.type === 'features')
+         .flatMap((item: any) => item.items?.map((f: any) => ({
+           category: 'General',
+           q: f.title,
+           a: f.description
+         })) || [])
+    )
+  ) || [];
+
+  const faqs = cmsFaqs.length > 0 ? cmsFaqs : [
     { 
       category: 'General',
-      q: 'What materials do you use?', 
-      a: 'We use sustainably sourced European Oak, Italian Velvet, and high-grade Belgian linens. All materials are selected for longevity and ethical impact.' 
+      q: 'Where is your furniture store located?', 
+      a: 'Our premium furniture showroom is located in Raja Park, Jaipur. You are always welcome to visit us, check the quality of our solid wood, and try out our furniture in person before buying.' 
     },
     { 
       category: 'Shipping',
-      q: 'How long does shipping take?', 
-      a: 'Standard pieces ship within 2-3 weeks. Custom bespoke orders typically take 8-10 weeks to allow for artisanal crafting and quality control.' 
+      q: 'Do you deliver furniture outside Jaipur?', 
+      a: 'Yes, absolutely! While our main store is in Jaipur, we safely deliver our home furniture all across Rajasthan. Whether you live in Jodhpur, Udaipur, or any other city, we will bring your order right to your doorstep.' 
     },
     { 
-      category: 'Shipping',
-      q: 'Do you offer international shipping?', 
-      a: 'Yes, we provide white-glove international shipping to over 40 countries, including full assembly in your room of choice.' 
+      category: 'Customization',
+      q: 'Can I get customized furniture for my home?', 
+      a: 'Yes, we love making custom furniture! If you have a specific design, size, or color in mind, just let us know. We will create the perfect sofa, bed, or dining table that fits your home perfectly.' 
     },
     { 
-      category: 'Orders',
-      q: 'Can I cancel or modify my order?', 
-      a: 'Orders can be modified or cancelled within 24 hours of placement. After this period, production begins, and modifications may incur a fee.' 
+      category: 'Quality',
+      q: 'What type of wood do you use for your furniture?', 
+      a: 'We mainly use high-quality solid wood, like pure Sheesham and Teak. These woods are very strong, look beautiful, and are naturally perfect for Rajasthan\'s hot and dry climate.' 
     },
     { 
-      category: 'Returns',
-      q: 'What is your return policy?', 
-      a: 'We offer a 14-day return policy for standard items in original condition. Custom bespoke pieces are non-refundable unless defective.' 
+      category: 'Delivery',
+      q: 'Is it safe to buy heavy furniture online from your website?', 
+      a: 'Yes, it is 100% safe. We use strong, multi-layer packaging to pack every item. Our trusted delivery team handles heavy solid wood furniture with great care so it reaches your home without a single scratch.' 
     },
     { 
       category: 'Care',
-      q: 'How do I care for my oak furniture?', 
-      a: 'We recommend using a soft, dry cloth for regular dusting. Avoid direct sunlight and extreme humidity. A detailed care guide is included with every order.' 
-    },
-    { 
-      category: 'General',
-      q: 'Do you have a physical showroom?', 
-      a: 'Currently, we operate exclusively online to provide the best value. However, we offer material swatches and virtual consultations to help you decide.' 
-    },
-    { 
-      category: 'Orders',
-      q: 'Do you offer trade discounts?', 
-      a: 'Yes, we have a dedicated trade program for interior designers, architects, and developers. Please contact our trade team for more information.' 
+      q: 'How should I clean and take care of my solid wood furniture?', 
+      a: 'It is very simple. Just wipe your furniture regularly with a soft, dry cloth. To keep the wood looking new for years, try to keep it away from direct sunlight and avoid putting hot mugs directly on the wooden surface.' 
     }
   ];
 
-  const filteredFaqs = faqs.filter(faq => 
+  const filteredFaqs = faqs.filter((faq: { q: string; a: string }) => 
     faq.q.toLowerCase().includes(searchQuery.toLowerCase()) || 
     faq.a.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -99,7 +101,7 @@ const FAQPage = () => {
       <section className="py-24 px-[5%] max-w-4xl mx-auto">
         <div className="space-y-4">
           {filteredFaqs.length > 0 ? (
-            filteredFaqs.map((faq, idx) => (
+            filteredFaqs.map((faq: { q: string; a: string; category: string }, idx: number) => (
               <motion.div 
                 key={idx}
                 initial={{ opacity: 0, y: 10 }}

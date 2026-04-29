@@ -51,10 +51,10 @@ export default function AdminDashboard() {
         const orders = await ordRes.json();
 
         setStats({
-          products: products.length || 0,
-          categories: categories.length || 0,
-          attributes: attributes.length || 0,
-          orders: orders.length || 0,
+          products: (Array.isArray(products) ? products.length : products.data?.length) || 0,
+          categories: (Array.isArray(categories) ? categories.length : categories.data?.length) || 0,
+          attributes: (Array.isArray(attributes) ? attributes.length : attributes.data?.length) || 0,
+          orders: (Array.isArray(orders) ? orders.length : orders.data?.length) || 0,
         });
       } catch (err) {
         console.error("Failed to load stats", err);
