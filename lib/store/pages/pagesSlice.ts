@@ -5,7 +5,8 @@ import {
   fetchPageBySlugThunk, 
   createPageThunk, 
   updatePageThunk, 
-  deletePageThunk 
+  deletePageThunk, 
+  fetchFastApiPagesThunk
 } from './pageThunk';
 
 interface PageState {
@@ -64,6 +65,25 @@ const pagesSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
       })
+      //feetch all, page through fast Api calling
+// /api/cms/pages
+       .addCase(fetchFastApiPagesThunk.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+       })
+       .addCase(fetchFastApiPagesThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.allPages = action.payload;
+        state.isAllPageFetched = true;
+        const data=action.payload.find((page:Page)=>page.slug==="home")
+        if(data){
+          state.currentPages=data
+        }
+       })
+       .addCase(fetchFastApiPagesThunk.rejected, (state) => {
+        state.isLoading = false;
+        state.isError = true;
+       }) 
       // Fetch single page
       .addCase(fetchPageBySlugThunk.pending, (state) => {
         state.isLoading = true;

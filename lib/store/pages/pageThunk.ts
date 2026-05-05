@@ -19,6 +19,31 @@ export const fetchPagesThunk = createAsyncThunk(
     }
   }
 );
+export const fetchFastApiPagesThunk = createAsyncThunk(
+  'pages/fetchFastApiAll',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await fetch('/api/cms/pages',
+      {
+        method:"GET",
+        headers: {
+          'Content-Type': 'application/json',
+          "x-tenant-db": "kp_nestcraft"
+        },
+       
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to fetch pages');
+      }
+      const data= await response.json();
+      console.log("all pages fetched ", data)
+      return data.data;
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 // Fetch a single page by slug
 export const fetchPageBySlugThunk = createAsyncThunk(

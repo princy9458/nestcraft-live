@@ -1,7 +1,7 @@
 "use client"
 
 import { useAppDispatch } from '@/lib/store/hooks';
-import { fetchPagesThunk } from '@/lib/store/pages/pageThunk';
+import { fetchFastApiPagesThunk, fetchPagesThunk } from '@/lib/store/pages/pageThunk';
 import { RootState } from '@/lib/store/store';
 
 import React, { useEffect, useRef } from 'react'
@@ -16,7 +16,7 @@ const GetAllPages = () => {
     useEffect(() => {
         if (!isAllPageFetched && !isApi.current) {
             isApi.current = true;
-            dispatch(fetchPagesThunk());
+            dispatch(fetchFastApiPagesThunk());
         } else {
             isApi.current = false;
         }

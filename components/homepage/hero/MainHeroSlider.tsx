@@ -1,8 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { usePathname } from "next/navigation";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
+import { RootState } from "@/lib/store/store";
+import { useSelector } from "react-redux";
 
 const premiumHeroSlides = [
   {
@@ -69,20 +72,48 @@ export const extractTitleParts = (text: string) => {
   };
 };
 
-const MainHeroSlider = ({ initialSlides = premiumHeroSlides }: { initialSlides?: any[] }) => {
-  const [slides, setSlides] = useState(initialSlides);
+const MainHeroSlider = ({ initialSlides }: { initialSlides?: any[] }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [progressKey, setProgressKey] = useState(0);
+  const pathname = usePathname();
 
-  useEffect(() => {
-    if (initialSlides && initialSlides.length > 0) {
-      setSlides(initialSlides);
+  const lang = useMemo(() => {
+    const segments = pathname.split("/").filter(Boolean);
+    if (segments[0] === "hi") return "hi";
+    return "en";
+  }, [pathname]);
+
+  const { currentPages } = useSelector((state: RootState) => state.pages);
+
+  const getCurrentSection = useMemo(() => {
+    if (!currentPages) return;
+    return currentPages.content?.find((page: any) => page.adminTitle === "Hero" || page.adminTitle === "Premium Hero Slider");
+  }, [currentPages]);
+
+  const slides = useMemo(() => {
+    if (getCurrentSection && getCurrentSection.content) {
+      return getCurrentSection.content.map((slide: any) => ({
+        id: slide.id,
+        label: slide.props?.label?.[lang] || slide.props?.label?.en || slide.props?.label || "",
+        title: slide.props?.title?.[lang] || slide.props?.title?.en || slide.props?.title || "",
+        highlight: slide.props?.highlight?.[lang] || slide.props?.highlight?.en || slide.props?.highlight || "",
+        titleEnd: slide.props?.titleEnd?.[lang] || slide.props?.titleEnd?.en || slide.props?.titleEnd || "",
+        description: slide.props?.description?.[lang] || slide.props?.description?.en || slide.props?.description || "",
+        image: slide.props?.image || "",
+        product: slide.props?.product?.[lang] || slide.props?.product?.en || slide.props?.product || "",
+        price: slide.props?.price?.[lang] || slide.props?.price?.en || slide.props?.price || "",
+      }));
     }
-  }, [initialSlides]);
+    return initialSlides || premiumHeroSlides;
+  }, [getCurrentSection, initialSlides, lang]);
+
+  //  console.log(getCurrentSection,"getCurrentSection")
+
+
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % slides.length);
+      setActiveIndex((prev) => (prev + 1) % slides?.length);
       setProgressKey((prev) => prev + 1);
     }, 10000);
 
@@ -106,7 +137,9 @@ const MainHeroSlider = ({ initialSlides = premiumHeroSlides }: { initialSlides?:
     setProgressKey((prev) => prev + 1);
   };
 
-  const activeSlide = slides[activeIndex] || premiumHeroSlides[0];
+  const activeSlide = slides[activeIndex];
+
+  if (!activeSlide) return null;
 
   return (
     <section className="relative min-h-[calc(100vh-106px)] overflow-hidden">
@@ -250,11 +283,10 @@ const MainHeroSlider = ({ initialSlides = premiumHeroSlides }: { initialSlides?:
                   key={slide.id}
                   onClick={() => goToSlide(index)}
                   aria-label={`Go to slide ${index + 1}`}
-                  className={`rounded-full transition-all ${
-                    activeIndex === index
+                  className={`rounded-full transition-all ${activeIndex === index
                       ? "h-2.5 w-9 bg-secondary"
                       : "h-2.5 w-2.5 bg-white/45 hover:bg-white"
-                  }`}
+                    }`}
                 />
               ))}
             </div>

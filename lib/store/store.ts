@@ -10,6 +10,7 @@ import authReducer from "./auth/authSlice";
 import categoryReducer from "./categories/categoriesSlices";
 import productsReducer from "./products/productsSlices";
 import attributesReducer from "./attributes/attributeSlices";
+import wishlistReducer from "./wishlist/wishlistSlice";
 
 export const makeStore = () => {
   return configureStore({
@@ -28,6 +29,7 @@ export const makeStore = () => {
       adminAttributes: attributesReducer,
       adminVariants: adminVariantsReducer,
       adminOrders: adminOrdersReducer,
+      wishlist: wishlistReducer,
     },
   });
 };
