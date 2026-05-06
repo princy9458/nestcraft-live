@@ -20,14 +20,15 @@ const FeaturedBanner = ({ section: propSection }: FeaturedBannerProps) => {
   }, [pathname]);
 
   const getCurrentSection = useMemo(() => {
-    if (!currentPages) return;
-    return currentPages.content?.find((page: any) => page?.adminTitle === "FeaturedBanner");
+    if (!currentPages || !Array.isArray(currentPages.content)) return;
+    return currentPages.content.find((page: any) => page?.adminTitle === "FeaturedBanner");
   }, [currentPages]);
 
   const section = propSection || getCurrentSection;
 
   const p = (section as any)?.props || defaultFeaturedBanner.props;
-  const content = (section as any)?.content || defaultFeaturedBanner.content;
+  const rawContent = (section as any)?.content || defaultFeaturedBanner.content;
+  const content = Array.isArray(rawContent) ? rawContent : [];
 
   const badge = p.badge?.[lang] || p.badge?.en || p.badge || "";
   const heading = p.heading?.[lang] || p.heading?.en || p.heading || "";

@@ -28,9 +28,10 @@ const Craft = ({ section: propSection }: CraftProps) => {
   }, [currentPages]);
 
   const section = propSection || getCurrentSection;
+  const rawContent = (section as any)?.content || defaultCraftData.content;
+  const content = Array.isArray(rawContent) ? rawContent : [];
 
   const p = (section as any)?.props || defaultCraftData.props;
-  const content = (section as any)?.content || defaultCraftData.content;
 
   const badge = p.badge?.[lang] || p.badge?.en || p.badge || "";
   const title = p.title?.[lang] || p.title?.en || p.title || "";

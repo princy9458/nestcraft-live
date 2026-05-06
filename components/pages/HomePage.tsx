@@ -33,14 +33,17 @@ interface HomePageProps {
 }
 
 // --- Helper to extract section mapping ---
-const getSection = (content: any[], adminTitle: string) => 
-  content?.find(s => s.adminTitle === adminTitle);
+const getSection = (content: any, adminTitle: string) => 
+  Array.isArray(content) ? content.find(s => s?.adminTitle === adminTitle) : undefined;
 
 const HomePage = ({ data }: HomePageProps) => {
   const { nestCraftUser } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
   const { currentPages } = useSelector((state: RootState) => state.pages);
-  const content = currentPages?.content || data?.content || [];
+  
+  // Ensure content is always an array
+  const rawContent = currentPages?.content || data?.content;
+  const content = Array.isArray(rawContent) ? rawContent : [];
 
   useEffect(() => {
     dispatch(resetPageComments());

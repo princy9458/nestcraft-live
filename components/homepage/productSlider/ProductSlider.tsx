@@ -25,14 +25,15 @@ const ProductSlider = ({ section: propSection }: ProductSliderProps) => {
   }, [pathname]);
 
   const getCurrentSection = useMemo(() => {
-    if (!currentPages) return;
-    return currentPages.content?.find((page: any) => page?.adminTitle === "Product Slider");
+    if (!currentPages || !Array.isArray(currentPages.content)) return;
+    return currentPages.content.find((page: any) => page?.adminTitle === "Product Slider");
   }, [currentPages]);
 
   const section = propSection || getCurrentSection;
 
   const p = (section as any)?.props || defaultProductSliderData.props;
-  const featuredProducts = (section as any)?.content || defaultProductSliderData.content;
+  const rawContent = (section as any)?.content || defaultProductSliderData.content;
+  const featuredProducts = Array.isArray(rawContent) ? rawContent : [];
 
   const badge = p.badge?.[lang] || p.badge?.en || p.badge || "";
   const heading = p.heading?.[lang] || p.heading?.en || p.heading || "";
