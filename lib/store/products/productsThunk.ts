@@ -4,7 +4,16 @@ export const fetchProducts = createAsyncThunk(
   "products/fetchAll",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch("/api/ecommerce/products");
+      const response = await fetch("/api/commerce/products",
+        {
+        method:"GET",
+        headers: {
+          'Content-Type': 'application/json',
+          "x-tenant-db": "kp_nestcraft"
+        },
+       
+      }
+      );
       if (!response.ok) throw new Error("Failed to fetch products");
       const data = await response.json();
       return data;

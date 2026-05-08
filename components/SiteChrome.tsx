@@ -33,6 +33,7 @@ import { products } from "@/data/products";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/lib/store/store";
 
+
 // --- Types ---
 type MegaMenuLink = { title: string; href: string };
 type MegaMenuSection = { heading: string; links: MegaMenuLink[] };
@@ -951,8 +952,8 @@ const Header = ({
   const cartCount = useAppSelector(selectCartCount);
   const { pathname } = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
+  const navigate = useNavigate();
   console.log('wsCategories', wsCategories)
-
   const dispatch= useDispatch<AppDispatch>()
   const activeTab = wsCategories.find((tab) => tab.key === activeMegaTab);
   const {allMenus}=useAppSelector((state)=>state.menus)
@@ -975,6 +976,13 @@ const Header = ({
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+
+  const handleClick = (tab: any) => {
+    console.log("tab--->", tab);
+    const href = tab?.promo?.href?.replace(/^\//, "") || "";
+    navigate(`/${href}`);
+    // setActiveMegaTab(null);
+  };
   return (
     <>
       <header className="w-full bg-background flex flex-col z-[1100] relative">
@@ -1134,19 +1142,16 @@ const Header = ({
           className="mx-auto px-4 sm:px-[5%] xl:px-[8%] flex items-center justify-start gap-8"
           onMouseLeave={() => setActiveMegaTab(null)}
         >
-          {wsCategories.map((tab) => {
+          { allMenus && allMenus?.map((tab) => {
             const isActive = activeMegaTab === tab.key;
             return (
               <button
                 key={tab.key}
                 onMouseEnter={() => setActiveMegaTab(tab.key)}
-                className={`group relative py-4 text-[14px] font-medium transition-colors ${
-                  tab.isLuxe
-                    ? "text-black"
-                    : isActive
-                      ? "text-secondary"
-                      : "text-foreground hover:text-secondary"
-                }`}
+                 onClick={()=>handleClick(tab)}
+                className={`group relative py-4 text-[14px] font-medium transition-colors
+            
+                `}
               >
                 <span>{tab.title}</span>
                 <span

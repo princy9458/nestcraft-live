@@ -105,11 +105,11 @@ const CategoryPage = () => {
   const filteredProducts = useMemo(() => {
     let result = allProducts;
 
-    if (currentCategory != undefined && currentCategory._id) {
-      result = result.filter((p) =>
-        p.categoryIds.includes(currentCategory?.id??""),
-      );
-    }
+    // if (currentCategory != undefined && currentCategory._id) {
+    //   result = result.filter((p) =>
+    //     p.categoryIds.includes(currentCategory?.id??""),
+    //   );
+    // }
 
     return result;
   }, [currentCategory, allProducts]);
@@ -329,7 +329,7 @@ const CategoryPage = () => {
               ) : (
                 <>
                   <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                    {paginatedProducts.map((product) => (
+                    {paginatedProducts?.map((product) => (
                       <div key={product._id} className="product-card group">
                         {/* <div className="badge">{product.badge}</div> */}
                         <Link
@@ -337,8 +337,8 @@ const CategoryPage = () => {
                           className="img-wrap block"
                         >
                           <img
-                            src={product.gallery[0].url}
-                            alt={product.gallery[0].alt}
+                            src={product?.gallery?.[0]?.url || ''}
+                            alt={product?.gallery?.[0]?.alt || ''}
                           />
                         </Link>
                         <div className="card-body">

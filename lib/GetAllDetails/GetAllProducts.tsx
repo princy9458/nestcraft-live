@@ -14,15 +14,14 @@ export default function GetAllProducts() {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const { nestCraftUser: user } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
-    if (!user) return;
+ 
 
     if (!hasFetched && !loading) {
       dispatch(fetchProducts());
     }
-  }, [user, hasFetched, loading]);
+  }, [hasFetched, loading]);
 
   return null;
 }
