@@ -22,6 +22,8 @@ export interface HeaderCategory {
   title: string;
   columns: HeaderColumn[];
   promo?: HeaderPromo;
+  isModular?: boolean;
+  isLuxe?: boolean;
 }
 
 export type HeaderData = HeaderCategory[];

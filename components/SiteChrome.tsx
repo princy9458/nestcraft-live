@@ -30,8 +30,9 @@ import { Link, useLocation, useNavigate } from "@/lib/router";
 import { useAppSelector } from "@/lib/store/hooks";
 import { selectCartCount } from "@/lib/store/cart/cartSlice";
 import { products } from "@/data/products";
+import { fetchMenusThunk } from "@/lib/store/menus/menusThunk";
+import { AppDispatch, RootState } from "@/lib/store/store";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/lib/store/store";
 
 
 // --- Types ---
@@ -954,9 +955,17 @@ const Header = ({
   const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
   console.log('wsCategories', wsCategories)
-  const dispatch= useDispatch<AppDispatch>()
-  const activeTab = wsCategories.find((tab) => tab.key === activeMegaTab);
-  const {allMenus}=useAppSelector((state)=>state.menus)
+  const dispatch = useDispatch<AppDispatch>();
+  const {allMenus, isFetchedMenus}=useAppSelector((state)=>state.menus)
+
+  useEffect(() => {
+    if (!isFetchedMenus) {
+      dispatch(fetchMenusThunk());
+    }
+  }, [dispatch, isFetchedMenus]);
+
+  const displayMenus = allMenus && allMenus.length > 0 ? allMenus : wsCategories;
+  const activeTab = displayMenus.find((tab) => tab.key === activeMegaTab);
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
@@ -1142,7 +1151,7 @@ const Header = ({
           className="mx-auto px-4 sm:px-[5%] xl:px-[8%] flex items-center justify-start gap-8"
           onMouseLeave={() => setActiveMegaTab(null)}
         >
-          { allMenus && allMenus?.map((tab) => {
+          { displayMenus.map((tab) => {
             const isActive = activeMegaTab === tab.key;
             return (
               <button
@@ -1295,11 +1304,11 @@ const Header = ({
                       {activeTab.promo && (
                         <div className="w-[300px] shrink-0 border-l border-border pl-8 hidden xl:block">
                           <Link
-                            href={activeTab.promo.href}
+                            href={activeTab.promo.href || "#"}
                             className="block overflow-hidden rounded-md bg-surface group relative h-[350px]"
                           >
                             <img
-                              src={activeTab.promo.img}
+                              src={activeTab.promo.img || ""}
                               alt="Category Promo"
                               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                             />
@@ -1350,7 +1359,7 @@ const Header = ({
                 </button>
               </div>
               <div className="space-y-4">
-                {wsCategories.map((tab) => (
+                {displayMenus.map((tab) => (
                   <div key={tab.key} className="border-b border-border pb-3">
                     <Link
                       href={`/category/${tab.key}`}
