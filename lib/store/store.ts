@@ -13,6 +13,7 @@ import attributesReducer from "./attributes/attributeSlices";
 import wishlistReducer from "./wishlist/wishlistSlice";
 import websiteDetailReducer from "./websiteDetail/websiteDetailSlice";
 import MenusReducer from "./menus/menusSlice";
+import formsReducer from "./forms/formsSlice";
 
 export const makeStore = () => {
   return configureStore({
@@ -22,11 +23,7 @@ export const makeStore = () => {
       menus:MenusReducer,
       comments: commentsReducer,
       cart: cartReducer,
-      // adminProducts: adminProductsReducer,
-      // adminCategories: adminCategoriesReducer,
-      // adminAttributes: adminAttributesReducer,
-      // adminVariants: adminVariantsReducer,
-      // adminOrders: adminOrdersReducer,
+         forms: formsReducer,
       adminProducts: productsReducer,
       adminCategories: categoryReducer,
       adminAttributes: attributesReducer,
@@ -34,6 +31,7 @@ export const makeStore = () => {
       adminOrders: adminOrdersReducer,
       wishlist: wishlistReducer,
       websiteDetail: websiteDetailReducer,
+   
     },
   });
 };

@@ -3,16 +3,16 @@ import { NextRequest, NextResponse } from "next/server";
 const FASTAPI_URL = process.env.FASTAPI_URL || "http://127.0.0.1:8000";
 const TENANT_DB_NAME = process.env.TENANT_DB_NAME;
 
-async function proxyToFastAPI(req: NextRequest, context: { params: Promise<{ slug: string[] }> }) {
+async function proxyToFastAPI(req: NextRequest, context: { params: Promise<{ slug?: string[] }> }) {
   const { slug } = await context.params;
-  const path = slug.join("/");
+  const path = slug ? slug.join("/") : "";
   const searchParams = req.nextUrl.searchParams.toString();
-  const url = `${FASTAPI_URL}/cms/${path}${searchParams ? `?${searchParams}` : ""}`;
+  const url = `${FASTAPI_URL}/cms${path ? `/${path}` : ""}${searchParams ? `?${searchParams}` : ""}`;
   
   const headers = new Headers();
   
   // Forward relevant headers
-  const headersToForward = ["authorization", "cookie", "content-type", "x-tenant-db"];
+  const headersToForward = ["authorization", "cookie", "content-type", "x-tenant-db", "accept"];
   headersToForward.forEach(headerName => {
     const value = req.headers.get(headerName);
     if (value) {
