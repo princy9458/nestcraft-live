@@ -1,12 +1,15 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
-import { useAppSelector } from "@/lib/store/hooks";
+import React, { useState, useMemo, useEffect } from "react";
+import { useAppSelector, useAppDispatch } from "@/lib/store/hooks";
 import { usePathname } from "next/navigation";
 import { defaultNewsletterData } from "./newsletterData";
+import { fetchAllForm } from "@/lib/store/forms/formsThunk";
+import { RootState } from "@/lib/store/store";
 
 const Newsletter = () => {
-  const [email, setEmail] = useState("");
+  const dispatch = useAppDispatch();
+  const [formData, setFormData] = useState<Record<string, string>>({});
   const [msg, setMsg] = useState("");
   const currentPages = useAppSelector((state) => state.pages.currentPages);
   const pathname = usePathname();
@@ -29,7 +32,6 @@ const Newsletter = () => {
   const description = p.description?.[lang] || p.description?.en || p.description || "";
   const joinTitle = p.joinTitle?.[lang] || p.joinTitle?.en || p.joinTitle || "";
   const joinSub = p.joinSub?.[lang] || p.joinSub?.en || p.joinSub || "";
-  const emailPlaceholder = p.emailPlaceholder?.[lang] || p.emailPlaceholder?.en || p.emailPlaceholder || "";
   const buttonLabel = p.buttonLabel?.[lang] || p.buttonLabel?.en || p.buttonLabel || "";
   const msgSuccess = p.msgSuccess?.[lang] || p.msgSuccess?.en || p.msgSuccess || "";
   
@@ -41,10 +43,23 @@ const Newsletter = () => {
   const unsubscribe = p.unsubscribe?.[lang] || p.unsubscribe?.en || p.unsubscribe || "";
   const updates = p.updates?.[lang] || p.updates?.en || p.updates || "";
 
+
+  const { allForms, isFetchedForms } = useAppSelector((state: RootState) => state.forms);
+
+
+  const subscriptionForm = useMemo(() => {
+    if(allForms && allForms.length>0){
+      const form = allForms?.find((f) => f.name === "Subscribtion Forms");
+      console.log("form---->", form);
+      return form;
+    }
+    return null
+  }, [allForms]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setMsg(msgSuccess);
-    setEmail("");
+    setFormData({});
   };
 
   return (
@@ -110,25 +125,37 @@ const Newsletter = () => {
 
               <form
                 onSubmit={handleSubmit}
-                className="flex flex-col gap-3 sm:flex-row sm:items-center"
+                className="flex flex-col gap-4"
               >
-                <div className="flex-1">
-                  <input
-                    className="py-4 w-full rounded-full border border-white/15 bg-white px-5 text-[16px] font-medium text-black outline-none transition placeholder:text-black/45 focus:border-[#B8D35A] focus:ring-2 focus:ring-[#B8D35A]/30"
-                    type="email"
-                    placeholder={emailPlaceholder}
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
+                  {subscriptionForm?.fields?.map((field) => (
+                    <div key={field.id} className="flex-1">
+                      <label className="mb-1.5 block text-[13px] font-semibold text-white/75 ml-1">
+                        {field.label}
+                      </label>
+                      <input
+                        className="py-4 w-full rounded-full border border-white/15 bg-white px-5 text-[16px] font-medium text-black outline-none transition placeholder:text-black/45 focus:border-[#B8D35A] focus:ring-2 focus:ring-[#B8D35A]/30"
+                        type={field.type === "text" && field.name?.toLowerCase().includes("email") ? "email" : field.type}
+                        placeholder={field.placeholder || field.label}
+                        required={field.required}
+                        value={formData[field.name || field.id] || ""}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            [field.name || field.id]: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  ))}
 
-                <button
-                  className="inline-flex py-4 items-center justify-center rounded-full bg-[#B8D35A] px-7 text-[14px] font-extrabold uppercase tracking-[0.14em] text-[#14351F] transition hover:translate-y-[-1px] hover:bg-[#c7df72]"
-                  type="submit"
-                >
-                  {buttonLabel}
-                </button>
+                  <button
+                    className="inline-flex py-4 items-center justify-center rounded-full bg-[#B8D35A] px-7 text-[14px] font-extrabold uppercase tracking-[0.14em] text-[#14351F] transition hover:translate-y-[-1px] hover:bg-[#c7df72] sm:h-[58px]"
+                    type="submit"
+                  >
+                    {buttonLabel}
+                  </button>
+                </div>
               </form>
 
               {msg && (
