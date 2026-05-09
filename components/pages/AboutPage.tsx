@@ -98,7 +98,7 @@ const assurances = [
 ];
 
 const AboutPage = () => {
-    const {nestCraftUser}= useSelector((state:RootState)=>state.auth)
+    const {user}= useSelector((state:RootState)=>state.auth)
    const dispatch= useDispatch()
     //update the page
     // useEffect(()=>{
@@ -107,7 +107,7 @@ const AboutPage = () => {
   return (
     <>
         {/* commentsS Plugin */}
-   {nestCraftUser?.role=="admin" && <AnnotatorPlugin />}
+   {user?.role=="admin" && <AnnotatorPlugin />}
    {/* get all page from the database */}
    <GetAllPages/>
          
