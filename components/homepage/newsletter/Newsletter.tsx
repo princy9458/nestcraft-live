@@ -7,6 +7,8 @@ import { defaultNewsletterData } from "./newsletterData";
 import { fetchAllForm } from "@/lib/store/forms/formsThunk";
 import { RootState } from "@/lib/store/store";
 
+
+const TENANT_DB_NAME = process.env.NEXT_PUBLIC_TENANT_DB_NAME;
 const Newsletter = () => {
   const dispatch = useAppDispatch();
   const [formData, setFormData] = useState<Record<string, string>>({});
@@ -46,20 +48,34 @@ const Newsletter = () => {
 
   const { allForms, isFetchedForms } = useAppSelector((state: RootState) => state.forms);
 
-
+ console.log("formData", formData);
   const subscriptionForm = useMemo(() => {
     if(allForms && allForms.length>0){
       const form = allForms?.find((f) => f.name === "Subscribtion Forms");
-      console.log("form---->", form);
+ 
       return form;
     }
     return null
   }, [allForms]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setMsg(msgSuccess);
-    setFormData({});
+    try{
+      const res = await fetch("/api/form-data", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(TENANT_DB_NAME ? { "x-tenant-db": TENANT_DB_NAME } : {})
+        },
+        body: JSON.stringify(formData),
+      });
+      if(res.status === 200){
+        setMsg(msgSuccess);
+        setFormData({});
+      }
+    }catch(error){
+      console.log(error);
+    }
   };
 
   return (
@@ -131,18 +147,18 @@ const Newsletter = () => {
                   {subscriptionForm?.fields?.map((field) => (
                     <div key={field.id} className="flex-1">
                       <label className="mb-1.5 block text-[13px] font-semibold text-white/75 ml-1">
-                        {field.label}
+                        {field.placeholder}
                       </label>
                       <input
                         className="py-4 w-full rounded-full border border-white/15 bg-white px-5 text-[16px] font-medium text-black outline-none transition placeholder:text-black/45 focus:border-[#B8D35A] focus:ring-2 focus:ring-[#B8D35A]/30"
                         type={field.type === "text" && field.name?.toLowerCase().includes("email") ? "email" : field.type}
                         placeholder={field.placeholder || field.label}
                         required={field.required}
-                        value={formData[field.name || field.id] || ""}
+                        value={formData[field?.placeholder??""] || ""}
                         onChange={(e) =>
                           setFormData({
                             ...formData,
-                            [field.name || field.id]: e.target.value,
+                            [field?.placeholder??""]: e.target.value,
                           })
                         }
                       />

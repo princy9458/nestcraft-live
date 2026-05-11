@@ -1,7 +1,7 @@
 export const defaultBlogPosts = [
   {
     id: "blog-1",
-    type: "blog-item",
+    type: "section",
     props: {
       title: { en: "Choosing the Right Wood for Jaipur’s Climate" },
       image: "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&q=80&w=1200",

@@ -19,7 +19,7 @@ import { resetPageComments } from "@/lib/store/comments/commentSlice";
 
 
 const AboutPage = () => {
-  const { nestCraftUser } = useSelector((state: RootState) => state.auth)
+  const { user : nestCraftUser} = useSelector((state: RootState) => state.auth)
   const dispatch = useDispatch()
   //update the page
   // useEffect(()=>{

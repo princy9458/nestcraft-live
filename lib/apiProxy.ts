@@ -3,16 +3,29 @@ import { NextRequest, NextResponse } from "next/server";
 const FASTAPI_URL = process.env.FASTAPI_URL || "http://127.0.0.1:8000";
 const TENANT_DB_NAME = process.env.TENANT_DB_NAME;
 
-async function proxyToFastAPI(req: NextRequest, context: { params: Promise<{ slug?: string[] }> }) {
-  const { slug } = await context.params;
-  const path = slug ? slug.join("/") : "";
+export async function proxyRequest(
+  req: NextRequest, 
+  targetPath: string,
+  options: { addApiPrefix?: boolean } = {}
+) {
   const searchParams = req.nextUrl.searchParams.toString();
-  const url = `${FASTAPI_URL}/cms${path ? `/${path}` : ""}${searchParams ? `?${searchParams}` : ""}`;
+  const baseBackendUrl = options.addApiPrefix ? `${FASTAPI_URL}/api` : FASTAPI_URL;
+  const url = `${baseBackendUrl}/${targetPath}${searchParams ? `?${searchParams}` : ""}`;
   
   const headers = new Headers();
   
   // Forward relevant headers
-  const headersToForward = ["authorization", "cookie", "content-type", "x-tenant-db", "accept"];
+  const headersToForward = [
+    "authorization", 
+    "cookie", 
+    "content-type", 
+    "x-tenant-db", 
+    "accept",
+    "tenant-slug",
+    "tenant_slug",
+    "auth-token"
+  ];
+
   headersToForward.forEach(headerName => {
     const value = req.headers.get(headerName);
     if (value) {
@@ -25,7 +38,7 @@ async function proxyToFastAPI(req: NextRequest, context: { params: Promise<{ slu
     headers.set("x-tenant-db", TENANT_DB_NAME);
   }
 
-  const options: RequestInit = {
+  const fetchOptions: RequestInit = {
     method: req.method,
     headers: headers,
   };
@@ -35,10 +48,9 @@ async function proxyToFastAPI(req: NextRequest, context: { params: Promise<{ slu
       const contentType = req.headers.get("content-type");
       if (contentType?.includes("application/json")) {
         const body = await req.json();
-        options.body = JSON.stringify(body);
+        fetchOptions.body = JSON.stringify(body);
       } else {
-        // Handle other content types if necessary (e.g., formData)
-        options.body = await req.blob();
+        fetchOptions.body = await req.blob();
       }
     } catch (e) {
       // No body or error parsing
@@ -46,8 +58,8 @@ async function proxyToFastAPI(req: NextRequest, context: { params: Promise<{ slu
   }
 
   try {
-    console.log(`Proxying ${req.method} request to FastAPI: ${url}`);
-    const response = await fetch(url, options);
+    console.log(`[Proxy] ${req.method} ${req.nextUrl.pathname} -> ${url}`);
+    const response = await fetch(url, fetchOptions);
     
     // Check if response is JSON
     const contentType = response.headers.get("content-type");
@@ -62,12 +74,10 @@ async function proxyToFastAPI(req: NextRequest, context: { params: Promise<{ slu
       });
     }
   } catch (error) {
-    console.error(`Error proxying to FastAPI (${url}):`, error);
-    return NextResponse.json({ success: false, error: "Failed to connect to backend service" }, { status: 500 });
+    console.error(`[Proxy Error] ${url}:`, error);
+    return NextResponse.json(
+      { success: false, error: "Failed to connect to backend service" }, 
+      { status: 500 }
+    );
   }
 }
-
-export const GET = proxyToFastAPI;
-export const POST = proxyToFastAPI;
-export const PUT = proxyToFastAPI;
-export const DELETE = proxyToFastAPI;
