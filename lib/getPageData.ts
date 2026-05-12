@@ -15,11 +15,11 @@ function serialize(obj: any): any {
 }
 
 
-const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 
 export const getPageData = cache(async (slug: string) => {
   const tenantId = process.env.TENANT_DB_NAME || "kp_nestcraft";
-
+const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
   try {
     const res = await fetch(`${API_URL}/cms/pages?slug=${slug}`, {
       method: "GET",
@@ -48,6 +48,7 @@ export const getPageData = cache(async (slug: string) => {
 
 export const getSingleProduct = cache(async (id: string) => {
   const tenantId = process.env.TENANT_DB_NAME || "kp_nestcraft";
+ const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
   try {
     const res = await fetch(`${API_URL}/api/commerce/products/${id}`, {
       method: "GET",
@@ -84,7 +85,7 @@ export const getTenantRegistry = cache(async () => {
 });
 
 export const getBusinessBlueprint = cache(async () => {
-
+const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
     const tenantId = process.env.TENANT_DB_NAME || "kp_nestcraft";
 
   try {

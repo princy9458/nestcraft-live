@@ -623,6 +623,9 @@ const ProductDetailPage = ({ currentProduct }: { currentProduct: any }) => {
     (state: RootState) => state.adminCategories,
   );
 
+
+  console.log("currentProduct---",currentProduct);
+  
   const { items, loading, error, hasCartFetched } = useSelector(
     (state: RootState) => state.cart,
   );
