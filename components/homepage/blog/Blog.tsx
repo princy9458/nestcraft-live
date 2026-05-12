@@ -32,9 +32,16 @@ const Blog = ({ section: propSection }: BlogProps) => {
 
   const p = (section as any)?.props || {};
 
-  const heading = p.heading?.[lang] || p.heading?.en || p.heading || "The Journal";
-  const viewAllLabel = p.viewAllLabel?.[lang] || p.viewAllLabel?.en || p.viewAllLabel || "View All Posts";
-  const viewAllLink = p.viewAllLink || "/blog";
+  const getV = (field: any) => {
+    if (!field) return "";
+    const val = field.value !== undefined ? field.value : field;
+    if (val && typeof val === "object") return val[lang] || val.en || "";
+    return val || "";
+  };
+
+  const heading = getV(p.heading) || "The Journal";
+  const viewAllLabel = getV(p.viewAllLabel) || "View All Posts";
+  const viewAllLink = p.viewAllLink?.value || p.viewAllLink || "/blog";
 
   const items = (section as any)?.content || defaultBlogPosts;
 
@@ -80,10 +87,10 @@ const Blog = ({ section: propSection }: BlogProps) => {
         >
           {items.map((post: any, idx: number) => {
             const p = post.props || {};
-            const title = p.title?.[lang] || p.title?.en || p.title || post.title?.[lang] || post.title?.en || post.title || "";
-            const description = p.description?.[lang] || p.description?.en || p.description || post.description?.[lang] || post.description?.en || post.description || "";
-            const image = p.image || post.image || "";
-            const link = p.link || post.link || "#";
+            const title = getV(p.title) || getV(post.title) || "";
+            const description = getV(p.description) || getV(post.description) || "";
+            const image = p.image?.value || p.image || post.image || "";
+            const link = p.link?.value || p.link || post.link || "#";
 
             return (
               <div

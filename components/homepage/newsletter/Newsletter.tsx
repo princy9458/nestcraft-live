@@ -9,7 +9,7 @@ import { RootState } from "@/lib/store/store";
 
 
 const TENANT_DB_NAME = process.env.NEXT_PUBLIC_TENANT_DB_NAME;
-const Newsletter = () => {
+const Newsletter = ({ section: propSection }: { section?: any }) => {
   const dispatch = useAppDispatch();
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [msg, setMsg] = useState("");
@@ -27,23 +27,31 @@ const Newsletter = () => {
     return currentPages.content?.find((page: any) => page.adminTitle === "Newsletter Section");
   }, [currentPages]);
 
-  const p = (getCurrentSection as any)?.props || defaultNewsletterData.props;
- 
-  const badge = p.badge?.[lang] || p.badge?.en || p.badge || "";
-  const title = p.title?.[lang] || p.title?.en || p.title || "";
-  const description = p.description?.[lang] || p.description?.en || p.description || "";
-  const joinTitle = p.joinTitle?.[lang] || p.joinTitle?.en || p.joinTitle || "";
-  const joinSub = p.joinSub?.[lang] || p.joinSub?.en || p.joinSub || "";
-  const buttonLabel = p.buttonLabel?.[lang] || p.buttonLabel?.en || p.buttonLabel || "";
-  const msgSuccess = p.msgSuccess?.[lang] || p.msgSuccess?.en || p.msgSuccess || "";
+  const section = propSection || getCurrentSection;
+  const p = (section as any)?.props || defaultNewsletterData.props;
+
+  const getV = (field: any) => {
+    if (!field) return "";
+    const val = field.value !== undefined ? field.value : field;
+    if (val && typeof val === "object") return val[lang] || val.en || "";
+    return val || "";
+  };
+
+  const badge = getV(p.badge);
+  const title = getV(p.title);
+  const description = getV(p.description);
+  const joinTitle = getV(p.joinTitle);
+  const joinSub = getV(p.joinSub);
+  const buttonLabel = getV(p.buttonLabel);
+  const msgSuccess = getV(p.msgSuccess);
   
-  const feature1 = p.feature1?.[lang] || p.feature1?.en || p.feature1 || "";
-  const feature2 = p.feature2?.[lang] || p.feature2?.en || p.feature2 || "";
-  const feature3 = p.feature3?.[lang] || p.feature3?.en || p.feature3 || "";
+  const feature1 = getV(p.feature1);
+  const feature2 = getV(p.feature2);
+  const feature3 = getV(p.feature3);
   
-  const noSpam = p.noSpam?.[lang] || p.noSpam?.en || p.noSpam || "";
-  const unsubscribe = p.unsubscribe?.[lang] || p.unsubscribe?.en || p.unsubscribe || "";
-  const updates = p.updates?.[lang] || p.updates?.en || p.updates || "";
+  const noSpam = getV(p.noSpam);
+  const unsubscribe = getV(p.unsubscribe);
+  const updates = getV(p.updates);
 
 
   const { allForms, isFetchedForms } = useAppSelector((state: RootState) => state.forms);

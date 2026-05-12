@@ -26,10 +26,17 @@ const InstagramGallery = ({ section: propSection }: { section?: any }) => {
   const p = (section as any)?.props || defaultInstagramData.props;
   const items = (section as any)?.content || defaultInstagramData.content;
 
-  const badge = p.badge?.[lang] || p.badge?.en || p.badge || "";
-  const heading = p.heading?.[lang] || p.heading?.en || p.heading || "";
-  const buttonLabel = p.buttonLabel?.[lang] || p.buttonLabel?.en || p.buttonLabel || "";
-  const buttonLink = p.buttonLink || "https://instagram.com";
+  const getV = (field: any) => {
+    if (!field) return "";
+    const val = field.value !== undefined ? field.value : field;
+    if (val && typeof val === "object") return val[lang] || val.en || "";
+    return val || "";
+  };
+
+  const badge = getV(p.badge);
+  const heading = getV(p.heading);
+  const buttonLabel = getV(p.buttonLabel);
+  const buttonLink = p.buttonLink?.value || p.buttonLink || "https://instagram.com";
 
   return (
   <section
@@ -57,7 +64,7 @@ const InstagramGallery = ({ section: propSection }: { section?: any }) => {
 
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
       {items.map((img: any, idx: number) => {
-        const url = typeof img === "string" ? img : img.url;
+        const url = img?.props?.image?.value || img?.url || (typeof img === "string" ? img : "");
         return (
           <motion.div
             key={idx}

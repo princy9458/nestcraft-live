@@ -29,9 +29,16 @@ const Collections = ({ section: propSection }: CollectionsProps) => {
   const p = (section as any)?.props || defaultCollectionProps;
   const items = (section as any)?.content || defaultCollections;
 
-  const heading = p.heading?.[lang] || p.heading?.en || p.heading || "";
-  const viewAllLabel = p.viewAllLabel?.[lang] || p.viewAllLabel?.en || p.viewAllLabel || "";
-  const viewAllLink = p.viewAllLink || "/shop";
+  const getV = (field: any) => {
+    if (!field) return "";
+    const val = field.value !== undefined ? field.value : field;
+    if (val && typeof val === "object") return val[lang] || val.en || "";
+    return val || "";
+  };
+
+  const heading = getV(p.heading);
+  const viewAllLabel = getV(p.viewAllLabel);
+  const viewAllLink = p.viewAllLink?.value || p.viewAllLink || "/shop";
 
   return (
     <section
@@ -54,9 +61,9 @@ const Collections = ({ section: propSection }: CollectionsProps) => {
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {items.map((item: any, idx: number) => {
           const sp = item.props || {};
-          const title = sp.title?.[lang] || sp.title?.en || sp.title || item.title?.[lang] || item.title?.en || item.title || "";
-          const image = sp.image || item.image || "";
-          const link = sp.link || item.link || "/shop";
+          const title = getV(sp.title) || getV(item.title) || "";
+          const image = sp.image?.value || sp.image || item.image || "";
+          const link = sp.link?.value || sp.link || item.link || "/shop";
 
           return (
             <Link

@@ -30,13 +30,21 @@ const FeaturedBanner = ({ section: propSection }: FeaturedBannerProps) => {
   const rawContent = (section as any)?.content || defaultFeaturedBanner.content;
   const content = Array.isArray(rawContent) ? rawContent : [];
 
-  const badge = p.badge?.[lang] || p.badge?.en || p.badge || "";
-  const heading = p.heading?.[lang] || p.heading?.en || p.heading || "";
-  const description = p.description?.[lang] || p.description?.en || p.description || "";
-  const buttonLabel = p.buttonLabel?.[lang] || p.buttonLabel?.en || p.buttonLabel || "";
-  const buttonLink = p.buttonLink || "/shop";
+  const getV = (field: any) => {
+    if (!field) return "";
+    const val = field.value !== undefined ? field.value : field;
+    if (val && typeof val === "object") return val[lang] || val.en || "";
+    return val || "";
+  };
+
+  const badge = getV(p.badge);
+  const heading = getV(p.heading);
+  const description = getV(p.description);
+  const buttonLabel = getV(p.buttonLabel);
+  const buttonLink = p.buttonLink?.value || p.buttonLink || "/shop";
 
   const imgBlock = content?.find((b: any) => b.type === "image");
+  const imgUrl = imgBlock?.props?.image?.value || imgBlock?.url || "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?auto=format&fit=crop&q=80&w=1200";
 
   return (
     <section
@@ -51,8 +59,8 @@ const FeaturedBanner = ({ section: propSection }: FeaturedBannerProps) => {
         className="md:h-[580px] h-[380px]"
       >
         <img
-          src={imgBlock?.url || "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?auto=format&fit=crop&q=80&w=1200"}
-          alt={imgBlock?.alt || "Bed"}
+          src={imgUrl}
+          alt={imgBlock?.props?.alt?.value || imgBlock?.alt || "Bed"}
           className="w-full h-full object-cover saturate-[1.02] contrast-[1.02]"
         />
       </motion.div>

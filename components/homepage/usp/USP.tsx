@@ -46,10 +46,18 @@ const USP = () => {
         className="bg-surface border border-border md:shadow-2xl grid sm:grid-cols-2 lg:grid-cols-4 gap-[18px] p-[22px] rounded-lg"
       >
         {items.map((item: any, idx: number) => {
-          const iconKey = item.props?.icon;
+          const sp = item.props || {};
+          const getV = (field: any) => {
+            if (!field) return "";
+            const val = field.value !== undefined ? field.value : field;
+            if (val && typeof val === "object") return val[lang] || val.en || "";
+            return val || "";
+          };
+
+          const iconKey = getV(sp.icon);
           const Icon = iconMap[iconKey] || icons[idx % icons.length];
-          const title = item.props?.title?.[lang] || item.props?.title?.en || item.props?.title || item.title;
-          const description = item.props?.description?.[lang] || item.props?.description?.en || item.props?.description || item.description || item.sub;
+          const title = getV(sp.title) || item.title;
+          const description = getV(sp.description) || item.description || item.sub;
           
           return (
             <div key={idx} className="flex gap-3 items-start p-[6px_8px]">

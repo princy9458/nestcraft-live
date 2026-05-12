@@ -33,19 +33,26 @@ const Craft = ({ section: propSection }: CraftProps) => {
 
   const p = (section as any)?.props || defaultCraftData.props;
 
-  const badge = p.badge?.[lang] || p.badge?.en || p.badge || "";
-  const title = p.title?.[lang] || p.title?.en || p.title || "";
-  const buttonLabel = p.buttonLabel?.[lang] || p.buttonLabel?.en || p.buttonLabel || "";
-  const buttonLink = p.buttonLink || "/about";
-  const mainHeading = p.mainHeading?.[lang] || p.mainHeading?.en || p.mainHeading || "";
-  const description = p.description?.[lang] || p.description?.en || p.description || "";
+  const getV = (field: any) => {
+    if (!field) return "";
+    const val = field.value !== undefined ? field.value : field;
+    if (val && typeof val === "object") return val[lang] || val.en || "";
+    return val || "";
+  };
+
+  const badge = getV(p.badge);
+  const title = getV(p.title);
+  const buttonLabel = getV(p.buttonLabel);
+  const buttonLink = p.buttonLink?.value || p.buttonLink || "/about";
+  const mainHeading = getV(p.mainHeading);
+  const description = getV(p.description);
 
   const imgBlock = content.find((b: any) => b.type === "image");
   const listBlock = content.find((b: any) => b.type === "list");
   const buttonsBlock = content.find((b: any) => b.type === "buttons");
 
-  const listItems = listBlock?.items || [];
-  const buttons = buttonsBlock?.items || [];
+  const listItems = listBlock?.items || listBlock?.props?.items?.value || [];
+  const buttons = buttonsBlock?.items || buttonsBlock?.props?.items?.value || [];
 
   return (
     <section
@@ -98,7 +105,7 @@ const Craft = ({ section: propSection }: CraftProps) => {
 
           <div className="grid gap-3 mt-[18px]">
             {listItems.map((li: any, idx: number) => {
-              const text = li?.[lang] || li?.en || li || "";
+              const text = getV(li);
               return (
                 <div
                   key={idx}
@@ -112,7 +119,7 @@ const Craft = ({ section: propSection }: CraftProps) => {
 
           <div className="mt-[22px] flex gap-3 flex-wrap">
             {buttons.map((btn: any, i: number) => {
-              const label = btn.label?.[lang] || btn.label?.en || btn.label || "";
+              const label = getV(btn.label);
               return (
                 <Link
                   key={i}

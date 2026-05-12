@@ -33,10 +33,17 @@ const ShopByRoom = ({ section: propSection }: ShopByRoomProps) => {
   const p = (section as any)?.props || defaultShopByRoomData.props;
   const items = (section as any)?.content || defaultShopByRoomData.content;
 
-  const badge = p.badge?.[lang] || p.badge?.en || p.badge || "";
-  const heading = p.heading?.[lang] || p.heading?.en || p.heading || "";
-  const buttonLabel = p.buttonLabel?.[lang] || p.buttonLabel?.en || p.buttonLabel || "";
-  const buttonLink = p.buttonLink || "/shop";
+  const getV = (field: any) => {
+    if (!field) return "";
+    const val = field.value !== undefined ? field.value : field;
+    if (val && typeof val === "object") return val[lang] || val.en || "";
+    return val || "";
+  };
+
+  const badge = getV(p.badge);
+  const heading = getV(p.heading);
+  const buttonLabel = getV(p.buttonLabel);
+  const buttonLink = p.buttonLink?.value || p.buttonLink || "/shop";
 
   return (
     <section
@@ -64,10 +71,10 @@ const ShopByRoom = ({ section: propSection }: ShopByRoomProps) => {
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {items.map((item: any, idx: number) => {
           const sp = item.props || {};
-          const name = sp.name?.[lang] || sp.name?.en || sp.name || item.name?.[lang] || item.name || item.title?.[lang] || item.title || "";
+          const name = getV(sp.name) || getV(item.name) || getV(item.title) || "";
           const id = item.id || idx;
-          const img = sp.image || item.img || item.image || "";
-          const exploreLabel = p.exploreLabel?.[lang] || p.exploreLabel?.en || p.exploreLabel || "";
+          const img = sp.image?.value || sp.image || item.img || item.image || "";
+          const exploreLabel = getV(p.exploreLabel);
           
           return (
             <Link

@@ -92,17 +92,27 @@ const MainHeroSlider = ({ initialSlides }: { initialSlides?: any[] }) => {
 
   const slides = useMemo(() => {
     if (getCurrentSection && getCurrentSection.content) {
-      return getCurrentSection.content.map((slide: any) => ({
-        id: slide.id,
-        label: slide.props?.label?.[lang] || slide.props?.label?.en || slide.props?.label || "",
-        title: slide.props?.title?.[lang] || slide.props?.title?.en || slide.props?.title || "",
-        highlight: slide.props?.highlight?.[lang] || slide.props?.highlight?.en || slide.props?.highlight || "",
-        titleEnd: slide.props?.titleEnd?.[lang] || slide.props?.titleEnd?.en || slide.props?.titleEnd || "",
-        description: slide.props?.description?.[lang] || slide.props?.description?.en || slide.props?.description || "",
-        image: slide.props?.image || "",
-        product: slide.props?.product?.[lang] || slide.props?.product?.en || slide.props?.product || "",
-        price: slide.props?.price?.[lang] || slide.props?.price?.en || slide.props?.price || "",
-      }));
+      return getCurrentSection.content.map((slide: any) => {
+        const p = slide.props || {};
+        const getV = (field: any) => {
+          if (!field) return "";
+          const val = field.value !== undefined ? field.value : field;
+          if (val && typeof val === "object") return val[lang] || val.en || "";
+          return val || "";
+        };
+
+        return {
+          id: slide.id,
+          label: getV(p.label),
+          title: getV(p.title),
+          highlight: getV(p.highlight),
+          titleEnd: getV(p.titleEnd),
+          description: getV(p.description),
+          image: p.image?.value || p.image || "",
+          product: getV(p.product),
+          price: getV(p.price),
+        };
+      });
     }
     return initialSlides || premiumHeroSlides;
   }, [getCurrentSection, initialSlides, lang]);

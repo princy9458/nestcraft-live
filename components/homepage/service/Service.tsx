@@ -30,10 +30,17 @@ const Services = ({ section: propSection }: ServiceProps) => {
   const p = (section as any)?.props || defaultServiceProps;
   const cards = (section as any)?.content || defaultServices;
 
-  const badge = p.badge?.[lang] || p.badge?.en || p.badge || "";
-  const heading = p.heading?.[lang] || p.heading?.en || p.heading || "";
-  const viewAllLabel = p.viewAllLabel?.[lang] || p.viewAllLabel?.en || p.viewAllLabel || "";
-  const viewAllLink = p.viewAllLink || "/services";
+  const getV = (field: any) => {
+    if (!field) return "";
+    const val = field.value !== undefined ? field.value : field;
+    if (val && typeof val === "object") return val[lang] || val.en || "";
+    return val || "";
+  };
+
+  const badge = getV(p.badge);
+  const heading = getV(p.heading);
+  const viewAllLabel = getV(p.viewAllLabel);
+  const viewAllLink = p.viewAllLink?.value || p.viewAllLink || "/services";
 
   const iconMap: Record<string, any> = {
     "pen-tool": PenTool,
@@ -72,9 +79,9 @@ const Services = ({ section: propSection }: ServiceProps) => {
       <div className="grid md:grid-cols-3 gap-7">
         {cards.map((item: any, idx: number) => {
           const sp = item.props || {};
-          const Icon = iconMap[sp.icon] || iconsFallback[idx % iconsFallback.length];
-          const title = sp.title?.[lang] || sp.title?.en || sp.title || item.title?.[lang] || item.title?.en || item.title || "";
-          const description = sp.description?.[lang] || sp.description?.en || sp.description || item.description?.[lang] || item.description?.en || item.description || "";
+          const Icon = iconMap[getV(sp.icon)] || iconsFallback[idx % iconsFallback.length];
+          const title = getV(sp.title) || getV(item.title) || "";
+          const description = getV(sp.description) || getV(item.description) || "";
           
           return (
             <motion.div
