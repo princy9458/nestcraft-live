@@ -35,10 +35,17 @@ const ProductSlider = ({ section: propSection }: ProductSliderProps) => {
   const rawContent = (section as any)?.content || defaultProductSliderData.content;
   const featuredProducts = Array.isArray(rawContent) ? rawContent : [];
 
-  const badge = p.badge?.[lang] || p.badge?.en || p.badge || "";
-  const heading = p.heading?.[lang] || p.heading?.en || p.heading || "";
-  const viewAllLabel = p.viewAllLabel?.[lang] || p.viewAllLabel?.en || p.viewAllLabel || "";
-  const viewAllLink = p.viewAllLink || "/shop";
+  const getV = (field: any) => {
+    if (!field) return "";
+    const val = field.value !== undefined ? field.value : field;
+    if (val && typeof val === "object") return val[lang] || val.en || "";
+    return val || "";
+  };
+
+  const badge = getV(p.badge);
+  const heading = getV(p.heading);
+  const viewAllLabel = getV(p.viewAllLabel);
+  const viewAllLink = p.viewAllLink?.value || p.viewAllLink || "/shop";
 
   const handleScroll = () => {
     if (scrollRef.current) {
@@ -86,12 +93,12 @@ const ProductSlider = ({ section: propSection }: ProductSliderProps) => {
           className="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory no-scrollbar pb-1"
         >
           {featuredProducts.map((prod: any, idx: number) => {
-            const dp = prod.props || {};
-            const title = dp.title?.[lang] || dp.title?.en || dp.title || prod.title?.[lang] || prod.title?.en || prod.title || "";
-            const price = dp.price?.[lang] || dp.price?.en || dp.price || prod.price?.[lang] || prod.price?.en || prod.price || "";
-            const badge = dp.badge?.[lang] || dp.badge?.en || dp.badge || prod.badge?.[lang] || prod.badge?.en || prod.badge || "";
-            const id = prod.id || idx;
-            const img = dp.image || prod.img || prod.image || "";
+          const dp = prod.props || {};
+          const title = getV(dp.title) || getV(prod.title) || "";
+          const price = getV(dp.price) || getV(prod.price) || "";
+          const badge = getV(dp.badge) || getV(prod.badge) || "";
+          const id = prod.id || idx;
+          const img = dp.image?.value || dp.image || prod.img || prod.image || "";
             
             return (
               <div

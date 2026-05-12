@@ -32,10 +32,17 @@ const FAQ = ({ section: propSection }: FAQProps) => {
 
   const p = (section as any)?.props || {};
   
-  const heading = p.heading?.[lang] || p.heading?.en || p.heading || "Frequently Asked Questions";
-  const subheading = p.subheading?.[lang] || p.subheading?.en || p.subheading || "";
-  const viewAllLabel = p.viewAllLabel?.[lang] || p.viewAllLabel?.en || p.viewAllLabel || "View All FAQs";
-  const viewAllLink = p.viewAllLink || "/faq";
+  const getV = (field: any) => {
+    if (!field) return "";
+    const val = field.value !== undefined ? field.value : field;
+    if (val && typeof val === "object") return val[lang] || val.en || "";
+    return val || "";
+  };
+
+  const heading = getV(p.heading) || "Frequently Asked Questions";
+  const subheading = getV(p.subheading) || "";
+  const viewAllLabel = getV(p.viewAllLabel) || "View All FAQs";
+  const viewAllLink = p.viewAllLink?.value || p.viewAllLink || "/faq";
 
   const items = (section as any)?.content || defaultFAQs;
 
@@ -60,8 +67,8 @@ const FAQ = ({ section: propSection }: FAQProps) => {
       <div className="max-w-[800px] mx-auto">
         {items.map((faq: any, idx: number) => {
           const p = faq.props || {};
-          const title = p.title?.[lang] || p.title?.en || p.title || faq.title?.[lang] || faq.title?.en || faq.title || "";
-          const description = p.description?.[lang] || p.description?.en || p.description || faq.description?.[lang] || faq.description?.en || faq.description || "";
+          const title = getV(p.title) || getV(faq.title) || "";
+          const description = getV(p.description) || getV(faq.description) || "";
           
           return (
             <div

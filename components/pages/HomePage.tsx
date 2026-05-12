@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
+import { usePathname } from "next/navigation";
 import { motion } from "motion/react";
 
 import { Link } from "@/lib/router";
@@ -54,7 +55,26 @@ const HomePage = ({ data }: HomePageProps) => {
   }, []);
 
   const ctaSection = getSection(content, "CTA");
-  const ctaBlock = ctaSection?.columns?.[0]?.[0];
+  const ctaBlock = ctaSection?.content?.[0] || ctaSection?.columns?.[0]?.[0];
+
+  const getV = (field: any, lang: string) => {
+    if (!field) return "";
+    const val = field.value !== undefined ? field.value : field;
+    if (val && typeof val === "object") return val[lang] || val.en || "";
+    return val || "";
+  };
+
+  const pathname = usePathname();
+  const lang = useMemo(() => {
+    const segments = pathname.split("/").filter(Boolean);
+    if (segments[0] === "hi") return "hi";
+    return "en";
+  }, [pathname]);
+
+  const ctaTitle = getV(ctaBlock?.props?.title, lang) || ctaBlock?.title || "";
+  const ctaDescription = getV(ctaBlock?.props?.description, lang) || ctaBlock?.description || "";
+  const ctaButtonLabel = getV(ctaBlock?.props?.buttonLabel, lang) || ctaBlock?.buttonLabel || "";
+  const ctaButtonLink = ctaBlock?.props?.buttonLink?.value || ctaBlock?.buttonLink || "/shop";
 
   return (
     <>
@@ -69,20 +89,20 @@ const HomePage = ({ data }: HomePageProps) => {
       <GetAuthTokenFastApi/>
       <UpdateCurrentPage/>
 
-      <Hero section={getSection(content, "Hero")} />
+      <Hero section={getSection(content, "Premium Hero Slider") || getSection(content, "Hero")} />
       <USP />
       <Services section={getSection(content, "Services")} />
       <Collections section={getSection(content, "Collections")} />
-      <ShopByRoom />
+      <ShopByRoom section={getSection(content, "Shop By Room Section")} />
       <FeaturedBanner section={getSection(content, "FeaturedBanner")} />
-      <ProductSlider />
-      <Craft section={getSection(content, "Craft")} />
-      <Testimonials section={getSection(content, "Testimonials")} />
-      <Blog section={getSection(content, "Blog")} />
-      <FAQ section={getSection(content, "FAQ")} />
-      <Newsletter />
+      <ProductSlider section={getSection(content, "New Essentials Slider")} />
+      <Craft section={getSection(content, "Craft & Quality Section")} />
+      <Testimonials section={getSection(content, "Customer Testimonials")} />
+      <Blog section={getSection(content, "Latest Blog Posts")} />
+      <FAQ section={getSection(content, "Homepage FAQs")} />
+      <Newsletter section={getSection(content, "Newsletter Section")} />
       
-      <InstagramGallery />
+      <InstagramGallery section={getSection(content, "Instagram Gallery")} />
 
       {ctaBlock && (
         <section
@@ -95,17 +115,17 @@ const HomePage = ({ data }: HomePageProps) => {
             viewport={{ once: true }}
           >
             <h2 className="text-[38px] lg:text-[48px] font-bold tracking-tight">
-              {ctaBlock.title}
+              {ctaTitle}
             </h2>
             <p className="text-white/70 font-semibold mt-[18px] mb-[34px] max-w-[600px] mx-auto">
-              {ctaBlock.description}
+              {ctaDescription}
             </p>
             <div className="flex gap-3.5 justify-center flex-wrap">
               <Link
-                href={ctaBlock.buttonLink || "/shop"}
+                href={ctaButtonLink}
                 className="bg-primary text-white px-8 h-12 rounded-full text-[14px] font-semibold uppercase tracking-wider hover:bg-primary/90 transition-all flex items-center"
               >
-                {ctaBlock.buttonLabel}
+                {ctaButtonLabel}
               </Link>
               <Link
                 href="/contact"

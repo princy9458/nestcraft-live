@@ -32,8 +32,15 @@ const Testimonials = ({ section: propSection }: TestimonialsProps) => {
   const p = (section as any)?.props || defaultTestimonialProps;
   const items = (section as any)?.content || defaultTestimonials;
 
-  const badge = p.badge?.[lang] || p.badge?.en || p.badge || "";
-  const heading = p.heading?.[lang] || p.heading?.en || p.heading || "";
+  const getV = (field: any) => {
+    if (!field) return "";
+    const val = field.value !== undefined ? field.value : field;
+    if (val && typeof val === "object") return val[lang] || val.en || "";
+    return val || "";
+  };
+
+  const badge = getV(p.badge);
+  const heading = getV(p.heading);
 
   const handleScroll = () => {
     if (scrollRef.current) {
@@ -76,9 +83,9 @@ const Testimonials = ({ section: propSection }: TestimonialsProps) => {
         >
           {items.map((item: any, idx: number) => {
             const sp = item.props || {};
-            const quote = sp.quote?.[lang] || sp.quote?.en || sp.quote || item.quote?.[lang] || item.quote?.en || item.quote || "";
-            const author = sp.author?.[lang] || sp.author?.en || sp.author || item.author?.[lang] || item.author?.en || item.author || "";
-            const role = sp.role?.[lang] || sp.role?.en || sp.role || item.role?.[lang] || item.role?.en || item.role || "";
+            const quote = getV(sp.quote) || getV(item.quote) || "";
+            const author = getV(sp.author) || getV(item.author) || "";
+            const role = getV(sp.role) || getV(item.role) || "";
             
             return (
               <div
