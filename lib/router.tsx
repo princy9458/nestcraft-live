@@ -13,7 +13,8 @@ export function Link({ href, ...props }: React.ComponentProps<typeof NextLink>) 
     typeof href === "string" &&
     href.startsWith("/") &&
     !href.startsWith("/api") &&
-    locale
+    locale &&
+    locale !== "en"
   ) {
     if (!href.startsWith(`/${locale}/`) && href !== `/${locale}`) {
       localizedHref = `/${locale}${href === "/" ? "" : href}`;
@@ -34,7 +35,8 @@ export function useNavigate() {
       to.startsWith("/") &&
       !to.startsWith("/admin") &&
       !to.startsWith("/api") &&
-      locale
+      locale &&
+      locale !== "en"
     ) {
       if (!to.startsWith(`/${locale}/`) && to !== `/${locale}`) {
         localizedTo = `/${locale}${to === "/" ? "" : to}`;

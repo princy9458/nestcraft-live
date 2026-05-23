@@ -32,23 +32,27 @@ export async function middleware(req: NextRequest) {
       return NextResponse.next();
     }
 
-    // 3. Check if the current pathname already has a supported locale prefix
-    const pathnameHasLocale = locales.some(
+    // 3. Check if the current pathname has a supported locale prefix
+    const matchedLocale = locales.find(
       (locale: any) =>
         pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`,
     );
 
-    if (pathnameHasLocale) {
+    if (matchedLocale === defaultLocale) {
+      // 4a. Default locale prefix in URL → redirect to remove it
+      const pathWithoutLocale = pathname.replace(`/${defaultLocale}`, "") || "/";
+      return NextResponse.redirect(new URL(pathWithoutLocale, req.url));
+    }
+
+    if (matchedLocale) {
+      // 4b. Non-default locale prefix → serve as-is
       return NextResponse.next();
     }
 
-    // 4. If no locale is present, redirect to the default locale
-    const redirectUrl = new URL(`/${defaultLocale}${pathname}`, req.url);
-
-    // Clean up double slashes
-    redirectUrl.pathname = redirectUrl.pathname.replace(/\/+/g, "/");
-
-    return NextResponse.redirect(redirectUrl);
+    // 5. No locale prefix → rewrite to default locale internally (URL stays clean)
+    const rewriteUrl = new URL(`/${defaultLocale}${pathname}`, req.url);
+    rewriteUrl.pathname = rewriteUrl.pathname.replace(/\/+/g, "/");
+    return NextResponse.rewrite(rewriteUrl);
   } catch (error) {
     console.error("Middleware error:", error);
     return NextResponse.next();
