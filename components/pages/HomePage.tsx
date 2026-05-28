@@ -4,7 +4,7 @@ import React, { useEffect, useMemo } from "react";
 import { usePathname } from "next/navigation";
 import { motion } from "motion/react";
 
-import { Link } from "@/lib/router";
+import Link from "next/link";
 import { AnnotatorPlugin } from "../annotationPlugin/AnnotatorPlugin";
 import GetAllPages from "./GetAllPages";
 import { RootState } from "@/lib/store/store";

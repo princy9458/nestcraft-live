@@ -6,7 +6,7 @@ import { categories as defaultCategories } from "@/data/products";
 import { defaultShopByRoomData } from "./shopByRoomData";
 import { ArrowRight } from "lucide-react";
 import { motion } from "motion/react";
-import { Link } from "@/lib/router";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAppSelector } from "@/lib/store/hooks";
 

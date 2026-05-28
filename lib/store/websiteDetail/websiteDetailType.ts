@@ -42,6 +42,22 @@ export interface WebsiteDetailPayload {
   paymentProviders: string | any;
   shippingRegions: string | any;
   checkoutPolicies: string | any;
+ analytics_tracking: {
+ googleAnalytics: {
+    measurementId: "",
+    enabled: false,
+    enhancedEcommerce: false,
+    debugMode: false,
+  },
+  metaPixel: {
+    pixelId: "",
+    enabled: false,
+    conversionsApiToken: "",
+    testEventCode: "",
+  },
+  jsonConfig: "",
+  parameters: [],
+}
 }
 
 export interface CommerceConfig {

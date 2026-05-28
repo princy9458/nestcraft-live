@@ -14,17 +14,17 @@ const GetAllMenus = () => {
     const { isFetchedMenus } = useSelector((state: RootState) => state.menus);
 
 
-    useEffect(() => {
+    // useEffect(() => {
  
 
-        if (!isFetchedMenus && !isApi.current ) {
-            console.log("Dispatching fetchAllHeadersThunk");
-            isApi.current = true;
-            dispatch(fetchMenusThunk());
-        } else {
-            isApi.current = false;
-        }
-    }, [dispatch, isFetchedMenus]);
+    //     if (!isFetchedMenus && !isApi.current ) {
+    //         console.log("Dispatching fetchAllHeadersThunk");
+    //         isApi.current = true;
+    //         dispatch(fetchMenusThunk());
+    //     } else {
+    //         isApi.current = false;
+    //     }
+    // }, [dispatch, isFetchedMenus]);
   return null;
 };
 export default GetAllMenus;

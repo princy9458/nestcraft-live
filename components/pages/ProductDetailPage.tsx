@@ -598,7 +598,8 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
-import { useParams, Link } from "@/lib/router";
+import { useParams } from "next/navigation";
+import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
 import {
   Star,

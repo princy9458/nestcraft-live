@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight, Search, Tag, Calendar, User } from 'lucide-react';
-import { Link } from '@/lib/router';
+import Link from 'next/link';
 
 const BlogPage = () => {
   const posts = [

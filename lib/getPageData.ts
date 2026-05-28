@@ -18,10 +18,10 @@ function serialize(obj: any): any {
 
 
 export const getPageData = cache(async (slug: string) => {
-  const tenantId = process.env.TENANT_DB_NAME || "kp_nestcraft";
+  const tenantId = process.env.TENANT_DB_NAME || "";
 const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
   try {
-    const res = await fetch(`${API_URL}/cms/pages?slug=${slug}`, {
+    const res = await fetch(`${API_URL}/api/cms/pages?slug=${slug}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -59,7 +59,7 @@ export const getSingleProduct = cache(async (id: string) => {
     });
 
     if (!res.ok) {
-      console.error(`Failed to fetch page data for slug: ${id}, status: ${res.status}`);
+      console.error(`Failed to fetch product data for id: ${id}, status: ${res.status}`);
       return null;
     }
 
@@ -70,7 +70,7 @@ export const getSingleProduct = cache(async (id: string) => {
 
     return serialize(data);
   } catch (error) {
-    console.error(`Error in getPageData for slug: ${id}`, error);
+    console.error(`Error in getSingleProduct for id: ${id}`, error);
     return null;
   }
 });

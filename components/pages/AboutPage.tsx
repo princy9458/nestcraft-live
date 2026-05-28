@@ -25,7 +25,7 @@ const AboutPage = () => {
   const { user: nestCraftUser } = useSelector((state: RootState) => state.auth);
   const { allPages, currentPages } = useSelector((state: RootState) => state.pages);
   const pathname = usePathname();
-  const slug = pathname.split("/")?.[2];
+  const slug = pathname.split("/").filter(Boolean).pop();
 
   const dispatch = useDispatch();
 
