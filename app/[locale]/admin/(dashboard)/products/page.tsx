@@ -40,7 +40,7 @@ import {
   Database,
   Activity,
 } from "lucide-react";
-import { Link } from "@/lib/router";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";

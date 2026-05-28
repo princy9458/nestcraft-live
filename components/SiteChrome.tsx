@@ -26,7 +26,8 @@ import {
   ClipboardList,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { Link, useLocation, useNavigate } from "@/lib/router";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { useAppSelector } from "@/lib/store/hooks";
 import { selectCartCount } from "@/lib/store/cart/cartSlice";
 import { products } from "@/data/products";
@@ -75,9 +76,9 @@ const Header = ({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeMegaTab, setActiveMegaTab] = useState<string | null>(null);
   const cartCount = useAppSelector(selectCartCount);
-  const { pathname } = useLocation();
+  const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
-  const navigate = useNavigate();
+  const router = useRouter();
   
   
   const dispatch = useDispatch<AppDispatch>();
@@ -114,7 +115,7 @@ const Header = ({
   const handleClick = (tab: any) => {
     console.log("tab--->", tab);
     const href = tab?.promo?.href?.replace(/^\//, "") || "";
-    navigate(`/${href}`);
+    router.push(`/${href}`);
     // setActiveMegaTab(null);
   };
   return (
@@ -513,7 +514,7 @@ const SearchOverlay = ({
   onClose: () => void;
 }) => {
   const [query, setQuery] = useState("");
-  const navigate = useNavigate();
+  const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -530,7 +531,7 @@ const SearchOverlay = ({
       : [];
 
   const handleSelect = (id: number) => {
-    navigate(`/product/${id}`);
+    router.push(`/product/${id}`);
     onClose();
     setQuery("");
   };
@@ -750,7 +751,7 @@ export default function SiteChrome({
 }) {
   const [theme, setTheme] = useState("light");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const { pathname } = useLocation();
+  const pathname = usePathname();
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");

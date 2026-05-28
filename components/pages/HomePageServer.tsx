@@ -14,7 +14,7 @@ import Newsletter from "../homepage/newsletter/Newsletter";
 import FAQ from "../homepage/faq/FAQ";
 import InstagramGallery from "../homepage/instagram/InstagramGallery";
 import { getSection, getV } from "@/lib/cmsUtils";
-import { Link } from "@/lib/router";
+import Link from "next/link";
 
 // Client-only initializers
 import GetAllPages from "./GetAllPages";
@@ -23,6 +23,7 @@ import GetAllProducts from "@/lib/GetAllDetails/GetAllProducts";
 import GetAllForms from "../forms/GetAllForms";
 import GetAuthTokenFastApi from "../wesiteDetail/GetAuthTokenFastApi";
 import UpdateCurrentPage from "./UpdateCurrentPage";
+import { AnnotatorPlugin } from "../annotationPlugin";
 
 interface HomePageServerProps {
   data: {
@@ -54,6 +55,7 @@ const HomePageServer = ({ data, lang }: HomePageServerProps) => {
       <GetAllForms />
       <GetAuthTokenFastApi />
       <UpdateCurrentPage />
+      <AnnotatorPlugin/>
 
       {/* Sections */}
       <Hero section={getSection(content, "Premium Hero Slider") || getSection(content, "Hero")} />

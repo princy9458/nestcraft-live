@@ -3,7 +3,7 @@
 
 import React, { useState, useRef, useMemo } from "react";
 import { Star, Heart, ChevronLeft, ChevronRight } from "lucide-react";
-import { Link } from "@/lib/router";
+import Link from "next/link";
 import { products as defaultProducts } from "@/data/products";
 import { defaultProductSliderData } from "./productSliderData";
 import { usePathname } from "next/navigation";

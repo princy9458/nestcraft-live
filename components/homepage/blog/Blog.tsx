@@ -3,7 +3,7 @@
 import React, { useState, useRef, useMemo } from "react";
 import { defaultBlogPosts } from "./blogData";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Link } from "@/lib/router";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAppSelector } from "@/lib/store/hooks";
 

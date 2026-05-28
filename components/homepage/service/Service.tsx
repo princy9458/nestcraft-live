@@ -2,7 +2,7 @@
 import React, { useMemo } from "react";
 import { Hammer, Package, PenTool } from "lucide-react";
 import { motion } from "motion/react";
-import { Link } from "@/lib/router";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAppSelector } from "@/lib/store/hooks";
 import { defaultServices, defaultServiceProps } from "./serviceData";

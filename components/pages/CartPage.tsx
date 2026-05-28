@@ -16,7 +16,7 @@ import {
   ShoppingBag,
   ChevronLeft,
 } from "lucide-react";
-import { Link } from "@/lib/router";
+import Link from "next/link";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store/store";
 

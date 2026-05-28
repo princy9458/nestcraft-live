@@ -4,7 +4,7 @@
 import React, { useState, useMemo } from "react";
 import { motion } from "motion/react";
 import { Plus, Minus } from "lucide-react";
-import { Link } from "@/lib/router";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAppSelector } from "@/lib/store/hooks";
 import { defaultFAQs } from "./faqData";

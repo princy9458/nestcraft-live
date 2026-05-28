@@ -16,7 +16,7 @@ import {
   CheckCircle2,
   ArrowRight,
 } from "lucide-react";
-import { Link } from "@/lib/router";
+import Link from "next/link";
 
 const CheckoutPage = () => {
   const cart = useAppSelector(selectCartItems);

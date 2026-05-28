@@ -48,7 +48,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useDispatch } from "react-redux";
 import { logoutThunk } from "@/lib/store/auth/authThunks";
-import { Link } from "@/lib/router";
+import Link from "next/link";
 
 const NAV_ITEMS = [
   {
