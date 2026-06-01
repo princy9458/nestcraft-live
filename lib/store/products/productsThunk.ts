@@ -7,18 +7,16 @@ export const fetchProducts = createAsyncThunk(
   "products/fetchAll",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch("/api/commerce/products",
-        {
-        method:"GET",
+      const response = await fetch("/api/commerce/products", {
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
-          "x-tenant-db": "kp_nestcraft"
+          "Content-Type": "application/json",
+          "x-tenant-db": "kp_nestcraft",
         },
-       
-      }
-      );
+      });
       if (!response.ok) throw new Error("Failed to fetch products");
       const data = await response.json();
+
       if (!response.ok)
         throw new Error(data.message || "Failed to fetch products");
       return data;
@@ -42,12 +40,12 @@ export const fetchProductsByCategory = createAsyncThunk(
   ) => {
     try {
       const parmas = new URLSearchParams(filters);
-
       const response = await fetch(
-        `${API_BASE_URL}/commerce/products?category=${category}&${parmas.toString()}`,
+        `/api/commerce/products?category=${category}&${parmas.toString()}`,
         {
           headers: {
             "x-tenant-db": tenantHeader || "",
+            "Content-Type": "application/json",
           },
           credentials: "include",
         },
@@ -55,7 +53,6 @@ export const fetchProductsByCategory = createAsyncThunk(
       const data = await response.json();
       if (!response.ok)
         throw new Error(data.message || "Failed to fetch products");
-
       return data;
     } catch (error: any) {
       return rejectWithValue(error.message);
@@ -67,7 +64,7 @@ export const fetchProductById = createAsyncThunk(
   "products/fetchById",
   async (id: string, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/commerce/products/${id}`, {
+      const response = await fetch(`/api/commerce/products/${id}`, {
         headers: {
           "x-tenant-db": tenantHeader || "",
         },
@@ -91,8 +88,8 @@ export const saveProduct = createAsyncThunk(
   ) => {
     try {
       const endpoint = id
-        ? `${API_BASE_URL}/commerce/products/${id}`
-        : `${API_BASE_URL}/commerce/products`;
+        ? `/api/commerce/products/${id}`
+        : `/api/commerce/products`;
       const method = id ? "PUT" : "POST";
 
       const response = await fetch(endpoint, {
@@ -122,7 +119,7 @@ export const deleteProduct = createAsyncThunk(
   "products/delete",
   async (id: string, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/commerce/products/${id}`, {
+      const response = await fetch(`/api/commerce/products/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -144,7 +141,7 @@ export const bulkImportProducts = createAsyncThunk(
   "products/bulkImport",
   async (products: any[], { rejectWithValue }) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/commerce/products/bulk`, {
+      const response = await fetch(`/api/commerce/products/bulk`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -162,4 +159,3 @@ export const bulkImportProducts = createAsyncThunk(
     }
   },
 );
-

@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { AppDispatch } from "../store/store";
 import { fetchProductsByCategory } from "../store/products/productsThunk";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 
 function checkIsFetched(arr: any[], id: string) {
   let main = arr.map((d) => d.categoryIds).flat();
@@ -15,6 +15,12 @@ function checkIsFetched(arr: any[], id: string) {
 
 export default function GetAllProducts() {
   const { id } = useParams<{ id: string }>();
+  const searchParams = useSearchParams();
+  const filters = useMemo(
+    () => Object.fromEntries(searchParams.entries()),
+    [searchParams],
+  );
+
   const { allProducts } = useSelector(
     (state: RootState) => state.adminProducts,
   );
@@ -22,11 +28,10 @@ export default function GetAllProducts() {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    if (checkIsFetched(allProducts, id)) {
-      return;
-    }
-    dispatch(fetchProductsByCategory({ category: id, filters: {} }));
-  }, [id]);
+    if (!id) return;
+
+    dispatch(fetchProductsByCategory({ category: id, filters }));
+  }, [id, filters]);
 
   return null;
 }

@@ -84,7 +84,7 @@ const HomePage = ({ data }: HomePageProps) => {
       {/* get all page from the database */}
       <GetAllPages />
       <GetAllMenus/>
-      <GetAllProducts/>
+      {/* <GetAllProducts/> */}
       <GetAllForms/>
       <GetAuthTokenFastApi/>
       <UpdateCurrentPage/>

@@ -9,7 +9,7 @@ export default function Page() {
     <Suspense fallback={<div>Loading Shop...</div>}>
       <GetAllPages />
       <GetAllMenus />
-      <GetAllProducts />
+      {/* <GetAllProducts /> */}
       <Component />
     </Suspense>
   );

@@ -364,8 +364,8 @@ const CheckoutPage = () => {
                 <div key={item._id} className="flex gap-4">
                   <div className="w-16 h-20 bg-background rounded-lg overflow-hidden border border-border flex-shrink-0">
                     <img
-                      src={item.gallery[0].url}
-                      alt={item.gallery[0].alt}
+                      src={item?.gallery[0]?.url}
+                      alt={item?.gallery[0]?.alt}
                       className="w-full h-full object-cover"
                     />
                   </div>
@@ -381,7 +381,7 @@ const CheckoutPage = () => {
                     </p>
                   </div>
                 </div>
-              ))} 
+              ))}
             </div>
             <div className="h-px bg-border my-6" />
             <div className="space-y-3 mb-6">

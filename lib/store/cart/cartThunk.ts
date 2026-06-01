@@ -26,7 +26,7 @@ export const addToCartAsync = createAsyncThunk(
   "cart/addToCart",
   async (item: any, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/commerce/cart`, {
+      const response = await fetch(`/api/commerce/cart`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -51,7 +51,7 @@ export const updateQuantityAsync = createAsyncThunk(
     { rejectWithValue },
   ) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/commerce/cart`, {
+      const response = await fetch(`/api/commerce/cart`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -74,7 +74,7 @@ export const removeFromCartAsync = createAsyncThunk(
   async (cartItemId: string, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        `${API_BASE_URL}/commerce/cart?cartItemId=${cartItemId}`,
+        `/api/commerce/cart?cartItemId=${cartItemId}`,
         {
           method: "DELETE",
           headers: {
@@ -97,7 +97,7 @@ export const clearCartAsync = createAsyncThunk(
   "cart/clearCart",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/commerce/cart?clear=true`, {
+      const response = await fetch(`/api/commerce/cart?clear=true`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -113,4 +113,3 @@ export const clearCartAsync = createAsyncThunk(
     }
   },
 );
-

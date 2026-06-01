@@ -17,6 +17,7 @@ import {
 
 export interface ProductFormState {
   _id?: string;
+  id?: string;
   name: string;
   sku: string;
   slug: string;
@@ -49,6 +50,8 @@ interface ProductsState {
   saving: boolean;
   error: string | null;
   hasFetched: boolean;
+  cmsFilters: any[];
+  totalProducts: number;
 }
 
 const initialFormState: ProductFormState = {
@@ -83,6 +86,8 @@ const initialState: ProductsState = {
   saving: false,
   error: null,
   hasFetched: false,
+  cmsFilters: [],
+  totalProducts: 0,
 };
 
 const productsSlice = createSlice({
@@ -129,6 +134,7 @@ const productsSlice = createSlice({
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.loading = false;
         state.allProducts = action.payload.data;
+        state.cmsFilters = action.payload.filters;
         state.hasFetched = true;
       })
       .addCase(fetchProducts.rejected, (state, action) => {
@@ -195,7 +201,9 @@ const productsSlice = createSlice({
           state.allProducts.push(action.payload.data);
         } else {
           state.allProducts = state.allProducts.map((product) =>
-            product._id === action.payload.editingId ? action.payload.data : product,
+            product._id === action.payload.editingId
+              ? action.payload.data
+              : product,
           );
         }
       })
@@ -228,13 +236,10 @@ const productsSlice = createSlice({
       })
       .addCase(fetchProductsByCategory.fulfilled, (state, action) => {
         const newProducts = action.payload.data;
-
-        newProducts.forEach((element: any) => {
-          if (!state.allProducts.find((p) => p._id === element._id)) {
-            state.allProducts.push(element);
-          }
-        });
+        state.allProducts = newProducts;
         state.loading = false;
+        state.totalProducts = action.payload.totalProducts;
+        state.cmsFilters = action.payload.filters;
       })
       .addCase(fetchProductsByCategory.rejected, (state, action) => {
         state.loading = false;

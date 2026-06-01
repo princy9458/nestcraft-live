@@ -21,7 +21,7 @@ const FetchAllData = () => {
       <GetAllMenus />
 
       {/* get all products */}
-      <GetAllProducts />
+      {/* <GetsAllProducts /> */}
 
       {/* get all forms */}
       <GetAllForms />
