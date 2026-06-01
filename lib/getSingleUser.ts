@@ -16,6 +16,7 @@ export const getAuthUser = cache(async (token: string) => {
         "x-tenant-db": process.env.NEXT_PUBLIC_TENANT_ID || "",
       } as HeadersInit,
     });
+    
     const data = await res.json();
     return serialize(data);
   } catch (error) {

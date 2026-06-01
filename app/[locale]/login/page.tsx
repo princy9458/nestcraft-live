@@ -26,6 +26,7 @@ export default function LoginPage() {
     try {
       const response = await dispatch(loginThunk({ email, password })).unwrap();
       if (response.user) {
+        console.log("====>>>", response)
         toast.success("Welcome back!");
         router.push("/");
       }

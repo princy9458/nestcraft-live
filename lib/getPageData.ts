@@ -3,23 +3,21 @@ import { connectTenantDB } from "./db";
 import { ObjectId } from "mongodb";
 import { isHex } from "@/app/api/ecommerce/categories/util";
 
-
 function serialize(obj: any): any {
   if (obj === null || obj === undefined) return null;
-  return JSON.parse(JSON.stringify(obj, (_, value) => {
-    if (value instanceof ObjectId) {
-      return value.toString();
-    }
-    return value;
-  }));
+  return JSON.parse(
+    JSON.stringify(obj, (_, value) => {
+      if (value instanceof ObjectId) {
+        return value.toString();
+      }
+      return value;
+    }),
+  );
 }
-
-
-
 
 export const getPageData = cache(async (slug: string) => {
   const tenantId = process.env.TENANT_DB_NAME || "";
-const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const API_URL = process.env.OWN_URL;
   try {
     const res = await fetch(`${API_URL}/api/cms/pages?slug=${slug}`, {
       method: "GET",
@@ -30,14 +28,15 @@ const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
     });
 
     if (!res.ok) {
-      console.error(`Failed to fetch page data for slug: ${slug}, status: ${res.status}`);
+      console.error(
+        `Failed to fetch page data for slug: ${slug}, status: ${res.status}`,
+      );
       return null;
     }
 
     const json = await res.json();
     // Support both wrapped { data: ... } and direct response formats
     const data = json.data !== undefined ? json.data : json;
-    
 
     return serialize(data);
   } catch (error) {
@@ -48,9 +47,9 @@ const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export const getSingleProduct = cache(async (id: string) => {
   const tenantId = process.env.TENANT_DB_NAME || "kp_nestcraft";
- const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const API_URL = process.env.OWN_URL;
   try {
-    const res = await fetch(`/api/commerce/products/${id}`, {
+    const res = await fetch(`${API_URL}/api/commerce/products/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -59,14 +58,15 @@ export const getSingleProduct = cache(async (id: string) => {
     });
 
     if (!res.ok) {
-      console.error(`Failed to fetch product data for id: ${id}, status: ${res.status}`);
+      console.error(
+        `Failed to fetch product data for id: ${id}, status: ${res.status}`,
+      );
       return null;
     }
 
     const json = await res.json();
     // Support both wrapped { data: ... } and direct response formats
     const data = json.data !== undefined ? json.data : json;
-    
 
     return serialize(data);
   } catch (error) {
@@ -85,20 +85,17 @@ export const getTenantRegistry = cache(async () => {
 });
 
 export const getBusinessBlueprint = cache(async () => {
-const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-    const tenantId = process.env.TENANT_DB_NAME || "kp_nestcraft";
+  const API_URL = process.env.OWN_URL;
+  const tenantId = process.env.TENANT_DB_NAME || "kp_nestcraft";
 
   try {
-    const response = await fetch(
-      `${API_URL}/cms/business-blueprint`,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          "x-tenant-db": tenantId || "kp_nestcraft",
-        },
-        credentials: "include",
+    const response = await fetch(`${API_URL}/cms/business-blueprint`, {
+      headers: {
+        "Content-Type": "application/json",
+        "x-tenant-db": tenantId || "kp_nestcraft",
       },
-    );
+      credentials: "include",
+    });
     const json = await response.json();
     const data = json.data !== undefined ? json.data : json;
     return serialize(data);

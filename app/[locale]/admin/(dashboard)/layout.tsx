@@ -39,7 +39,9 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   const cookieStore = await cookies();
-  const token = cookieStore.get("auth_token")?.value;
+  const tenantId = process.env.NEXT_PUBLIC_TENANT_ID;
+  const key = `auth_token_${tenantId}`
+  const token = cookieStore.get(key)?.value;
   const tenantRegistry = await getTenantRegistry();
 
   let isAuthenticated = false;

@@ -17,7 +17,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   const cookieStore = await cookies();
-  const token = cookieStore.get("auth_token")?.value;
+  const tenantId = process.env.NEXT_PUBLIC_TENANT_ID;
+  const key = `auth_token_${tenantId}`
+  const token = cookieStore.get(key)?.value;
 
   const [data, user] = await Promise.all([
     getPageData("about"),

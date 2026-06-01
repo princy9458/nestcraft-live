@@ -37,13 +37,17 @@ export default async function LocaleLayout({
 }) {
   const { locale } = await params;
   const cookieStore = await cookies();
-  const token = cookieStore.get("auth_token")?.value;
+  const tenantId = process.env.NEXT_PUBLIC_TENANT_ID;
+  const key = `auth_token_${tenantId}`
+  const token = cookieStore.get(key)?.value;
 
   const [tenantRegistry, businessBlueprint, user] = await Promise.all([
     getTenantRegistry(),
     getBusinessBlueprint(),
     token ? getAuthUser(token).catch(() => null) : Promise.resolve(null),
   ]);
+
+  console.log(user)
 
   return (
     <html
