@@ -46,7 +46,7 @@ All storefront routes are defined under `app/[locale]/` with a dynamic `[locale]
 | Page Path | File Path | Router | Component Type | Key Features |
 |-----------|----------|--------|---------------|--------------|
 | `/{locale}/product/[id]` | `app/[locale]/product/[id]/page.tsx` | App | **Mixed** (server fetch + client component) | `getSingleProduct(id)` server-side → `<ProductDetailPage>`: image gallery, variant selector, quantity picker, add-to-cart, tabs (overview/details/reviews/shipping), accordion specs |
-| `/{locale}/shop` | `app/[locale]/shop/page.tsx` | App | **Client** (all data via Redux thunks) | `<GetAllProducts>` prefetch → `<CategoryPage>`: product grid with filters, sidebar categories, pagination |
+| `/{locale}/shop` | `app/[locale]/shop/page.tsx` | App | *n*Client** (all data via Redux thunks) | `<GetAllProducts>` prefetch → `<CategoryPage>`: product grid with filters, sidebar categories, pagination |
 | `/{locale}/category/[id]` | `app/[locale]/category/[id]/page.tsx` | App | **Client** (all data via Redux thunks) | `<GetProductCategoryWise>` prefetch → `<CategoryPage>`: same component as shop, filtered by category ID |
 
 ### 2.2 Category / Collection Pages

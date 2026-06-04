@@ -598,7 +598,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
 import {
@@ -623,15 +623,18 @@ const ProductDetailPage = ({ currentProduct }: { currentProduct: any }) => {
   const { allCategories } = useSelector(
     (state: RootState) => state.adminCategories,
   );
+   const pathname= usePathname()
 
-
-  console.log("currentProduct---",currentProduct);
+   console.log("currentProduct--",currentProduct)
   
   const { items, loading, error, hasCartFetched } = useSelector(
     (state: RootState) => state.cart,
   );
 
   const { id } = useParams<{ id: string }>();
+
+ 
+
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
   const [activeTab, setActiveTab] = useState("overview");

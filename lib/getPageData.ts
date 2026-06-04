@@ -46,8 +46,9 @@ export const getPageData = cache(async (slug: string) => {
 });
 
 export const getSingleProduct = cache(async (id: string) => {
+  const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
   const tenantId = process.env.TENANT_DB_NAME || "kp_nestcraft";
-  const API_URL = process.env.OWN_URL;
+
   try {
     const res = await fetch(`${API_URL}/api/commerce/products/${id}`, {
       method: "GET",
@@ -65,7 +66,8 @@ export const getSingleProduct = cache(async (id: string) => {
     }
 
     const json = await res.json();
-    // Support both wrapped { data: ... } and direct response formats
+    // console.log("get single product---->",json)
+    // // Support both wrapped { data: ... } and direct response formats
     const data = json.data !== undefined ? json.data : json;
 
     return serialize(data);

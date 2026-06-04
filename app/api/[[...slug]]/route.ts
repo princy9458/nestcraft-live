@@ -34,7 +34,10 @@ async function handleProxy(req: NextRequest, context: { params: Promise<{ slug?:
   // if (base === "commerce") {
   //   addApiPrefix = false;
   // } else 
-    if (base === "form-data") {
+
+  if (base === "commerce") {
+    targetPath = "commerce/" + rest;
+  } else if (base === "form-data") {
     // If Newsletter calls /api/form-data, we might need to map it to backend /form_data
     // or just let it pass through if the backend endpoint is actually /form-data
     targetPath = "form-data"; 

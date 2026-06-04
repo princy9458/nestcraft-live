@@ -1,0 +1,532 @@
+{
+  
+  "title": { "en": "Home", "hi": "होम" },
+  "slug": "home",
+  "isPublished": true,
+  "isHomepage": true,
+  "metaTitle": { "en": "NestCraft Living - Premium Home Decor", "hi": "नेस्टक्राफ्ट लिविंग - प्रीमियम होम डेकोर" },
+  "metaDescription": { "en": "Discover premium furniture and home decor", "hi": "प्रीमियम फर्नीचर और होम डेकोर खोजें" },
+  "content": [
+    {
+      "id": "sec-hero",
+      "type": "hero",
+      "adminTitle": "Premium Hero Slider",
+      "layout": "fullwidth",
+      "props": {
+        "autoplaySpeed": { "value": 5000 }
+      },
+      "content": [
+        {
+          "id": "slide-1",
+          "type": "slide",
+          "props": {
+            "label": { "value": { "en": "Modern Living", "hi": "आधुनिक लिविंग" } },
+            "title": { "value": { "en": "Furniture That", "hi": "फर्नीचर जो" } },
+            "highlight": { "value": { "en": "Defines", "hi": "परिभाषित" } },
+            "titleEnd": { "value": { "en": "Your Space.", "hi": "आपकी जगह" } },
+            "description": { "value": { "en": "Discover sculptural sofas, refined textures, and timeless furniture pieces crafted to bring warmth, comfort, and luxury into the modern home.", "hi": "आधुनिक घर में गर्माहट, आराम और विलासिता लाने के लिए तैयार की गई मूर्तिकला सोफा, परिष्कृत बनावट और कालातीत फर्नीचर की खोज करें।" } },
+            "image": { "value": "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&q=80&w=1800" },
+            "product": { "value": { "en": "The Archi Sofa", "hi": "द आर्ची सोफा" } },
+            "price": { "value": { "en": "Starting at ₹1,200", "hi": "₹1,200 से शुरू" } }
+          }
+        },
+        {
+          "id": "slide-2",
+          "type": "slide",
+          "props": {
+            "label": { "value": { "en": "Bedroom Luxury", "hi": "बेडरूम लक्ज़री" } },
+            "title": { "value": { "en": "Designed For", "hi": "के लिए डिज़ाइन" } },
+            "highlight": { "value": { "en": "Quiet", "hi": "शांत" } },
+            "titleEnd": { "value": { "en": "Comfort.", "hi": "आराम" } },
+            "description": { "value": { "en": "Elevate your bedroom with calming palettes, elegant beds, and thoughtfully designed furniture that blends sophistication with everyday ease.", "hi": "शांत पैलेट, सुरुचिपूर्ण बेड और सोच-समझकर डिज़ाइन किए गए फर्नीचर के साथ अपने बेडरूम को ऊपर उठाएं जो परिष्कार को रोजमर्रा की सहजता के साथ मिश्रित करता है।" } },
+            "image": { "value": "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&q=80&w=1800" },
+            "product": { "value": { "en": "The Haven Bed", "hi": "द हेवन बेड" } },
+            "price": { "value": { "en": "Starting at ₹1,450", "hi": "₹1,450 से शुरू" } }
+          }
+        },
+        {
+          "id": "slide-3",
+          "type": "slide",
+          "props": {
+            "label": { "value": { "en": "Dining Collection", "hi": "डाइनिंग कलेक्शन" } },
+            "title": { "value": { "en": "Gather Around", "hi": "चारों ओर इकट्ठा" } },
+            "highlight": { "value": { "en": "Beautifully", "hi": "खूबसूरती" } },
+            "titleEnd": { "value": { "en": "Crafted Tables.", "hi": "से तैयार टेबल" } },
+            "description": { "value": { "en": "Create memorable dining moments with statement tables, elegant chairs, and premium finishes tailored for contemporary interiors.", "hi": "स्टेटमेंट टेबल, सुरुचिपूर्ण कुर्सियां और समकालीन इंटीरियर के लिए तैयार प्रीमियम फिनिश के साथ यादगार डाइनिंग पल बनाएं।" } },
+            "image": { "value": "https://images.unsplash.com/photo-1484101403633-562f891dc89a?auto=format&fit=crop&q=80&w=1800" },
+            "product": { "value": { "en": "The Forma Table", "hi": "द फॉर्मा टेबल" } },
+            "price": { "value": { "en": "Starting at ₹980", "hi": "₹980 से शुरू" } }
+          }
+        }
+      ]
+    },
+    {
+      "id": "sec-usp",
+      "type": "features",
+      "adminTitle": "USP Section",
+      "layout": "grid_4",
+      "content": [
+        {
+          "id": "usp-1",
+          "type": "feature",
+          "props": {
+            "icon": { "value": "truck" },
+            "title": { "value": { "en": "Free Shipping", "hi": "मुफ्त शिपिंग" } },
+            "description": { "value": { "en": "On orders above ₹999", "hi": "₹999 से अधिक के ऑर्डर पर" } }
+          }
+        },
+        {
+          "id": "usp-2",
+          "type": "feature",
+          "props": {
+            "icon": { "value": "shield-check" },
+            "title": { "value": { "en": "Secure Payment", "hi": "सुरक्षित भुगतान" } },
+            "description": { "value": { "en": "100% secure checkout", "hi": "100% सुरक्षित चेकआउट" } }
+          }
+        },
+        {
+          "id": "usp-3",
+          "type": "feature",
+          "props": {
+            "icon": { "value": "refresh" },
+            "title": { "value": { "en": "Easy Returns", "hi": "आसान रिटर्न" } },
+            "description": { "value": { "en": "30-day return policy", "hi": "30 दिन की वापसी नीति" } }
+          }
+        },
+        {
+          "id": "usp-4",
+          "type": "feature",
+          "props": {
+            "icon": { "value": "headset" },
+            "title": { "value": { "en": "24/7 Support", "hi": "24/7 सहायता" } },
+            "description": { "value": { "en": "Dedicated customer care", "hi": "समर्पित ग्राहक सेवा" } }
+          }
+        }
+      ]
+    },
+    {
+      "id": "sec-services",
+      "type": "features",
+      "adminTitle": "Services",
+      "layout": "grid_3",
+      "props": {
+        "badge": { "value": { "en": "What We Do", "hi": "हम क्या करते हैं" } },
+        "heading": { "value": { "en": "Our Services", "hi": "हमारी सेवाएं" } },
+        "viewAllLabel": { "value": { "en": "View All", "hi": "सभी देखें" } },
+        "viewAllLink": { "value": "/services" }
+      },
+      "content": [
+        {
+          "id": "svc-1",
+          "type": "feature",
+          "props": {
+            "icon": { "value": "pen-tool" },
+            "title": { "value": { "en": "Custom Design", "hi": "कस्टम डिज़ाइन" } },
+            "description": { "value": { "en": "Bespoke furniture tailored to your taste", "hi": "आपकी पसंद के अनुसार विशेष फर्नीचर" } }
+          }
+        },
+        {
+          "id": "svc-2",
+          "type": "feature",
+          "props": {
+            "icon": { "value": "hammer" },
+            "title": { "value": { "en": "Premium Craftsmanship", "hi": "प्रीमियम कारीगरी" } },
+            "description": { "value": { "en": "Handcrafted by master artisans", "hi": "मास्टर कारीगरों द्वारा हस्तनिर्मित" } }
+          }
+        },
+        {
+          "id": "svc-3",
+          "type": "feature",
+          "props": {
+            "icon": { "value": "package" },
+            "title": { "value": { "en": "Pan India Delivery", "hi": "पूरे भारत में डिलीवरी" } },
+            "description": { "value": { "en": "Delivered to your doorstep anywhere in India", "hi": "भारत में कहीं भी आपके दरवाजे तक डिलीवरी" } }
+          }
+        }
+      ]
+    },
+    {
+      "id": "sec-collections",
+      "type": "grid",
+      "adminTitle": "Collections",
+      "layout": "grid_4",
+      "props": {
+        "heading": { "value": { "en": "Shop by Collection", "hi": "संग्रह द्वारा खरीदें" } },
+        "viewAllLabel": { "value": { "en": "View All", "hi": "सभी देखें" } },
+        "viewAllLink": { "value": "/collections" }
+      },
+      "content": [
+        {
+          "id": "col-1",
+          "type": "card",
+          "props": {
+            "title": { "value": { "en": "Sofa Sets", "hi": "सोफा सेट" } },
+            "image": { "value": "/images/collection-sofa.jpg" },
+            "link": { "value": "/category/sofa" }
+          }
+        },
+        {
+          "id": "col-2",
+          "type": "card",
+          "props": {
+            "title": { "value": { "en": "Dining Tables", "hi": "डाइनिंग टेबल" } },
+            "image": { "value": "/images/collection-dining.jpg" },
+            "link": { "value": "/category/dining" }
+          }
+        },
+        {
+          "id": "col-3",
+          "type": "card",
+          "props": {
+            "title": { "value": { "en": "Bedroom", "hi": "बेडरूम" } },
+            "image": { "value": "/images/collection-bedroom.jpg" },
+            "link": { "value": "/category/bedroom" }
+          }
+        },
+        {
+          "id": "col-4",
+          "type": "card",
+          "props": {
+            "title": { "value": { "en": "Lighting", "hi": "लाइटिंग" } },
+            "image": { "value": "/images/collection-lighting.jpg" },
+            "link": { "value": "/category/lighting" }
+          }
+        }
+      ]
+    },
+    {
+      "id": "sec-shop-by-room",
+      "type": "grid",
+      "adminTitle": "Shop By Room Section",
+      "layout": "grid_4",
+      "props": {
+        "badge": { "value": { "en": "Rooms", "hi": "कमरे" } },
+        "heading": { "value": { "en": "Shop by Room", "hi": "कमरे के अनुसार खरीदें" } },
+        "buttonLabel": { "value": { "en": "Explore", "hi": "एक्सप्लोर करें" } }
+      },
+      "content": [
+        {
+          "id": "room-1",
+          "type": "card",
+          "props": {
+            "name": { "value": { "en": "Living Room", "hi": "लिविंग रूम" } },
+            "image": { "value": "/images/room-living.jpg" }
+          }
+        },
+        {
+          "id": "room-2",
+          "type": "card",
+          "props": {
+            "name": { "value": { "en": "Bedroom", "hi": "बेडरूम" } },
+            "image": { "value": "/images/room-bedroom.jpg" }
+          }
+        },
+        {
+          "id": "room-3",
+          "type": "card",
+          "props": {
+            "name": { "value": { "en": "Kitchen", "hi": "रसोई" } },
+            "image": { "value": "/images/room-kitchen.jpg" }
+          }
+        },
+        {
+          "id": "room-4",
+          "type": "card",
+          "props": {
+            "name": { "value": { "en": "Dining", "hi": "डाइनिंग" } },
+            "image": { "value": "/images/room-dining.jpg" }
+          }
+        }
+      ]
+    },
+    {
+      "id": "sec-featured-banner",
+      "type": "cta",
+      "adminTitle": "FeaturedBanner",
+      "layout": "two_column",
+      "props": {
+        "badge": { "value": { "en": "Featured", "hi": "फीचर्ड" } },
+        "heading": { "value": { "en": "Handcrafted with Love", "hi": "प्यार से हस्तनिर्मित" } },
+        "description": { "value": { "en": "Each piece tells a story of tradition and artistry passed down through generations.", "hi": "हर टुकड़ा परंपरा और कलात्मकता की कहानी कहता है" } },
+        "buttonLabel": { "value": { "en": "Learn More", "hi": "और जानें" } },
+        "buttonLink": { "value": "/about" }
+      },
+      "content": [
+        {
+          "id": "banner-img",
+          "type": "image",
+          "url": "/images/featured-banner.jpg",
+          "alt": "Handcrafted furniture",
+          "props": {
+            "image": { "value": "/images/featured-banner.jpg" }
+          }
+        }
+      ]
+    },
+    {
+      "id": "sec-product-slider",
+      "type": "carousel",
+      "adminTitle": "New Essentials Slider",
+      "layout": "slider",
+      "props": {
+        "badge": { "value": { "en": "New In", "hi": "नया आया" } },
+        "heading": { "value": { "en": "New Essentials", "hi": "नई आवश्यक वस्तुएं" } },
+        "viewAllLabel": { "value": { "en": "View All", "hi": "सभी देखें" } },
+        "viewAllLink": { "value": "/shop" }
+      },
+      "content": [
+        {
+          "id": "prod-1",
+          "type": "product",
+          "props": {
+            "title": { "value": { "en": "Minimalist Wooden Chair", "hi": "मिनिमलिस्ट लकड़ी की कुर्सी" } },
+            "price": { "value": "₹12,999" },
+            "badge": { "value": "New" },
+            "image": { "value": "/images/product-chair.jpg" }
+          }
+        },
+        {
+          "id": "prod-2",
+          "type": "product",
+          "props": {
+            "title": { "value": { "en": "Ceramic Vase Set", "hi": "सिरेमिक फूलदान सेट" } },
+            "price": { "value": "₹3,499" },
+            "badge": { "value": "Best Seller" },
+            "image": { "value": "/images/product-vase.jpg" }
+          }
+        },
+        {
+          "id": "prod-3",
+          "type": "product",
+          "props": {
+            "title": { "value": { "en": "Woolen Throw Blanket", "hi": "ऊनी थ्रो कंबल" } },
+            "price": { "value": "₹4,999" },
+            "image": { "value": "/images/product-blanket.jpg" }
+          }
+        }
+      ]
+    },
+    {
+      "id": "sec-craft",
+      "type": "text",
+      "adminTitle": "Craft & Quality Section",
+      "layout": "two_column",
+      "props": {
+        "badge": { "value": { "en": "Our Craft", "hi": "हमारी कारीगरी" } },
+        "title": { "value": { "en": "Craft & Quality", "hi": "कारीगरी और गुणवत्ता" } },
+        "mainHeading": { "value": { "en": "Where Tradition Meets Modern Design", "hi": "जहां परंपरा मिलती है आधुनिक डिज़ाइन से" } },
+        "description": { "value": { "en": "Every piece is thoughtfully designed and meticulously crafted.", "hi": "हर टुकड़ा सोच-समझकर डिज़ाइन और सावधानीपूर्वक तैयार किया गया है" } },
+        "buttonLabel": { "value": { "en": "Discover Our Story", "hi": "हमारी कहानी जानें" } },
+        "buttonLink": { "value": "/about" }
+      },
+      "content": [
+        {
+          "id": "craft-img",
+          "type": "image",
+          "props": {
+            "image": { "value": "/images/craft-image.jpg" }
+          },
+          "url": "/images/craft-image.jpg"
+        },
+        {
+          "id": "craft-list",
+          "type": "list",
+          "props": {
+            "items": {
+              "value": [
+                { "en": "Premium teakwood & sheesham", "hi": "प्रीमियम सागौन और शीशम" },
+                { "en": "Eco-friendly finishes", "hi": "इको-फ्रेंडली फिनिश" },
+                { "en": "Hand-carved detailing", "hi": "हस्तनक्काशीदार विवरण" }
+              ]
+            }
+          }
+        },
+        {
+          "id": "craft-buttons",
+          "type": "buttons",
+          "props": {
+            "items": {
+              "value": [
+                { "label": { "value": { "en": "Explore", "hi": "एक्सप्लोर करें" } }, "link": "/shop" },
+                { "label": { "value": { "en": "Contact Us", "hi": "संपर्क करें" } }, "link": "/contact" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "sec-testimonials",
+      "type": "testimonials",
+      "adminTitle": "Customer Testimonials",
+      "layout": "slider",
+      "props": {
+        "badge": { "value": { "en": "Testimonials", "hi": "प्रशंसापत्र" } },
+        "heading": { "value": { "en": "What Our Customers Say", "hi": "हमारे ग्राहक क्या कहते हैं" } }
+      },
+      "content": [
+        {
+          "id": "test-1",
+          "type": "testimonial",
+          "props": {
+            "quote": { "value": { "en": "Absolutely stunning quality! The furniture exceeded our expectations.", "hi": "बिल्कुल शानदार गुणवत्ता! फर्नीचर हमारी उम्मीदों से बढ़कर था।" } },
+            "author": { "value": { "en": "Priya Sharma", "hi": "प्रिया शर्मा" } },
+            "role": { "value": { "en": "Homeowner, Mumbai", "hi": "गृहस्वामी, मुंबई" } }
+          }
+        },
+        {
+          "id": "test-2",
+          "type": "testimonial",
+          "props": {
+            "quote": { "value": { "en": "The craftsmanship is remarkable. Every detail is perfect.", "hi": "कारीगरी उल्लेखनीय है। हर विवरण एकदम सही है।" } },
+            "author": { "value": { "en": "Rahul Verma", "hi": "राहुल वर्मा" } },
+            "role": { "value": { "en": "Interior Designer, Delhi", "hi": "इंटीरियर डिज़ाइनर, दिल्ली" } }
+          }
+        },
+        {
+          "id": "test-3",
+          "type": "testimonial",
+          "props": {
+            "quote": { "value": { "en": "Fast delivery and easy assembly. Highly recommend!", "hi": "त्वरित डिलीवरी और आसान असेंबली। अत्यधिक अनुशंसित!" } },
+            "author": { "value": { "en": "Ananya Patel", "hi": "अनन्या पटेल" } },
+            "role": { "value": { "en": "Homeowner, Bangalore", "hi": "गृहस्वामी, बैंगलोर" } }
+          }
+        }
+      ]
+    },
+    {
+      "id": "sec-blog",
+      "type": "grid",
+      "adminTitle": "Latest Blog Posts",
+      "layout": "slider",
+      "props": {
+        "heading": { "value": { "en": "Latest from Our Blog", "hi": "हमारे ब्लॉग से ताज़ा अपडेट" } },
+        "viewAllLabel": { "value": { "en": "View All Posts", "hi": "सभी पोस्ट देखें" } },
+        "viewAllLink": { "value": "/blog" }
+      },
+      "content": [
+        {
+          "id": "post-1",
+          "type": "article",
+          "props": {
+            "title": { "value": { "en": "5 Tips for Choosing the Perfect Sofa", "hi": "परफेक्ट सोफा चुनने के 5 टिप्स" } },
+            "description": { "value": { "en": "Furniture Guide", "hi": "फर्नीचर गाइड" } },
+            "image": { "value": "/images/blog-sofa.jpg" },
+            "link": { "value": "/blog/perfect-sofa-tips" }
+          }
+        },
+        {
+          "id": "post-2",
+          "type": "article",
+          "props": {
+            "title": { "value": { "en": "Sustainable Decor Trends 2026", "hi": "2026 के सस्टेनेबल डेकोर ट्रेंड्स" } },
+            "description": { "value": { "en": "Trends", "hi": "ट्रेंड्स" } },
+            "image": { "value": "/images/blog-trends.jpg" },
+            "link": { "value": "/blog/sustainable-decor-2026" }
+          }
+        },
+        {
+          "id": "post-3",
+          "type": "article",
+          "props": {
+            "title": { "value": { "en": "Small Space, Big Style", "hi": "छोटी जगह, बड़ा स्टाइल" } },
+            "description": { "value": { "en": "Interior Tips", "hi": "इंटीरियर टिप्स" } },
+            "image": { "value": "/images/blog-small-space.jpg" },
+            "link": { "value": "/blog/small-space-big-style" }
+          }
+        }
+      ]
+    },
+    {
+      "id": "sec-faq",
+      "type": "accordion",
+      "adminTitle": "Homepage FAQs",
+      "layout": "list",
+      "props": {
+        "heading": { "value": { "en": "Frequently Asked Questions", "hi": "अक्सर पूछे जाने वाले प्रश्न" } },
+        "subheading": { "value": { "en": "Everything you need to know", "hi": "वह सब जो आपको जानना चाहिए" } },
+        "viewAllLabel": { "value": { "en": "View All FAQs", "hi": "सभी FAQ देखें" } },
+        "viewAllLink": { "value": "/faq" }
+      },
+      "content": [
+        {
+          "id": "faq-1",
+          "type": "accordion-item",
+          "props": {
+            "title": { "value": { "en": "What is your delivery timeframe?", "hi": "आपकी डिलीवरी की समय सीमा क्या है?" } },
+            "description": { "value": { "en": "Standard delivery takes 7-14 business days across India.", "hi": "मानक डिलीवरी में पूरे भारत में 7-14 कार्य दिवस लगते हैं।" } }
+          }
+        },
+        {
+          "id": "faq-2",
+          "type": "accordion-item",
+          "props": {
+            "title": { "value": { "en": "Do you offer customization?", "hi": "क्या आप कस्टमाइज़ेशन प्रदान करते हैं?" } },
+            "description": { "value": { "en": "Yes, we offer custom sizing and finishes for most of our furniture.", "hi": "हाँ, हम अपने अधिकांश फर्नीचर के लिए कस्टम आकार और फिनिश प्रदान करते हैं।" } }
+          }
+        },
+        {
+          "id": "faq-3",
+          "type": "accordion-item",
+          "props": {
+            "title": { "value": { "en": "What is your return policy?", "hi": "आपकी वापसी नीति क्या है?" } },
+            "description": { "value": { "en": "We offer a 30-day hassle-free return policy on all products.", "hi": "हम सभी उत्पादों पर 30 दिन की आसान वापसी नीति प्रदान करते हैं।" } }
+          }
+        }
+      ]
+    },
+    {
+      "id": "sec-newsletter",
+      "type": "form",
+      "adminTitle": "Newsletter Section",
+      "layout": "two_column",
+      "props": {
+        "badge": { "value": { "en": "Stay Connected", "hi": "जुड़े रहें" } },
+        "title": { "value": { "en": "Join Our Community", "hi": "हमारे समुदाय से जुड़ें" } },
+        "description": { "value": { "en": "Get exclusive offers and design inspiration.", "hi": "विशेष ऑफ़र और डिज़ाइन प्रेरणा प्राप्त करें।" } },
+        "joinTitle": { "value": { "en": "Join the list", "hi": "सूची में शामिल हों" } },
+        "joinSub": { "value": { "en": "Be the first to hear about launches, curated inspiration, and private offers.", "hi": "लॉन्च, क्यूरेटेड प्रेरणा और निजी ऑफ़र के बारे में सबसे पहले सुनें।" } },
+        "feature1": { "value": { "en": "10% off your first order", "hi": "पहले ऑर्डर पर 10% छूट" } },
+        "feature2": { "value": { "en": "Weekly design tips", "hi": "साप्ताहिक डिज़ाइन टिप्स" } },
+        "feature3": { "value": { "en": "Early access to new collections", "hi": "नए संग्रह तक शीघ्र पहुंच" } },
+        "buttonLabel": { "value": { "en": "Subscribe", "hi": "सब्सक्राइब करें" } },
+        "msgSuccess": { "value": { "en": "Thank you for subscribing!", "hi": "सब्सक्राइब करने के लिए धन्यवाद!" } },
+        "noSpam": { "value": { "en": "No spam, ever.", "hi": "कोई स्पैम नहीं।" } },
+        "unsubscribe": { "value": { "en": "Unsubscribe anytime.", "hi": "कभी भी अनसब्सक्राइब करें।" } },
+        "updates": { "value": { "en": "Latest updates straight to your inbox.", "hi": "नवीनतम अपडेट सीधे आपके इनबॉक्स में।" } }
+      }
+    },
+    {
+      "id": "sec-instagram",
+      "type": "gallery",
+      "adminTitle": "Instagram Gallery",
+      "layout": "grid_6",
+      "props": {
+        "badge": { "value": { "en": "Follow Us", "hi": "हमें फॉलो करें" } },
+        "heading": { "value": { "en": "@NestCraftLiving on Instagram", "hi": "@NestCraftLiving इंस्टाग्राम पर" } },
+        "buttonLabel": { "value": { "en": "Follow Us", "hi": "फॉलो करें" } },
+        "buttonLink": { "value": "https://instagram.com/nestcraftliving" }
+      },
+      "content": [
+        { "id": "ig-1", "type": "image", "props": { "image": { "value": "/images/instagram-1.jpg" } } },
+        { "id": "ig-2", "type": "image", "props": { "image": { "value": "/images/instagram-2.jpg" } } },
+        { "id": "ig-3", "type": "image", "props": { "image": { "value": "/images/instagram-3.jpg" } } },
+        { "id": "ig-4", "type": "image", "props": { "image": { "value": "/images/instagram-4.jpg" } } },
+        { "id": "ig-5", "type": "image", "props": { "image": { "value": "/images/instagram-5.jpg" } } },
+        { "id": "ig-6", "type": "image", "props": { "image": { "value": "/images/instagram-6.jpg" } } }
+      ]
+    },
+    {
+      "id": "sec-cta",
+      "type": "cta",
+      "adminTitle": "CTA",
+      "layout": "centered",
+      "props": {
+        "title": { "value": { "en": "Ready to Transform Your Home?", "hi": "अपने घर को बदलने के लिए तैयार हैं?" } },
+        "description": { "value": { "en": "Visit our store or book a free consultation with our design experts.", "hi": "हमारे स्टोर पर आएं या हमारे डिज़ाइन विशेषज्ञों के साथ मुफ्त परामर्श बुक करें।" } },
+        "buttonLabel": { "value": { "en": "Shop Now", "hi": "अभी खरीदें" } },
+        "buttonLink": { "value": "/shop" }
+      }
+    }
+  ]
+}
