@@ -38,14 +38,16 @@ interface HomePageProps {
 }
 
 // --- Helper to extract section mapping ---
-const getSection = (content: any, adminTitle: string) => 
-  Array.isArray(content) ? content.find(s => s?.adminTitle === adminTitle) : undefined;
+const getSection = (content: any, adminTitle: string) =>
+  Array.isArray(content)
+    ? content.find((s) => s?.adminTitle === adminTitle)
+    : undefined;
 
 const HomePage = ({ data }: HomePageProps) => {
   const { user } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
   const { currentPages } = useSelector((state: RootState) => state.pages);
-  
+
   // Ensure content is always an array
   const rawContent = currentPages?.content || data?.content;
   const content = Array.isArray(rawContent) ? rawContent : [];
@@ -72,9 +74,12 @@ const HomePage = ({ data }: HomePageProps) => {
   }, [pathname]);
 
   const ctaTitle = getV(ctaBlock?.props?.title, lang) || ctaBlock?.title || "";
-  const ctaDescription = getV(ctaBlock?.props?.description, lang) || ctaBlock?.description || "";
-  const ctaButtonLabel = getV(ctaBlock?.props?.buttonLabel, lang) || ctaBlock?.buttonLabel || "";
-  const ctaButtonLink = ctaBlock?.props?.buttonLink?.value || ctaBlock?.buttonLink || "/shop";
+  const ctaDescription =
+    getV(ctaBlock?.props?.description, lang) || ctaBlock?.description || "";
+  const ctaButtonLabel =
+    getV(ctaBlock?.props?.buttonLabel, lang) || ctaBlock?.buttonLabel || "";
+  const ctaButtonLink =
+    ctaBlock?.props?.buttonLink?.value || ctaBlock?.buttonLink || "/shop";
 
   return (
     <>
@@ -83,13 +88,18 @@ const HomePage = ({ data }: HomePageProps) => {
 
       {/* get all page from the database */}
       <GetAllPages />
-      <GetAllMenus/>
+      <GetAllMenus />
       {/* <GetAllProducts/> */}
-      <GetAllForms/>
-      <GetAuthTokenFastApi/>
-      <UpdateCurrentPage/>
+      <GetAllForms />
+      {/* <GetAuthTokenFastApi/> */}
+      <UpdateCurrentPage />
 
-      <Hero section={getSection(content, "Premium Hero Slider") || getSection(content, "Hero")} />
+      <Hero
+        section={
+          getSection(content, "Premium Hero Slider") ||
+          getSection(content, "Hero")
+        }
+      />
       <USP />
       <Services section={getSection(content, "Services")} />
       <Collections section={getSection(content, "Collections")} />
@@ -101,7 +111,7 @@ const HomePage = ({ data }: HomePageProps) => {
       <Blog section={getSection(content, "Latest Blog Posts")} />
       <FAQ section={getSection(content, "Homepage FAQs")} />
       <Newsletter section={getSection(content, "Newsletter Section")} />
-      
+
       <InstagramGallery section={getSection(content, "Instagram Gallery")} />
 
       {ctaBlock && (

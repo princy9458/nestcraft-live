@@ -17,7 +17,7 @@ interface BusinessBlueprintPayload {
 
   public_navigation: NavigationItem[];
   admin_navigation: NavigationItem[];
-
+  commerce?: Record<string, any>;
   routes: Route[];
   dashboard_widgets: DashboardWidget;
   brandAssets: any;
@@ -118,7 +118,7 @@ interface BusinessBlueprintState {
 
 const initialState: BusinessBlueprintState = {
   businessBlueprint: null,
-  isLoading: false,
+  isLoading: true,
   error: null,
   hasBlueprintFetched: false,
   activeThemeMode: "admin", // NEW: Default to admin theme

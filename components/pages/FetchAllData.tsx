@@ -1,20 +1,20 @@
-"use client"
-import React from 'react'
-import GetAllPages from './GetAllPages'
-import GetAllMenus from '../cms/menus/GetAllMenus'
-import GetAllProducts from '@/lib/GetAllDetails/GetAllProducts'
-import GetAllForms from '../forms/GetAllForms'
-import GetAuthTokenFastApi from '../wesiteDetail/GetAuthTokenFastApi'
-import UpdateCurrentPage from './UpdateCurrentPage'
-import GetAllAttributes from '@/lib/GetAllDetails/GetAllAttributes'
-import GetAllCategories from '@/lib/GetAllDetails/GetAllCategories'
-import GetCart from '@/lib/GetAllDetails/GetCart'
-import GetUser from '@/lib/GetAllDetails/GetUser'
+"use client";
+import React from "react";
+import GetAllPages from "./GetAllPages";
+import GetAllMenus from "../cms/menus/GetAllMenus";
+import GetAllProducts from "@/lib/GetAllDetails/GetAllProducts";
+import GetAllForms from "../forms/GetAllForms";
+import GetAuthTokenFastApi from "../wesiteDetail/GetAuthTokenFastApi";
+import UpdateCurrentPage from "./UpdateCurrentPage";
+import GetAllAttributes from "@/lib/GetAllDetails/GetAllAttributes";
+import GetAllCategories from "@/lib/GetAllDetails/GetAllCategories";
+import GetCart from "@/lib/GetAllDetails/GetCart";
+import GetUser from "@/lib/GetAllDetails/GetUser";
 
 const FetchAllData = () => {
   return (
-   <>
-    {/* get all pages */}
+    <>
+      {/* get all pages */}
       <GetAllPages />
 
       {/* get all menus */}
@@ -27,26 +27,24 @@ const FetchAllData = () => {
       <GetAllForms />
 
       {/* get auth token from fast api */}
-      <GetAuthTokenFastApi />
+      {/* <GetAuthTokenFastApi /> */}
 
       {/* update current page */}
       <UpdateCurrentPage />
 
       {/* get all attributes */}
-      <GetAllAttributes/>
+      <GetAllAttributes />
 
       {/* get all categories */}
-        <GetAllCategories />
+      <GetAllCategories />
 
-        {/* get cart */}
-            <GetCart />
+      {/* get cart */}
+      <GetCart />
 
-            {/* get all user */}
-              {/* <GetUser user={user} /> */}
+      {/* get all user */}
+      {/* <GetUser user={user} /> */}
+    </>
+  );
+};
 
-
-           </>
-  )
-}
-
-export default FetchAllData
+export default FetchAllData;

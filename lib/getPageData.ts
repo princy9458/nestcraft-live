@@ -88,13 +88,13 @@ export const getTenantRegistry = cache(async () => {
 
 export const getBusinessBlueprint = cache(async () => {
   const API_URL = process.env.OWN_URL;
-  const tenantId = process.env.TENANT_DB_NAME || "kp_nestcraft";
+  const tenantId = process.env.NEXT_PUBLIC_TENANT_ID;
 
   try {
-    const response = await fetch(`${API_URL}/cms/business-blueprint`, {
+    const response = await fetch(`${API_URL}/api/platform/business-blueprint`, {
       headers: {
         "Content-Type": "application/json",
-        "x-tenant-db": tenantId || "kp_nestcraft",
+        "x-tenant-db": tenantId!,
       },
       credentials: "include",
     });
