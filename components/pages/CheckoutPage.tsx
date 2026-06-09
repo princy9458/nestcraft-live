@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useAppSelector, useAppDispatch } from "@/lib/store/hooks";
 import {
@@ -22,7 +22,10 @@ import {
   Check,
 } from "lucide-react";
 import Link from "next/link";
+import { getGateway } from "@/lib/paymentgateway/resgistry";
+
 const tenantId = process.env.NEXT_PUBLIC_TENANT_ID;
+
 const CheckoutPage = () => {
   const regions = {
     India: "IN",
@@ -32,47 +35,10 @@ const CheckoutPage = () => {
   };
   const cart = useAppSelector(selectCartItems);
   const cartTotal = useAppSelector(selectCartTotal);
-  const dispatch = useAppDispatch();
-  const taxes = {
-    taxRules: [
-      {
-        id: "tax_1780656473847",
-        label: "GST",
-        rate: 18,
-        region: "IN",
-        inclusive: false,
-        enabled: true,
-      },
-      {
-        id: "tax_1780656473848",
-        label: "VAT",
-        rate: 25,
-        region: "IN",
-        inclusive: true,
-        enabled: true,
-      },
-    ],
-  };
-  const shippingThings = {
-    localFulfillment: {
-      localPickup: true,
-      localDelivery: true,
-    },
-    freeShipping: {
-      threshold: 50000,
-    },
-    zones: [
-      {
-        id: "zone_1780657873657",
-        name: "Indian Zone",
-        regions: ["IN"],
-        rateType: "flat",
-        flatRate: 1000,
-        weightRate: 0,
-        enabled: true,
-      },
-    ],
-  };
+  const { businessBlueprint, isLoading } = useAppSelector(
+    (state: RootState) => state.businessBlueprint,
+  );
+
   const [step, setStep] = useState(1);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
@@ -80,6 +46,7 @@ const CheckoutPage = () => {
   const [paymentMethod, setPaymentMethod] = useState<"online" | "cod">(
     "online",
   );
+  const [selectedGateway, setSelectedGateway] = useState<string>("");
   const [shippingData, setShippingData] = useState<any>(null);
   const [billingData, setBillingData] = useState<any>(null);
   const { user } = useAppSelector((state: RootState) => state.auth);
@@ -89,7 +56,7 @@ const CheckoutPage = () => {
   const [selectedBillingAddressId, setSelectedBillingAddressId] = useState<
     string | null
   >(null);
-
+  const dispatch = useAppDispatch();
   // Coupon / Promotion State
   const [couponCode, setCouponCode] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState<string | null>(null);
@@ -97,40 +64,71 @@ const CheckoutPage = () => {
   const [couponError, setCouponError] = useState<string | null>(null);
   const [couponSuccess, setCouponSuccess] = useState<string | null>(null);
 
+  const commerce = businessBlueprint?.payload?.commerce;
+
+  const shippingRegions = commerce?.shippingRegions;
+  const paymentProviders = commerce?.paymentProviders;
+  const enabledGateways =
+    paymentProviders?.gateways?.filter((g: any) => g.enabled) || [];
+
+  useEffect(() => {
+    if (enabledGateways.length > 0 && !selectedGateway) {
+      setSelectedGateway(enabledGateways[0].id);
+    }
+  }, [enabledGateways, selectedGateway]);
+
+  const currenciesTaxes = commerce?.currenciesTaxes;
+  const checkoutPolicies = commerce?.checkoutPolicies;
+
+  // const dispatch = useAppDispatch();
+  const taxes = currenciesTaxes?.tax;
+
+  const shippingThings = shippingRegions;
+
   // Taxing Rule Code
-  const countrySelected = shippingData?.country;
+  const [manualShippingCountry, setManualShippingCountry] =
+    useState<keyof typeof regions>("India");
+
+  const rawCountry = selectedShippingAddressId
+    ? user?.addresses?.find((a: any) => a.id === selectedShippingAddressId)
+        ?.country
+    : manualShippingCountry;
+  const countrySelected = (
+    rawCountry && rawCountry in regions ? rawCountry : "India"
+  ) as keyof typeof regions;
 
   const taxingRule = countrySelected
     ? taxes?.taxRules?.filter(
-        (rule) =>
-          rule.region === regions[countrySelected as keyof typeof regions],
+        (rule: any) => rule.region === regions[countrySelected],
       )
     : null;
 
-  const amoutTaxable = taxingRule?.reduce((acc, rule) => {
-    if (rule.inclusive) {
-      return acc + 0;
-    } else {
-      return acc + rule.rate;
-    }
-  }, 0) || 0;
+  const amoutTaxable =
+    taxingRule?.reduce((acc: number, rule: any) => {
+      if (rule.inclusive) {
+        return acc + 0;
+      } else {
+        return acc + rule.rate;
+      }
+    }, 0) || 0;
 
   const totalTax =
-    Math.max(0, cartTotal - discountAmount) * (amoutTaxable / 100);
+    Math.max(0, cartTotal - discountAmount) * (amoutTaxable! / 100);
 
   // "============================================"
 
   // Shipping Rule
   const shippingRule = countrySelected
-    ? shippingThings?.zones?.find((zone) =>
-        zone.regions.includes(regions[countrySelected as keyof typeof regions]),
+    ? shippingThings?.zones?.find((zone: any) =>
+        zone.regions.includes(regions[countrySelected]),
       )
     : null;
 
-  const shippingCost =
-    cartTotal >= shippingThings.freeShipping.threshold
+  const shippingCost = shippingThings?.freeShipping
+    ? cartTotal >= shippingThings.freeShipping.threshold
       ? 0
-      : shippingRule?.flatRate || 0;
+      : shippingRule?.flatRate || 0
+    : 0;
   // "============================================"
 
   // Shipping Rule
@@ -307,13 +305,13 @@ const CheckoutPage = () => {
         shippingAddress: shippingData,
         billingAddress: billingData,
         payment: {
-          method: paymentMethod === "cod" ? "cod" : "razorpay",
+          method:
+            paymentMethod === "cod" ? "cod" : selectedGateway || "razorpay",
           ...(paymentMethod === "online"
             ? {
-                transactionId:
-                  "pay_dummy" + Math.floor(Math.random() * 10000000),
+                transactionId: null,
                 paymentGatewayResponse: {
-                  status: "captured",
+                  status: "pending",
                   amount: Math.round(
                     Math.max(
                       0,
@@ -325,7 +323,7 @@ const CheckoutPage = () => {
                   ),
                   currency: "INR",
                 },
-                paidAt: new Date().toISOString(),
+                paidAt: null,
               }
             : {}),
         },
@@ -347,12 +345,59 @@ const CheckoutPage = () => {
 
       const data = await res.json();
 
-      console.log(data);
+      console.log("===>>>", data);
 
-      if (data.success) {
+      const gateway = getGateway(selectedGateway);
+
+      const { apiKey, apiSecret } = enabledGateways.find(
+        (gw: any) => gw.id === selectedGateway,
+      );
+
+      const paymentpayload = {
+        amount: Number(payload.payment.paymentGatewayResponse?.amount) * 100,
+        currency: String(payload.payment.paymentGatewayResponse?.currency),
+        orderId: data.gateway_order_id,
+        customerEmail: shippingData.email,
+        customerName: shippingData.firstName + " " + shippingData.lastName,
+      };
+      // const paymentpayload = {
+      //   amount: 259900, // ₹2599.00 in paise
+      //   currency: "INR",
+      //   orderId: "ORD-20260609-0001",
+      //   customerEmail: "john.doe@example.com",
+      //   customerName: "John Doe",
+      // };
+
+      const result = await gateway.initiatePayment(
+        paymentpayload,
+        String(apiKey),
+        payload.shippingAddress.addressLine1 +
+          " " +
+          payload.shippingAddress.addressLine2,
+      );
+
+      const verifyPayment = await fetch(
+        `api/commerce/orders/${data?.gateway_order_data?.receipt}/payment?provider=${selectedGateway}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-tenant-db": tenantId || "",
+          },
+          body: JSON.stringify({
+            ...result,
+            gateway_order_id: data.gateway_order_id,
+          }),
+        },
+      );
+
+      const verifyData = await verifyPayment.json();
+
+      // if (data.success) {
+      if (verifyData) {
         setIsProcessing(false);
         setIsCompleted(true);
-        // dispatch(clearCart());
+        dispatch(clearCart());
       }
 
       // setTimeout(() => {
@@ -617,7 +662,19 @@ const CheckoutPage = () => {
               <div className="relative">
                 <select
                   required
-                  defaultValue={data?.country || "India"}
+                  value={
+                    prefix === "shipping" ? manualShippingCountry : undefined
+                  }
+                  defaultValue={
+                    prefix === "shipping" ? undefined : data?.country || "India"
+                  }
+                  onChange={(e) => {
+                    if (prefix === "shipping") {
+                      setManualShippingCountry(
+                        e.target.value as keyof typeof regions,
+                      );
+                    }
+                  }}
                   name={`${prefix}Country`}
                   className="w-full h-14 px-6 rounded-xl bg-surface border border-border outline-none focus:border-secondary transition-all font-semibold appearance-none cursor-pointer"
                 >
@@ -846,18 +903,81 @@ const CheckoutPage = () => {
                     </div>
                   </div>
 
-                  {/* Informational UI for Online since redirection is expected */}
+                  {/* Enabled Gateways list for Online */}
                   <AnimatePresence>
                     {paymentMethod === "online" && (
                       <motion.div
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="overflow-hidden"
+                        className="overflow-hidden space-y-4"
                       >
-                        <div className="pt-4 text-sm font-semibold text-muted bg-surface/50 p-6 rounded-xl border border-border">
-                          You will be redirected to the secure payment gateway
-                          after reviewing your order.
+                        <div className="mt-4 p-6 rounded-2xl bg-surface border border-border space-y-4">
+                          <label className="text-[11px] font-black uppercase tracking-[2px] text-muted block ml-1">
+                            Select Online Payment Gateway
+                          </label>
+                          {enabledGateways.length === 0 ? (
+                            <div className="text-sm font-semibold text-muted bg-primary/5 p-4 rounded-xl border border-dashed border-border text-center">
+                              No online payment gateways are currently enabled.
+                            </div>
+                          ) : (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                              {enabledGateways.map((gateway: any) => {
+                                const isSelected =
+                                  selectedGateway === gateway.id;
+                                return (
+                                  <div
+                                    key={gateway.id}
+                                    onClick={() =>
+                                      setSelectedGateway(gateway.id)
+                                    }
+                                    className={`p-4 rounded-xl border-2 cursor-pointer transition-all flex items-center justify-between ${
+                                      isSelected
+                                        ? "border-[#5a6330] bg-primary/5"
+                                        : "border-border bg-surface hover:border-[#5a6330]/30"
+                                    }`}
+                                  >
+                                    <div className="flex items-center gap-3">
+                                      <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                                        <CreditCard size={16} />
+                                      </div>
+                                      <div>
+                                        <p className="font-bold text-sm">
+                                          {gateway.name}
+                                        </p>
+                                        {gateway.testMode && (
+                                          <span className="text-[9px] font-black uppercase tracking-wider text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">
+                                            Test Mode
+                                          </span>
+                                        )}
+                                      </div>
+                                    </div>
+                                    <div
+                                      className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
+                                        isSelected
+                                          ? "border-[#5a6330]"
+                                          : "border-border"
+                                      }`}
+                                    >
+                                      {isSelected && (
+                                        <div className="w-2.5 h-2.5 rounded-full bg-[#5a6330]" />
+                                      )}
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          )}
+                          {enabledGateways.length > 0 && (
+                            <div className="pt-2 text-xs font-semibold text-muted">
+                              You will be redirected to the secure payment
+                              gateway (
+                              {enabledGateways.find(
+                                (g: any) => g.id === selectedGateway,
+                              )?.name || "selected provider"}
+                              ) after reviewing your order.
+                            </div>
+                          )}
                         </div>
                       </motion.div>
                     )}
@@ -909,7 +1029,11 @@ const CheckoutPage = () => {
                         <p className="font-bold">
                           {paymentMethod === "cod"
                             ? "Cash on Delivery (COD)"
-                            : "Online Payment"}
+                            : `Online Payment (${
+                                enabledGateways.find(
+                                  (g: any) => g.id === selectedGateway,
+                                )?.name || "Online"
+                              })`}
                         </p>
                       </div>
                       <button
@@ -937,7 +1061,7 @@ const CheckoutPage = () => {
               )}
               <button
                 type="submit"
-                disabled={isProcessing}
+                disabled={isProcessing || isLoading}
                 className="flex-[2] bg-primary text-white h-14 rounded-full text-[15px] font-bold uppercase tracking-wider hover:bg-primary/90 transition-all flex items-center justify-center gap-3 disabled:opacity-70"
               >
                 {isProcessing ? (
@@ -1092,13 +1216,29 @@ const CheckoutPage = () => {
               )}
               <div className="flex justify-between text-sm text-muted font-semibold">
                 <span>Shipping</span>
-                <span className="text-emerald-600">
-                  {shippingCost == 0 ? "Free" : formatPrice(shippingCost)}
+                <span className="text-emerald-600 font-semibold">
+                  {isLoading ? (
+                    <span className="text-xs text-muted animate-pulse">
+                      Calculating...
+                    </span>
+                  ) : shippingCost == 0 ? (
+                    "Free"
+                  ) : (
+                    formatPrice(shippingCost)
+                  )}
                 </span>
               </div>
+              {isLoading && countrySelected && (
+                <div className="flex justify-between text-sm text-muted font-semibold">
+                  <span>Taxes</span>
+                  <span className="text-xs text-muted animate-pulse">
+                    Calculating...
+                  </span>
+                </div>
+              )}
               {taxingRule &&
                 taxingRule.length > 0 &&
-                taxingRule?.map((item) => {
+                taxingRule?.map((item: any) => {
                   return (
                     <div
                       key={item.id}
@@ -1121,15 +1261,21 @@ const CheckoutPage = () => {
             </div>
             <div className="flex justify-between text-lg font-black pt-4 border-t border-border">
               <span>Total</span>
-              <span className="text-secondary">
-                {formatPrice(
-                  Math.max(
-                    0,
-                    cartTotal -
-                      discountAmount +
-                      (totalTax || 0) +
-                      (shippingCost || 0),
-                  ),
+              <span className="text-secondary font-black">
+                {isLoading ? (
+                  <span className="text-sm font-semibold text-muted animate-pulse">
+                    Calculating...
+                  </span>
+                ) : (
+                  formatPrice(
+                    Math.max(
+                      0,
+                      cartTotal -
+                        discountAmount +
+                        (totalTax || 0) +
+                        (shippingCost || 0),
+                    ),
+                  )
                 )}
               </span>
             </div>

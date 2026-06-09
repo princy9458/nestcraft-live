@@ -623,17 +623,13 @@ const ProductDetailPage = ({ currentProduct }: { currentProduct: any }) => {
   const { allCategories } = useSelector(
     (state: RootState) => state.adminCategories,
   );
-   const pathname= usePathname()
+  const pathname = usePathname();
 
-   console.log("currentProduct--",currentProduct)
-  
   const { items, loading, error, hasCartFetched } = useSelector(
     (state: RootState) => state.cart,
   );
 
   const { id } = useParams<{ id: string }>();
-
- 
 
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);

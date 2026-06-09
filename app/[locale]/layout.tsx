@@ -38,7 +38,7 @@ export default async function LocaleLayout({
   const { locale } = await params;
   const cookieStore = await cookies();
   const tenantId = process.env.NEXT_PUBLIC_TENANT_ID;
-  const key = `auth_token_${tenantId}`
+  const key = `auth_token_${tenantId}`;
   const token = cookieStore.get(key)?.value;
 
   const [tenantRegistry, businessBlueprint, user] = await Promise.all([
@@ -46,8 +46,6 @@ export default async function LocaleLayout({
     getBusinessBlueprint(),
     token ? getAuthUser(token).catch(() => null) : Promise.resolve(null),
   ]);
-
-  console.log(user)
 
   return (
     <html
@@ -65,7 +63,7 @@ export default async function LocaleLayout({
           <ThemeInitializer />
           <Providers>
             <GetUser user={user} />
-              <FetchAllData/>
+            <FetchAllData />
             <LayoutWrapper brandConfig={tenantRegistry}>
               {children}
             </LayoutWrapper>
