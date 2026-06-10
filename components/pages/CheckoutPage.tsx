@@ -555,10 +555,10 @@ const CheckoutPage = () => {
             </div>
           </motion.div>
         ) : (
-          <div className="flex flex-col gap-6">
-            <div className="grid sm:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="text-[11px] font-black uppercase tracking-[2px] text-muted ml-1">
+          <div className="flex flex-col gap-4">
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <label className="text-[11px] font-black uppercase tracking-[1px] text-muted ml-1">
                   First Name *
                 </label>
                 <input
@@ -569,8 +569,8 @@ const CheckoutPage = () => {
                   className="w-full h-14 px-6 rounded-xl bg-surface border border-border outline-none focus:border-secondary transition-all font-semibold"
                 />
               </div>
-              <div className="space-y-2">
-                <label className="text-[11px] font-black uppercase tracking-[2px] text-muted ml-1">
+              <div className="space-y-1">
+                <label className="text-[11px] font-black uppercase tracking-[1px] text-muted ml-1">
                   Last Name *
                 </label>
                 <input
@@ -583,9 +583,9 @@ const CheckoutPage = () => {
               </div>
             </div>
 
-            <div className="grid sm:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="text-[11px] font-black uppercase tracking-[2px] text-muted ml-1">
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <label className="text-[11px] font-black uppercase tracking-[1px] text-muted ml-1">
                   Email *
                 </label>
                 <input
@@ -596,8 +596,8 @@ const CheckoutPage = () => {
                   className="w-full h-14 px-6 rounded-xl bg-surface border border-border outline-none focus:border-secondary transition-all font-semibold"
                 />
               </div>
-              <div className="space-y-2">
-                <label className="text-[11px] font-black uppercase tracking-[2px] text-muted ml-1">
+              <div className="space-y-1">
+                <label className="text-[11px] font-black uppercase tracking-[1px] text-muted ml-1">
                   Phone *
                 </label>
                 <input
@@ -610,8 +610,8 @@ const CheckoutPage = () => {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-[11px] font-black uppercase tracking-[2px] text-muted ml-1">
+            <div className="space-y-1">
+              <label className="text-[11px] font-black uppercase tracking-[1px] text-muted ml-1">
                 Address Line 1 *
               </label>
               <input
@@ -623,8 +623,8 @@ const CheckoutPage = () => {
               />
             </div>
 
-            <div className="space-y-2">
-              <label className="text-[11px] font-black uppercase tracking-[2px] text-muted ml-1">
+            <div className="space-y-1">
+              <label className="text-[11px] font-black uppercase tracking-[1px] text-muted ml-1">
                 Address Line 2
               </label>
               <input
@@ -635,9 +635,9 @@ const CheckoutPage = () => {
               />
             </div>
 
-            <div className="grid sm:grid-cols-3 gap-6">
-              <div className="space-y-2">
-                <label className="text-[11px] font-black uppercase tracking-[2px] text-muted ml-1">
+            <div className="grid sm:grid-cols-3 gap-4">
+              <div className="space-y-1">
+                <label className="text-[11px] font-black uppercase tracking-[1px] text-muted ml-1">
                   City *
                 </label>
                 <input
@@ -648,8 +648,8 @@ const CheckoutPage = () => {
                   className="w-full h-14 px-6 rounded-xl bg-surface border border-border outline-none focus:border-secondary transition-all font-semibold"
                 />
               </div>
-              <div className="space-y-2">
-                <label className="text-[11px] font-black uppercase tracking-[2px] text-muted ml-1">
+              <div className="space-y-1">
+                <label className="text-[11px] font-black uppercase tracking-[1px] text-muted ml-1">
                   State *
                 </label>
                 <input
@@ -660,8 +660,8 @@ const CheckoutPage = () => {
                   className="w-full h-14 px-6 rounded-xl bg-surface border border-border outline-none focus:border-secondary transition-all font-semibold"
                 />
               </div>
-              <div className="space-y-2">
-                <label className="text-[11px] font-black uppercase tracking-[2px] text-muted ml-1">
+              <div className="space-y-1">
+                <label className="text-[11px] font-black uppercase tracking-[1px] text-muted ml-1">
                   Zip Code *
                 </label>
                 <input
@@ -674,8 +674,8 @@ const CheckoutPage = () => {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-[11px] font-black uppercase tracking-[2px] text-muted ml-1">
+            <div className="space-y-1">
+              <label className="text-[11px] font-black uppercase tracking-[1px] text-muted ml-1">
                 Country *
               </label>
               <div className="relative">
