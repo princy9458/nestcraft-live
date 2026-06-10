@@ -435,7 +435,7 @@ const CategoryPage = () => {
                             </div>
                             <div className="flex justify-between items-center gap-2.5 flex-wrap font-black tracking-[1px] text-foreground/75">
                               <span className="text-black text-[13px] uppercase tracking-[2px]">
-                                {product.price}
+                                ₹{product.price}
                               </span>
                               {/* <span className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[2px] text-primary whitespace-nowrap">
                               <Star
