@@ -303,6 +303,44 @@
             "price": { "value": "₹4,999" },
             "image": { "value": "/images/product-blanket.jpg" }
           }
+        },
+        {
+          "id": "prod-4",
+          "type": "product",
+          "props": {
+            "title": { "value": { "en": "Luxury Velvet Sofa", "hi": "लक्ज़री मखमली सोफा" } },
+            "price": { "value": "₹45,999" },
+            "badge": { "value": "Trending" },
+            "image": { "value": "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=900" }
+          }
+        },
+        {
+          "id": "prod-5",
+          "type": "product",
+          "props": {
+            "title": { "value": { "en": "Modern Coffee Table", "hi": "आधुनिक कॉफी टेबल" } },
+            "price": { "value": "₹15,499" },
+            "image": { "value": "https://images.unsplash.com/photo-1532372576444-eea888bfa3d1?auto=format&fit=crop&q=80&w=900" }
+          }
+        },
+        {
+          "id": "prod-6",
+          "type": "product",
+          "props": {
+            "title": { "value": { "en": "Artisan Table Lamp", "hi": "आर्टिसन टेबल लैंप" } },
+            "price": { "value": "₹8,999" },
+            "image": { "value": "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&q=80&w=900" }
+          }
+        },
+        {
+          "id": "prod-7",
+          "type": "product",
+          "props": {
+            "title": { "value": { "en": "Nordic Dining Chair", "hi": "नॉर्डिक डाइनिंग कुर्सी" } },
+            "price": { "value": "₹10,499" },
+            "badge": { "value": "Featured" },
+            "image": { "value": "https://images.unsplash.com/photo-1503602642458-232111445657?auto=format&fit=crop&q=80&w=900" }
+          }
         }
       ]
     },
@@ -391,6 +429,15 @@
             "author": { "value": { "en": "Ananya Patel", "hi": "अनन्या पटेल" } },
             "role": { "value": { "en": "Homeowner, Bangalore", "hi": "गृहस्वामी, बैंगलोर" } }
           }
+        },
+        {
+          "id": "test-4",
+          "type": "testimonial",
+          "props": {
+            "quote": { "value": { "en": "The wood finish and build quality are absolutely premium. Worth every penny.", "hi": "लकड़ी की फिनिश और निर्माण गुणवत्ता बिल्कुल प्रीमियम हैं। हर पैसे के लायक।" } },
+            "author": { "value": { "en": "Vikram Singh", "hi": "विक्रम सिंह" } },
+            "role": { "value": { "en": "Architect, Pune", "hi": "वास्तुकार, पुणे" } }
+          }
         }
       ]
     },
@@ -433,6 +480,16 @@
             "description": { "value": { "en": "Interior Tips", "hi": "इंटीरियर टिप्स" } },
             "image": { "value": "/images/blog-small-space.jpg" },
             "link": { "value": "/blog/small-space-big-style" }
+          }
+        },
+        {
+          "id": "post-4",
+          "type": "article",
+          "props": {
+            "title": { "value": { "en": "How to Light Your Living Room", "hi": "अपने लिविंग रूम को कैसे रोशन करें" } },
+            "description": { "value": { "en": "Lighting Guide", "hi": "लाइटिंग गाइड" } },
+            "image": { "value": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&q=80&w=900" },
+            "link": { "value": "/blog/lighting-guide" }
           }
         }
       ]

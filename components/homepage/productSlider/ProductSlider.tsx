@@ -57,11 +57,15 @@ const ProductSlider = ({ section: propSection }: ProductSliderProps) => {
 
   const scroll = (dir: number) => {
     if (scrollRef.current) {
-      const { clientWidth } = scrollRef.current;
-      scrollRef.current.scrollBy({
-        left: dir * clientWidth,
-        behavior: "smooth",
-      });
+      const child = scrollRef.current.firstElementChild as HTMLElement;
+      if (child) {
+        const itemWidth = child.offsetWidth;
+        const gap = 24; // gap-6 is 24px
+        scrollRef.current.scrollBy({
+          left: dir * (itemWidth + gap),
+          behavior: "smooth",
+        });
+      }
     }
   };
 
