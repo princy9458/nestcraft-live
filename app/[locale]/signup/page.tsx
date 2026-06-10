@@ -8,6 +8,7 @@ import { signupThunk } from "@/lib/store/auth/authThunks";
 import { toast } from "sonner";
 import Link from "next/link";
 import { User, Mail, Lock, ArrowRight } from "lucide-react";
+import { useAppSelector } from "@/lib/store/hooks";
 
 export default function SignupPage() {
   const [firstName, setFirstName] = useState("");
@@ -17,6 +18,7 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
+  const {businessBlueprint} = useAppSelector(state=>state.businessBlueprint)
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,7 +31,8 @@ export default function SignupPage() {
           last_name: lastName,
           email,
           password,
-          tenant_slug: "nestcraft-living",
+          tenant_slug: businessBlueprint?.tenant_slug,
+          role:"customer"
         }),
       ).unwrap();
 

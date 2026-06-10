@@ -37,7 +37,7 @@ export const getUserThunk = createAsyncThunk(
   "auth/getUser",
   async (_, { rejectWithValue }) => {
     try {
-      const response: any = await fetch(`${API_BASE_URL}/auth/login`, {
+      const response: any = await fetch(`/api/auth/login`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -65,7 +65,7 @@ export const logoutThunk = createAsyncThunk(
   "auth/logout",
   async (_, { rejectWithValue }) => {
     try {
-      const response: any = await fetch(`${API_BASE_URL}/auth/logout`, {
+      const response: any = await fetch(`/api/auth/logout`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -90,7 +90,7 @@ export const signupThunk = createAsyncThunk(
   "auth/signup",
   async (userData: any, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/register`, {
+      const response = await fetch(`/api/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -128,7 +128,7 @@ export const updateProfileThunk = createAsyncThunk(
       const { auth } = getState() as any;
 
       const response = await fetch(
-        `${API_BASE_URL}/auth/update-profile`,
+        `/api/auth/update-profile`,
         {
           method: "PATCH",
           headers: {
@@ -146,7 +146,7 @@ export const updateProfileThunk = createAsyncThunk(
         return rejectWithValue(data.message || "Profile update failed");
       }
 
-      return data;
+      return data.user;
     } catch (error: any) {
       return rejectWithValue(error.message || "An unexpected error occurred");
     }

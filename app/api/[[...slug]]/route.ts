@@ -17,6 +17,10 @@ export async function DELETE(req: NextRequest, context: { params: Promise<{ slug
   return handleProxy(req, context);
 }
 
+export async function PATCH(req: NextRequest, context: { params: Promise<{ slug?: string[] }> }) {
+  return handleProxy(req, context);
+}
+
 async function handleProxy(req: NextRequest, context: { params: Promise<{ slug?: string[] }> }) {
   const { slug } = await context.params;
   

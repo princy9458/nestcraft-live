@@ -25,6 +25,7 @@ import {
   ShieldCheck,
   ClipboardList,
   ChevronRight,
+  LogOut,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
@@ -36,6 +37,10 @@ import { fetchMenusThunk } from "@/lib/store/menus/menusThunk";
 import { AppDispatch, RootState } from "@/lib/store/store";
 import { useDispatch } from "react-redux";
 import { wsCategories } from "./cms/menus/constMenus";
+import { toast } from "sonner";
+import { profile } from "console";
+import { logoutThunk } from "@/lib/store/auth/authThunks";
+import { Button } from "./ui/button";
 
 // --- Types ---
 export type MegaMenuLink = { title: string; href: string };
@@ -91,6 +96,20 @@ const Header = ({
 
   const dispatch = useDispatch<AppDispatch>();
   const { allMenus, isFetchedMenus } = useAppSelector((state) => state.menus);
+  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
+  const wishlistCount = (user! && user?.wishlist && user.wishlist.length) || 0;
+
+  const handleLogout = async () => {
+    try {
+      const data = await dispatch(logoutThunk()).unwrap();
+
+      if (data.success) {
+        router.push("/login"); // or "/"
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     if (!isFetchedMenus) {
@@ -103,7 +122,9 @@ const Header = ({
   const activeTab = displayMenus.find((tab) => tab.key === activeMegaTab);
 
   const [hasColumns, setHasColumns] = useState<boolean>(false);
-  const [expandedDrawerTab, setExpandedDrawerTab] = useState<string | null>(null);
+  const [expandedDrawerTab, setExpandedDrawerTab] = useState<string | null>(
+    null,
+  );
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
@@ -123,32 +144,41 @@ const Header = ({
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleClick = (tab: any) => {
-    console.log("tab--->", tab);
-    const href = tab?.promo?.href?.replace(/^\//, "") || "";
-    router.push(`/${href}`);
-    // setActiveMegaTab(null);
-  };
-  const isHome = pathname === '/' || pathname === '/en' || pathname === '/hi';
-  const isTransparent = isHome && !isScrolled && !activeMegaTab && !isMobileMenuOpen;
+  const isHome = pathname === "/" || pathname === "/en" || pathname === "/hi";
+  const isTransparent =
+    isHome && !isScrolled && !activeMegaTab && !isMobileMenuOpen;
 
-  const textColor = isTransparent ? 'text-white' : 'text-foreground';
-  const hoverColor = isTransparent ? 'hover:text-white/80' : 'hover:text-secondary';
+  const textColor = isTransparent ? "text-white" : "text-foreground";
+  const hoverColor = isTransparent
+    ? "hover:text-white/80"
+    : "hover:text-secondary";
 
-  const logoClass = isTransparent ? 'h-10 sm:h-14 w-auto object-contain ' : 'h-10 sm:h-14 w-auto object-contain';
+  const logoClass = isTransparent
+    ? "h-10 sm:h-14 w-auto object-contain "
+    : "h-10 sm:h-14 w-auto object-contain";
 
   const defaultLogo = "/assets/Image/nestcraft-logo.svg";
   const whiteLogo = "/assets/Image/nestcraft-logo.svg";
 
   let currentLogoSrc = normalizeLogoUrl(logoUrl) || defaultLogo;
+
   if (isTransparent && currentLogoSrc.includes("nestcraft-logo.svg")) {
     currentLogoSrc = whiteLogo;
   }
 
   return (
-    <div className={`w-full z-[1200] transition-all duration-300 ${isScrolled ? 'fixed top-0 left-0 animate-in slide-in-from-top-2' : (isTransparent ? 'absolute top-0 left-0' : 'relative')
-      }`}>
-      <header className={`w-full flex flex-col relative transition-colors duration-300 ${isTransparent ? 'bg-transparent border-transparent' : 'bg-background border-b border-border'}`}>
+    <div
+      className={`w-full z-[1200] transition-all duration-300 ${
+        isScrolled
+          ? "fixed top-0 left-0 animate-in slide-in-from-top-2"
+          : isTransparent
+            ? "absolute top-0 left-0"
+            : "relative"
+      }`}
+    >
+      <header
+        className={`w-full flex flex-col relative transition-colors duration-300 ${isTransparent ? "bg-transparent border-transparent" : "bg-background border-b border-border"}`}
+      >
         {/* TIER 1: Top Bar */}
         {/* <div className="hidden lg:flex items-center justify-between px-4 sm:px-[5%] xl:px-[8%] py-2 bg-surface/40 border-b border-border text-[12px] text-muted">
           <div className="flex items-center gap-6 font-medium">
@@ -212,7 +242,9 @@ const Header = ({
           </div>
         </div> */}
 
-        <div className={`grid grid-cols-3 items-center px-4 sm:px-[5%] xl:px-[8%] py-4 ${isTransparent ? 'bg-transparent' : 'bg-background'}`}>
+        <div
+          className={`grid grid-cols-3 items-center px-4 sm:px-[5%] xl:px-[8%] py-4 ${isTransparent ? "bg-transparent" : "bg-background"}`}
+        >
           {/* Left Column: Menu & Search */}
           <div className="flex items-center gap-6 justify-start">
             <button
@@ -220,14 +252,18 @@ const Header = ({
               className={`flex items-center gap-2 transition-colors ${textColor} ${hoverColor}`}
             >
               <Menu size={24} strokeWidth={1.5} />
-              <span className="text-[15px] font-medium hidden sm:block">Menu</span>
+              <span className="text-[15px] font-medium hidden sm:block">
+                Menu
+              </span>
             </button>
             <button
               onClick={onSearchOpen}
               className={`flex items-center gap-2 transition-colors ${textColor} ${hoverColor}`}
             >
               <Search size={20} strokeWidth={1.5} />
-              <span className="text-[15px] font-normal hidden sm:block">Search</span>
+              <span className="text-[15px] font-normal hidden sm:block">
+                Search
+              </span>
             </button>
           </div>
 
@@ -247,21 +283,64 @@ const Header = ({
 
           {/* Right Column: Icons */}
           <div className="flex items-center gap-6 justify-end">
-            <Link
-              href="/admin"
-              className={`flex items-center gap-2 transition-colors ${textColor} ${hoverColor}`}
-            >
-              <User size={20} strokeWidth={1.5} />
-              <span className="text-[15px] font-normal hidden lg:block">Login</span>
-            </Link>
+            {isAuthenticated ? (
+              <>
+                <Link
+                  href={
+                    isAuthenticated && user?.role != "customer"
+                      ? "/admin"
+                      : "/account"
+                  }
+                  className={`flex items-center gap-2 transition-colors ${textColor} ${hoverColor}`}
+                >
+                  <User size={20} strokeWidth={1.5} />
+                  <span className="text-[15px] font-normal hidden lg:block">
+                    Account
+                  </span>
+                </Link>
+                <Button
+                  // href={"/logout"}
+                  onClick={handleLogout}
+                  className={`flex items-center gap-2 transition-colors ${textColor} ${hoverColor}`}
+                >
+                  <LogOut size={20} strokeWidth={1.5} />
+                  <span className="text-[15px] font-normal hidden lg:block">
+                    Logout
+                  </span>
+                </Button>
+              </>
+            ) : (
+              <Link
+                href="/login"
+                className={`flex items-center gap-2 transition-colors ${textColor} ${hoverColor}`}
+              >
+                <User size={20} strokeWidth={1.5} />
+                <span className="text-[15px] font-normal hidden lg:block">
+                  Login
+                </span>
+              </Link>
+            )}
 
-            {/* <Link
-              href="/wishlist"
-              className={`flex items-center gap-2 transition-colors ${textColor} ${hoverColor}`}
-            >
-              <Heart size={20} strokeWidth={1.5} />
-              <span className="text-[13px] font-normal hidden lg:block">Wishlist</span>
-            </Link> */}
+            {isAuthenticated && (
+              <Link
+                href="/wishlist"
+                className={`flex items-center gap-2 transition-colors ${textColor} ${hoverColor}`}
+              >
+                <div className="relative">
+                  <Heart size={20} strokeWidth={1.5} />
+
+                  {wishlistCount > 0 && (
+                    <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-secondary text-[9px] font-bold text-white">
+                      {wishlistCount}
+                    </span>
+                  )}
+                </div>
+
+                <span className="text-[13px] font-normal hidden lg:block">
+                  Wishlist
+                </span>
+              </Link>
+            )}
 
             <Link
               href="/cart"
@@ -282,8 +361,6 @@ const Header = ({
           </div>
         </div>
       </header>
-
-
 
       {/* Menu Drawer */}
       <AnimatePresence>
@@ -321,7 +398,9 @@ const Header = ({
                 {displayMenus.map((tab) => {
                   const hasSubMenu = tab.columns && tab.columns.length > 0;
                   const isExpanded = expandedDrawerTab === tab.key;
-                  const categorySlug = tab.title ? tab.title.toLowerCase().replace(/\s+/g, '-') : tab.key.toLowerCase().replace(/\s+/g, '-');
+                  const categorySlug = tab.title
+                    ? tab.title.toLowerCase().replace(/\s+/g, "-")
+                    : tab.key.toLowerCase().replace(/\s+/g, "-");
 
                   return (
                     <div
@@ -341,16 +420,24 @@ const Header = ({
                         </Link>
                         {hasSubMenu && (
                           <button
-                            onClick={() => setExpandedDrawerTab(isExpanded ? null : tab.key)}
+                            onClick={() =>
+                              setExpandedDrawerTab(isExpanded ? null : tab.key)
+                            }
                             className="p-2 text-muted hover:text-foreground transition-colors lg:hidden"
                           >
-                            <ChevronRight size={20} className={`transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}`} />
+                            <ChevronRight
+                              size={20}
+                              className={`transition-transform duration-200 ${isExpanded ? "rotate-90" : ""}`}
+                            />
                           </button>
                         )}
                         {/* On Desktop, show a right arrow always if it has submenu, matching Swadesh */}
                         {hasSubMenu && (
                           <div className="hidden lg:flex p-2 text-muted">
-                            <ChevronRight size={20} className="transition-transform duration-200 group-hover:translate-x-1" />
+                            <ChevronRight
+                              size={20}
+                              className="transition-transform duration-200 group-hover:translate-x-1"
+                            />
                           </div>
                         )}
                       </div>
@@ -366,38 +453,55 @@ const Header = ({
                               className="overflow-hidden"
                             >
                               <div className="pt-4 pb-2 pl-4 space-y-6">
-                                {tab.columns?.map((col: any, colIdx: number) => (
-                                  <div key={colIdx} className="space-y-4">
-                                    {col.sections?.map((section: any, secIdx: number) => (
-                                      <div key={secIdx}>
-                                        <h4 className="text-[16px] font-sans font-medium text-foreground mb-3">{section.heading}</h4>
-                                        <ul className="space-y-2.5">
-                                          {section.links?.map((link: any, linkIdx: number) => {
-                                            const href = link.href === "#" ? `/category/${link.title.toLowerCase().replace(/\s+/g, '-')}` : link.href;
-                                            return (
-                                              <li key={linkIdx}>
-                                                <Link
-                                                  href={href}
-                                                  onClick={() => setIsMobileMenuOpen(false)}
-                                                  className="text-[16px] font-sans font-medium text-muted hover:text-secondary transition-colors block"
-                                                >
-                                                  {link.title}
-                                                </Link>
-                                              </li>
-                                            );
-                                          })}
-                                        </ul>
-                                      </div>
-                                    ))}
-                                  </div>
-                                ))}
+                                {tab.columns?.map(
+                                  (col: any, colIdx: number) => (
+                                    <div key={colIdx} className="space-y-4">
+                                      {col.sections?.map(
+                                        (section: any, secIdx: number) => (
+                                          <div key={secIdx}>
+                                            <h4 className="text-[16px] font-sans font-medium text-foreground mb-3">
+                                              {section.heading}
+                                            </h4>
+                                            <ul className="space-y-2.5">
+                                              {section.links?.map(
+                                                (
+                                                  link: any,
+                                                  linkIdx: number,
+                                                ) => {
+                                                  const href =
+                                                    link.href === "#"
+                                                      ? `/category/${link.title.toLowerCase().replace(/\s+/g, "-")}`
+                                                      : link.href;
+                                                  return (
+                                                    <li key={linkIdx}>
+                                                      <Link
+                                                        href={href}
+                                                        onClick={() =>
+                                                          setIsMobileMenuOpen(
+                                                            false,
+                                                          )
+                                                        }
+                                                        className="text-[16px] font-sans font-medium text-muted hover:text-secondary transition-colors block"
+                                                      >
+                                                        {link.title}
+                                                      </Link>
+                                                    </li>
+                                                  );
+                                                },
+                                              )}
+                                            </ul>
+                                          </div>
+                                        ),
+                                      )}
+                                    </div>
+                                  ),
+                                )}
                               </div>
                             </motion.div>
                           )}
                         </AnimatePresence>
                       </div>
                     </div>
-
                   );
                 })}
               </div>
@@ -416,10 +520,14 @@ const Header = ({
                     className="fixed left-[400px] top-0 z-[2000] h-full w-[450px] overflow-y-auto bg-surface px-10 py-12 shadow-2xl border-l border-border"
                   >
                     {(() => {
-                      const activeTab = displayMenus.find(t => t.key === expandedDrawerTab);
+                      const activeTab = displayMenus.find(
+                        (t) => t.key === expandedDrawerTab,
+                      );
                       if (!activeTab || !activeTab.columns) return null;
 
-                      const activeCategorySlug = activeTab.title ? activeTab.title.toLowerCase().replace(/\s+/g, '-') : activeTab.key.toLowerCase().replace(/\s+/g, '-');
+                      const activeCategorySlug = activeTab.title
+                        ? activeTab.title.toLowerCase().replace(/\s+/g, "-")
+                        : activeTab.key.toLowerCase().replace(/\s+/g, "-");
 
                       return (
                         <div className="space-y-10">
@@ -433,29 +541,40 @@ const Header = ({
 
                           {activeTab.columns.map((col: any, colIdx: number) => (
                             <div key={colIdx} className="space-y-8">
-                              {col.sections?.map((section: any, secIdx: number) => (
-                                <div key={secIdx}>
-                                  <h4 className="text-[16px] font-sans font-medium text-muted mb-4">{section.heading}</h4>
-                                  <ul className="space-y-3">
-                                    {section.links?.map((link: any, linkIdx: number) => {
-                                      // Optional: Format submenu links too, just in case backend has them as just text names without paths, 
-                                      // but assuming backend provides proper `link.href` for sub-links if needed, we'll keep `link.href` or fix it if it's '#'
-                                      const href = link.href === "#" ? `/category/${link.title.toLowerCase().replace(/\s+/g, '-')}` : link.href;
-                                      return (
-                                        <li key={linkIdx}>
-                                          <Link
-                                            href={href}
-                                            onClick={() => setIsMobileMenuOpen(false)}
-                                            className="text-[16px] font-sans font-medium text-foreground hover:text-secondary transition-colors block"
-                                          >
-                                            {link.title}
-                                          </Link>
-                                        </li>
-                                      );
-                                    })}
-                                  </ul>
-                                </div>
-                              ))}
+                              {col.sections?.map(
+                                (section: any, secIdx: number) => (
+                                  <div key={secIdx}>
+                                    <h4 className="text-[16px] font-sans font-medium text-muted mb-4">
+                                      {section.heading}
+                                    </h4>
+                                    <ul className="space-y-3">
+                                      {section.links?.map(
+                                        (link: any, linkIdx: number) => {
+                                          // Optional: Format submenu links too, just in case backend has them as just text names without paths,
+                                          // but assuming backend provides proper `link.href` for sub-links if needed, we'll keep `link.href` or fix it if it's '#'
+                                          const href =
+                                            link.href === "#"
+                                              ? `/category/${link.title.toLowerCase().replace(/\s+/g, "-")}`
+                                              : link.href;
+                                          return (
+                                            <li key={linkIdx}>
+                                              <Link
+                                                href={href}
+                                                onClick={() =>
+                                                  setIsMobileMenuOpen(false)
+                                                }
+                                                className="text-[16px] font-sans font-medium text-foreground hover:text-secondary transition-colors block"
+                                              >
+                                                {link.title}
+                                              </Link>
+                                            </li>
+                                          );
+                                        },
+                                      )}
+                                    </ul>
+                                  </div>
+                                ),
+                              )}
                             </div>
                           ))}
                         </div>
@@ -491,10 +610,10 @@ const SearchOverlay = ({
   const filteredProducts =
     query.length > 1
       ? products.filter(
-        (p) =>
-          p.title.toLowerCase().includes(query.toLowerCase()) ||
-          p.category.toLowerCase().includes(query.toLowerCase()),
-      )
+          (p) =>
+            p.title.toLowerCase().includes(query.toLowerCase()) ||
+            p.category.toLowerCase().includes(query.toLowerCase()),
+        )
       : [];
 
   const handleSelect = (id: number) => {
@@ -753,7 +872,7 @@ export default function SiteChrome({
 
   const primaryLogo = normalizeLogoUrl(
     brandConfig?.logos?.find((l: any) => l.id === "primary")?.url ||
-    brandConfig?.logos?.[0]?.url,
+      brandConfig?.logos?.[0]?.url,
   );
 
   const companyName = brandConfig?.companyInfo?.name || "NestCraft";
@@ -780,4 +899,3 @@ export default function SiteChrome({
     </div>
   );
 }
-

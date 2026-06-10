@@ -52,6 +52,7 @@ interface ProductsState {
   hasFetched: boolean;
   cmsFilters: any[];
   totalProducts: number;
+  loadingMore:boolean
 }
 
 const initialFormState: ProductFormState = {
@@ -88,6 +89,7 @@ const initialState: ProductsState = {
   hasFetched: false,
   cmsFilters: [],
   totalProducts: 0,
+  loadingMore: false
 };
 
 const productsSlice = createSlice({
@@ -231,20 +233,54 @@ const productsSlice = createSlice({
       .addCase(bulkImportProducts.rejected, (state, action) => {
         state.error = action.payload as string;
       })
-      .addCase(fetchProductsByCategory.pending, (state) => {
-        state.loading = true;
+      .addCase(fetchProductsByCategory.pending, (state, action) => {
+        if (action.meta.arg.append) {
+          // background batch fetch — do NOT trigger the full-page loader
+          state.loadingMore = true;
+        } else {
+          state.loading = true;
+        }
       })
       .addCase(fetchProductsByCategory.fulfilled, (state, action) => {
-        const newProducts = action.payload.data;
-        state.allProducts = newProducts;
+        const newProducts = action.payload.data ?? [];
+
+        if (action.meta.arg.append) {
+          // Append the next batch, de-duped by _id just in case the
+          // backend overlaps batches
+          const existingIds = new Set(state.allProducts.map((p) => p.id));
+          state.allProducts.push(
+            ...newProducts.filter((p: any) => !existingIds.has(p.id)),
+          );
+        } else {
+          // Fresh category / filters — replace the cache
+          state.allProducts = newProducts;
+        }
+
+        state.totalProducts =
+          action.payload.totalProducts ?? newProducts.length;
+        state.cmsFilters = action.payload.filters ?? state.cmsFilters;
         state.loading = false;
-        state.totalProducts = action.payload.totalProducts;
-        state.cmsFilters = action.payload.filters;
+        state.loadingMore = false;
       })
       .addCase(fetchProductsByCategory.rejected, (state, action) => {
         state.loading = false;
+        state.loadingMore = false;
         state.error = action.payload as string;
       });
+    // .addCase(fetchProductsByCategory.pending, (state) => {
+    //   state.loading = true;
+    // })
+    // .addCase(fetchProductsByCategory.fulfilled, (state, action) => {
+    //   const newProducts = action.payload.data;
+    //   state.allProducts = newProducts;
+    //   state.loading = false;
+    //   state.totalProducts = action.payload.totalProducts;
+    //   state.cmsFilters = action.payload.filters;
+    // })
+    // .addCase(fetchProductsByCategory.rejected, (state, action) => {
+    //   state.loading = false;
+    //   state.error = action.payload as string;
+    // });
   },
 });
 

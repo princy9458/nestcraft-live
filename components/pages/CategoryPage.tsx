@@ -25,8 +25,11 @@ import AccordionSection from "../category/accordionSection/AccordionSection";
 import Pagination from "../category/Pagination";
 import PageHead from "../category/pageHead/PageHead";
 import { CategoryRecord } from "@/lib/store/categories/categoriesSlices";
+import { generateBreadcrumbs } from "@/lib/utils";
+import { useAppDispatch } from "@/lib/store/hooks";
+import { updateProfileThunk } from "@/lib/store/auth/authThunks";
+import { toast } from "sonner";
 
-/* ─── Loading Skeleton ──────────────────────────────────── */
 const ProductCardSkeleton = () => (
   <div className="product-card animate-pulse">
     <div className="img-wrap bg-muted/20 aspect-square rounded-2xl mb-4"></div>
@@ -57,10 +60,13 @@ const CategoryPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
+  const dispatch = useAppDispatch();
+  const breadCrump = generateBreadcrumbs(pathname);
 
   const handleFilterChange = (key: string, value: string) => {
     const currentKey = `f_${key}`;
     const allparams = Object.fromEntries(searchParams.entries());
+    delete allparams.page;
     const params = allparams[currentKey];
     if (params) {
       const values = params.split(",");
@@ -92,11 +98,12 @@ const CategoryPage = () => {
     (state: RootState) => state.adminCategories,
   );
 
-  const { allProducts, loading, cmsFilters, totalProducts } = useSelector(
-    (state: RootState) => state.adminProducts,
-  );
+  const { allProducts, loading, cmsFilters, totalProducts, loadingMore } =
+    useSelector((state: RootState) => state.adminProducts);
 
-  const { user } = useSelector((state: RootState) => state.auth);
+  const { user, isAuthenticated } = useSelector(
+    (state: RootState) => state.auth,
+  );
 
   const currentCategory = useMemo(() => {
     if (!id) return null;
@@ -116,8 +123,17 @@ const CategoryPage = () => {
   }, [currentCategory, allProducts]);
 
   // Pagination calculations
-  const totalPages = Math.ceil(totalProducts / itemsPerPage);
-  const paginatedProducts = filteredProducts;
+  // const totalPages = Math.ceil(totalProducts / itemsPerPage);
+  const totalPages = Math.max(1, Math.ceil(totalProducts / itemsPerPage));
+  // const paginatedProducts = filteredProducts;
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
+
+  const missingCount = loadingMore
+    ? Math.min(itemsPerPage, Math.max(0, endIndex - filteredProducts.length))
+    : 0;
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -142,6 +158,39 @@ const CategoryPage = () => {
     setCurrentPage(1);
   };
 
+  const wishlistIds = isAuthenticated ? user?.wishlist! : [];
+
+  const handleWishlist = async (e: React.MouseEvent, product: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!user?.id) return;
+    let copiedList = structuredClone(wishlistIds);
+
+    const existingProduct = copiedList.find((prod) => prod.id === product.id);
+    if (existingProduct) {
+      copiedList = copiedList.filter((prod) => prod.id !== product.id);
+    } else {
+      copiedList.push(product);
+    }
+
+    const res = await dispatch(
+      updateProfileThunk({
+        userData: { wishlist: copiedList },
+      }),
+    );
+
+    if (res.payload.success) {
+      toast.success("Wishlist updated successfully");
+    } else {
+      toast.error("Failed to update wishlist");
+    }
+  };
+
+  useEffect(() => {
+    setCurrentPage(Number(searchParams.get("page")) || 1);
+  }, [searchParams]);
+
   if (categoryLoading || loading) {
     return <LoadingState />;
   }
@@ -157,13 +206,17 @@ const CategoryPage = () => {
         <div className="crumbs flex items-center gap-2">
           <Link href="/">Home</Link>{" "}
           <ChevronRight size={12} className="opacity-50" />
-          <Link href="/shop">Shop</Link>{" "}
-          <ChevronRight size={12} className="opacity-50" />
-          <strong className="text-foreground">
-            {currentCategory
-              ? currentCategory.title || currentCategory.name
-              : "All Products"}
-          </strong>
+          {breadCrump.length > 0 &&
+            breadCrump.map((d, index) => {
+              return (
+                <React.Fragment key={index}>
+                  <Link href={d.href}>{d.label}</Link>{" "}
+                  {index != breadCrump.length - 1 && (
+                    <ChevronRight size={12} className="opacity-50" />
+                  )}
+                </React.Fragment>
+              );
+            })}
         </div>
 
         {/* Header */}
@@ -328,61 +381,90 @@ const CategoryPage = () => {
               ) : (
                 <>
                   <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                    {paginatedProducts?.map((product) => (
-                      <div key={product._id} className="product-card group">
-                        {/* <div className="badge">{product.badge}</div> */}
-                        <Link
-                          href={`/product/${product.slug}`}
-                          className="img-wrap block"
-                        >
-                          <img
-                            src={product?.gallery?.[0]?.url || ""}
-                            alt={product?.gallery?.[0]?.alt || ""}
-                          />
-                        </Link>
-                        <div className="card-body">
-                          <div className="flex justify-between items-start mb-2.5">
-                            <Link
-                              href={`/product/${product.slug}`}
-                              className="font-heading text-[20px] font-black leading-[1.05] text-foreground/92 hover:text-secondary transition-colors"
-                            >
-                              {product.name}
-                            </Link>
-                            <div className="flex items-center gap-2">
-                              <button
-                                className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-white text-foreground opacity-0 shadow-lg transition-all duration-300 group-hover:opacity-100 hover:scale-110 hover:text-secondary shrink-0"
-                                title="Wishlist"
-                              >
-                                <Heart size={18} />
-                              </button>
+                    {paginatedProducts?.map((product) => {
+                      const isWishList = wishlistIds.some(
+                        (d) => d.id === product.id,
+                      );
 
-                              <button
-                                className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-white text-foreground opacity-0 shadow-lg transition-all duration-300 group-hover:opacity-100 hover:scale-110 hover:text-secondary shrink-0"
-                                title="Quick View"
+                      return (
+                        <div key={product.id} className="product-card group">
+                          {/* <div className="badge">{product.badge}</div> */}
+                          <Link
+                            href={`/product/${product.slug}`}
+                            className="img-wrap block"
+                          >
+                            <img
+                              src={product?.gallery?.[0]?.url || ""}
+                              alt={product?.gallery?.[0]?.alt || ""}
+                            />
+                          </Link>
+                          <div className="card-body">
+                            <div className="flex justify-between items-start mb-2.5">
+                              <Link
+                                href={`/product/${product.slug}`}
+                                className="font-heading text-[20px] font-black leading-[1.05] text-foreground/92 hover:text-secondary transition-colors"
                               >
-                                <Eye size={18} />
-                              </button>
+                                {product.name}
+                              </Link>
+                              <div className="flex items-center gap-2">
+                                <button
+                                  onClick={(e) => handleWishlist(e, product)}
+                                  className="flex h-10 w-10 items-center justify-center
+                                         rounded-full border border-border bg-white shadow-lg
+                                        opacity-0 transition-all duration-300 group-hover:opacity-100
+                                          hover:scale-110 shrink-0"
+                                  title="Wishlist"
+                                >
+                                  <Heart
+                                    size={18}
+                                    className={
+                                      isWishList
+                                        ? "text-red-500 fill-red-500"
+                                        : "text-foreground"
+                                    }
+                                  />
+                                </button>
+
+                                <button
+                                  className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-white text-foreground opacity-0 shadow-lg transition-all duration-300 group-hover:opacity-100 hover:scale-110 hover:text-secondary shrink-0"
+                                  title="Quick View"
+                                >
+                                  <Eye size={18} />
+                                </button>
+                              </div>
                             </div>
-                          </div>
-                          <div className="flex justify-between items-center gap-2.5 flex-wrap font-black tracking-[1px] text-foreground/75">
-                            <span className="text-black text-[13px] uppercase tracking-[2px]">
-                              {product.price}
-                            </span>
-                            {/* <span className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[2px] text-primary whitespace-nowrap">
+                            <div className="flex justify-between items-center gap-2.5 flex-wrap font-black tracking-[1px] text-foreground/75">
+                              <span className="text-black text-[13px] uppercase tracking-[2px]">
+                                {product.price}
+                              </span>
+                              {/* <span className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[2px] text-primary whitespace-nowrap">
                               <Star
                                 size={12}
                                 className="text-secondary fill-secondary"
                               />{" "}
                               {product.rating.toFixed(1)}
                             </span> */}
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      );
+                    })}
+                    {Array.from({ length: missingCount }).map((_, i) => (
+                      <ProductCardSkeleton key={`loading-${i}`} />
                     ))}
                   </div>
 
                   {/* Pagination */}
-                  {paginatedProducts.length > 0 && totalPages > 1 && (
+                  {/* {paginatedProducts.length > 0 && totalPages > 1 && (
+                    <Pagination
+                      currentPage={currentPage}
+                      totalPages={totalPages}
+                      onPageChange={handlePageChange}
+                      itemsPerPage={itemsPerPage}
+                      onItemsPerPageChange={handleItemsPerPageChange}
+                    />
+                  )} */}
+                  {totalPages > 1 && (
                     <Pagination
                       currentPage={currentPage}
                       totalPages={totalPages}
@@ -395,7 +477,7 @@ const CategoryPage = () => {
               )}
 
               {/* Empty State */}
-              {filteredProducts.length === 0 && !loading && (
+              {filteredProducts.length === 0 && !loading && !loadingMore && (
                 <div className="py-20 text-center">
                   <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-muted/10 mb-6">
                     <Search size={32} className="text-muted" />

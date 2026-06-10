@@ -26,22 +26,76 @@ export const fetchProducts = createAsyncThunk(
   },
 );
 
+// export const fetchProductsByCategory = createAsyncThunk(
+//   "products/fetchByCategory",
+//   async (
+//     {
+//       category,
+//       filters,
+//     }: {
+//       category: string;
+//       filters: any;
+//     },
+//     { rejectWithValue },
+//   ) => {
+//     try {
+//       const parmas = new URLSearchParams(filters);
+//       const response = await fetch(
+//         `/api/commerce/products?category=${category}&${parmas.toString()}`,
+//         {
+//           headers: {
+//             "x-tenant-db": tenantHeader || "",
+//             "Content-Type": "application/json",
+//           },
+//           credentials: "include",
+//         },
+//       );
+//       const data = await response.json();
+//       if (!response.ok)
+//         throw new Error(data.message || "Failed to fetch products");
+//       return data;
+//     } catch (error: any) {
+//       return rejectWithValue(error.message);
+//     }
+//   },
+// );
+
+// ─── productsThunk.ts — updated fetchProductsByCategory ───────────────
+// Replace your existing fetchProductsByCategory with this version.
+// New args: offset, limit, append. The `append` flag is read by the slice
+// via action.meta.arg to decide replace vs append.
+
+export const BATCH_SIZE = 50;
+
 export const fetchProductsByCategory = createAsyncThunk(
   "products/fetchByCategory",
   async (
     {
       category,
       filters,
+      offset = 0,
+      limit = BATCH_SIZE,
+      append = false, // eslint-disable-line @typescript-eslint/no-unused-vars
     }: {
       category: string;
-      filters: any;
+      filters: Record<string, string>;
+      offset?: number;
+      limit?: number;
+      append?: boolean;
     },
     { rejectWithValue },
   ) => {
     try {
-      const parmas = new URLSearchParams(filters);
+      // Strip pagination params — the API should NOT paginate per UI page,
+      // it should return a batch based on offset/limit.
+      const { page, perPage, ...realFilters } = filters;
+
+      const params = new URLSearchParams(realFilters);
+      params.set("page", String(offset / limit + 1)); 
+      params.set("perPage", String(limit));
+
       const response = await fetch(
-        `/api/commerce/products?category=${category}&${parmas.toString()}`,
+        `/api/commerce/products?category=${category}&${params.toString()}`,
         {
           headers: {
             "x-tenant-db": tenantHeader || "",
@@ -53,7 +107,7 @@ export const fetchProductsByCategory = createAsyncThunk(
       const data = await response.json();
       if (!response.ok)
         throw new Error(data.message || "Failed to fetch products");
-      return data;
+      return data; // expected: { data: [...], totalProducts, filters }
     } catch (error: any) {
       return rejectWithValue(error.message);
     }

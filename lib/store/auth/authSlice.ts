@@ -1,5 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getUserThunk, loginThunk, logoutThunk } from "./authThunks";
+import {
+  getUserThunk,
+  loginThunk,
+  logoutThunk,
+  updateProfileThunk,
+} from "./authThunks";
 import { ProductFormState } from "../products/productsSlices";
 
 export type Address = {
@@ -17,6 +22,10 @@ export type Address = {
   isDefault?: boolean;
   id?: string;
   email?: string;
+};
+
+export type AddInProfile = Address & {
+  label: string;
 };
 
 interface User {
@@ -120,6 +129,12 @@ const authSlice = createSlice({
       })
       .addCase(logoutThunk.rejected, (state, action) => {
         state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(updateProfileThunk.fulfilled, (state, action) => {
+        state.user = action.payload;
+      })
+      .addCase(updateProfileThunk.rejected, (state, action) => {
         state.error = action.payload as string;
       });
   },
