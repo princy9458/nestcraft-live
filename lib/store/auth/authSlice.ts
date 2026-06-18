@@ -38,7 +38,7 @@ interface User {
   _id?: string;
   addresses?: Address[];
   name?: string;
-  wishlist?: ProductFormState[];
+  wishlist?: string[];
   isTenantOwner?: boolean;
   createdAt?: string;
   updatedAt?: string;

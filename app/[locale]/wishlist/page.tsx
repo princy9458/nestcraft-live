@@ -9,6 +9,7 @@ import {
   ChevronRight,
   Search,
   ArrowLeft,
+  Loader2,
 } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "@/lib/store/store";
@@ -24,47 +25,51 @@ export default function WishlistPage() {
     (state: RootState) => state.auth,
   );
 
-  const [wishlistIds, setWishlistIds] = useState<ProductFormState[]>(
-    user?.wishlist || [],
-  );
+  const [wishlistProducts, setWishlistProducts] = useState<ProductFormState[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (!user?.wishlist?.length) {
-      setWishlistIds([]);
+      setWishlistProducts([]);
       return;
     }
 
     (async () => {
-      const responses = await Promise.all(
-        user.wishlist!.map((prod) =>
-          fetch(`/api/commerce/products/${prod.id}`, {
-            headers: {
-              "Content-Type": "application/json",
-              "x-tenant-db": process.env.NEXT_PUBLIC_TENANT_ID!,
-            },
-          }),
-        ),
-      );
+      setIsLoading(true);
+      try {
+        const responses = await Promise.all(
+          user.wishlist!.map((id) =>
+            fetch(`/api/commerce/products/${id}`, {
+              headers: {
+                "Content-Type": "application/json",
+                "x-tenant-db": process.env.NEXT_PUBLIC_TENANT_ID!,
+              },
+            }),
+          ),
+        );
 
-      const products = await Promise.all(responses.map((res) => res.json()));
-
-      setWishlistIds(products);
+        const products = await Promise.all(responses.map((res) => res.json()));
+        const validProducts = products.filter((p) => p && p.id);
+        setWishlistProducts(validProducts);
+      } catch (error) {
+        console.error("Failed to fetch wishlist products:", error);
+      } finally {
+        setIsLoading(false);
+      }
     })();
   }, [user?.wishlist]);
 
   const handleRemove = async (product: ProductFormState) => {
-    if (!user?.id) return;
+    if (!user?.id || !user?.wishlist || !product.id) return;
 
-    let copiedList = structuredClone(wishlistIds);
-    const existingProduct = copiedList.find((prod) => prod.id === product.id);
-    if (existingProduct) {
-      copiedList = copiedList.filter((prod) => prod.id !== product.id);
-    }
+    const updatedWishlist = user.wishlist.filter((id) => id !== product.id);
     try {
+      setWishlistProducts((prev) => prev.filter((p) => p.id !== product.id));
+
       const res = await dispatch(
         updateProfileThunk({
           userData: {
-            wishlist: copiedList,
+            wishlist: updatedWishlist,
           },
         }),
       ).unwrap();
@@ -105,6 +110,19 @@ export default function WishlistPage() {
     );
   }
 
+  if (isLoading) {
+    return (
+      <div className="mx-auto px-[5%] pb-20 pt-[50px]">
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="text-center space-y-4">
+            <Loader2 className="w-12 h-12 animate-spin text-secondary mx-auto" />
+            <p className="text-muted font-bold text-sm">Loading wishlist...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="pb-24 pt-12 px-[5%] max-w-7xl mx-auto">
       {/* BREADCRUMBS */}
@@ -131,10 +149,10 @@ export default function WishlistPage() {
         <div className="flex items-center gap-4">
           <div className="bg-surface border border-border px-5 py-2.5 rounded-full flex items-center gap-2">
             <span className="text-secondary font-black">
-              {wishlistIds.length}
+              {wishlistProducts.length}
             </span>
             <span className="text-muted text-[11px] font-black uppercase tracking-wider">
-              {wishlistIds.length === 1 ? "Item Saved" : "Items Saved"}
+              {wishlistProducts.length === 1 ? "Item Saved" : "Items Saved"}
             </span>
           </div>
           <Link
@@ -146,10 +164,10 @@ export default function WishlistPage() {
         </div>
       </div>
 
-      {wishlistIds.length > 0 ? (
+      {wishlistProducts.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           <AnimatePresence mode="popLayout">
-            {wishlistIds.map((product) => (
+            {wishlistProducts.map((product) => (
               <motion.article
                 key={product.id}
                 layout

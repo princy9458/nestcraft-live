@@ -158,20 +158,25 @@ const CategoryPage = () => {
     setCurrentPage(1);
   };
 
-  const wishlistIds = isAuthenticated ? user?.wishlist! : [];
+  const wishlistIds: string[] =
+    isAuthenticated && user?.wishlist ? user.wishlist : [];
+
+  console.log(user);
 
   const handleWishlist = async (e: React.MouseEvent, product: any) => {
     e.preventDefault();
     e.stopPropagation();
 
-    if (!user?.id) return;
-    let copiedList = structuredClone(wishlistIds);
+    if (!user?.id || !product.id) {
+      return;
+    }
+    let copiedList = [...wishlistIds];
 
-    const existingProduct = copiedList.find((prod) => prod.id === product.id);
-    if (existingProduct) {
-      copiedList = copiedList.filter((prod) => prod.id !== product.id);
+    const exists = copiedList.includes(product.id);
+    if (exists) {
+      copiedList = copiedList.filter((id) => id !== product.id);
     } else {
-      copiedList.push(product);
+      copiedList.push(product.id);
     }
 
     const res = await dispatch(
@@ -382,9 +387,9 @@ const CategoryPage = () => {
                 <>
                   <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                     {paginatedProducts?.map((product) => {
-                      const isWishList = wishlistIds.some(
-                        (d) => d.id === product.id,
-                      );
+                      const isWishList = product.id
+                        ? wishlistIds.includes(product.id)
+                        : false;
 
                       return (
                         <div key={product.id} className="product-card group">
@@ -394,8 +399,15 @@ const CategoryPage = () => {
                             className="img-wrap block"
                           >
                             <img
-                              src={product?.gallery?.[0]?.url || "/assets/Image/Sofa.jpg"}
-                              alt={product?.gallery?.[0]?.alt || product?.name || ""}
+                              src={
+                                product?.gallery?.[0]?.url ||
+                                "/assets/Image/Sofa.jpg"
+                              }
+                              alt={
+                                product?.gallery?.[0]?.alt ||
+                                product?.name ||
+                                ""
+                              }
                             />
                           </Link>
                           <div className="card-body">
