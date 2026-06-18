@@ -26,6 +26,7 @@ import {
   ClipboardList,
   ChevronRight,
   LogOut,
+  Package,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
@@ -317,6 +318,20 @@ const Header = ({
                 <User size={20} strokeWidth={1.5} />
                 <span className="text-[15px] font-normal hidden lg:block">
                   Login
+                </span>
+              </Link>
+            )}
+
+            {isAuthenticated && (
+              <Link
+                href="/orders"
+                className={`flex items-center gap-2 transition-colors ${textColor} ${hoverColor}`}
+              >
+                <div className="relative">
+                  <Package size={20} strokeWidth={1.5} />
+                </div>
+                <span className="text-[13px] font-normal hidden lg:block">
+                  Orders
                 </span>
               </Link>
             )}

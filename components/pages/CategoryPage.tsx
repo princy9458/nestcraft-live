@@ -394,8 +394,8 @@ const CategoryPage = () => {
                             className="img-wrap block"
                           >
                             <img
-                              src={product?.gallery?.[0]?.url || ""}
-                              alt={product?.gallery?.[0]?.alt || ""}
+                              src={product?.gallery?.[0]?.url || "/assets/Image/Sofa.jpg"}
+                              alt={product?.gallery?.[0]?.alt || product?.name || ""}
                             />
                           </Link>
                           <div className="card-body">

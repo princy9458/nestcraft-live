@@ -192,8 +192,14 @@ const CheckoutPage = () => {
 
   const getItemImage = (item: any) => {
     if (item.selectedVariant?.image) return item.selectedVariant.image;
+    if (item.selectedVariant?.imageId && item.gallery) {
+      const vImg = item.gallery.find((d: any) => d.id === item.selectedVariant.imageId);
+      if (vImg?.url) return vImg.url;
+    }
+    const primaryImg = item.gallery?.find((d: any) => d.id === item.primaryImageId);
+    if (primaryImg?.url) return primaryImg.url;
     if (item.gallery && item.gallery.length > 0) return item.gallery[0].url;
-    return "/placeholder-product.png";
+    return "/assets/Image/Sofa.jpg";
   };
 
   const buildOrderPayload = (isCOD: boolean) => ({
