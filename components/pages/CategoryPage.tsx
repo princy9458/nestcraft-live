@@ -86,7 +86,9 @@ const CategoryPage = () => {
     }
   };
 
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(
+    searchParams.get("search") || "",
+  );
   const [currentPage, setCurrentPage] = useState(
     Number(searchParams.get("page")) || 1,
   );
@@ -98,16 +100,208 @@ const CategoryPage = () => {
     (state: RootState) => state.adminCategories,
   );
 
-  const { allProducts, loading, cmsFilters, totalProducts, loadingMore } =
-    useSelector((state: RootState) => state.adminProducts);
+  const {
+    allProducts,
+    loading,
+    cmsFilters,
+    totalProducts,
+    loadingMore,
+    hasFetched,
+  } = useSelector((state: RootState) => state.adminProducts);
 
   const { user, isAuthenticated } = useSelector(
     (state: RootState) => state.auth,
   );
 
+  const [expandedCategories, setExpandedCategories] = useState<
+    Record<string, boolean>
+  >({});
+
+  const getCatIdStr = (cat: any) => {
+    if (!cat) return "";
+    if (typeof cat === "string") return cat;
+    return cat.id || cat._id || "";
+  };
+
+  const getParentIdStr = (cat: any) => {
+    if (!cat || !cat.parentId) return null;
+    if (typeof cat.parentId === "string") return cat.parentId;
+    return cat.parentId.id || cat.parentId._id || cat.parentId || null;
+  };
+
+  const toggleExpand = (catId: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setExpandedCategories((prev) => ({
+      ...prev,
+      [catId]: !prev[catId],
+    }));
+  };
+
+  // Trace up the tree to expand parent categories of the currently active category
+  useEffect(() => {
+    if (!id || allCategories.length === 0) return;
+
+    const activeCat = allCategories.find((c: any) => c.slug === id);
+    if (!activeCat) return;
+
+    const newExpanded = { ...expandedCategories };
+    let current = activeCat;
+
+    while (current) {
+      const pid = getParentIdStr(current);
+      if (!pid) break;
+
+      const parent = allCategories.find((c: any) => getCatIdStr(c) === pid);
+      if (parent) {
+        newExpanded[pid] = true;
+        current = parent;
+      } else {
+        break;
+      }
+    }
+
+    setExpandedCategories(newExpanded);
+  }, [id, allCategories]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Infinite recursive renderer for category trees utilizing AccordionSection
+  const renderCategoryTree = (
+    categories: any[],
+    parentId: string | null = null,
+    depth: number = 0,
+  ) => {
+    const levelCats = categories.filter((c: any) => {
+      const pid = getParentIdStr(c);
+      if (parentId === null) {
+        return pid == null;
+      }
+      return pid === parentId;
+    });
+
+    if (levelCats.length === 0) return null;
+
+    // Outer level categories
+    if (depth === 0) {
+      return (
+        <div className="border-t border-border/70 -mx-4 mt-2.5">
+          {levelCats.map((cat: any) => {
+            const catIdVal = getCatIdStr(cat);
+            const hasChildren = categories.some(
+              (c: any) => getParentIdStr(c) === catIdVal,
+            );
+            const isActive = id === cat.slug;
+            const fontClass = "text-xs font-bold uppercase tracking-[1.5px]";
+
+            const titleNode = (
+              <Link
+                href={`/category/${cat.slug}`}
+                onClick={(e) => e.stopPropagation()}
+                className={`hover:text-secondary transition-colors ${fontClass} ${
+                  isActive ? "text-secondary font-black" : "text-foreground/80"
+                }`}
+              >
+                {cat.title ? cat.title : cat.name}
+              </Link>
+            );
+
+            if (hasChildren) {
+              const isExpanded = !!expandedCategories[catIdVal];
+              return (
+                <AccordionSection
+                  key={catIdVal}
+                  title={titleNode as any}
+                  isLast={false}
+                  initialOpen={isExpanded}
+                >
+                  <div className="pl-2.5 py-1">
+                    {renderCategoryTree(categories, catIdVal, depth + 1)}
+                  </div>
+                </AccordionSection>
+              );
+            }
+
+            return (
+              <div
+                key={catIdVal}
+                className="px-4 py-3.5 border-b border-border/70"
+              >
+                <Link
+                  href={`/category/${cat.slug}`}
+                  className={`hover:text-secondary transition-colors ${fontClass} ${
+                    isActive ? "text-secondary font-black" : "text-foreground/80"
+                  }`}
+                >
+                  {cat.title ? cat.title : cat.name}
+                </Link>
+              </div>
+            );
+          })}
+        </div>
+      );
+    }
+
+    // Nested child categories (recursive depth > 0)
+    return (
+      <div className="space-y-2 border-l border-border/40 pl-3.5 ml-1 my-1.5">
+        {levelCats.map((cat: any) => {
+          const catIdVal = getCatIdStr(cat);
+          const hasChildren = categories.some(
+            (c: any) => getParentIdStr(c) === catIdVal,
+          );
+          const isActive = id === cat.slug;
+
+          const fontClass =
+            depth === 1 ? "text-xs font-bold" : "text-[11px] font-semibold";
+
+          const titleNode = (
+            <Link
+              href={`/category/${cat.slug}`}
+              onClick={(e) => e.stopPropagation()}
+              className={`hover:text-secondary transition-colors ${fontClass} ${
+                isActive ? "text-secondary font-black" : "text-muted"
+              }`}
+            >
+              {cat.title ? cat.title : cat.name}
+            </Link>
+          );
+
+          if (hasChildren) {
+            const isExpanded = !!expandedCategories[catIdVal];
+            return (
+              <div key={catIdVal} className="space-y-1">
+                <AccordionSection
+                  title={titleNode as any}
+                  isLast={true}
+                  initialOpen={isExpanded}
+                >
+                  <div className="pl-1">
+                    {renderCategoryTree(categories, catIdVal, depth + 1)}
+                  </div>
+                </AccordionSection>
+              </div>
+            );
+          }
+
+          return (
+            <div key={catIdVal} className="py-0.5">
+              <Link
+                href={`/category/${cat.slug}`}
+                className={`hover:text-secondary transition-colors ${fontClass} ${
+                  isActive ? "text-secondary font-black" : "text-muted"
+                }`}
+              >
+                {cat.title ? cat.title : cat.name}
+              </Link>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
   const currentCategory = useMemo(() => {
     if (!id) return null;
-    return allCategories.find((c: any) => c._id === id);
+    return allCategories.find((c: any) => c.slug === id);
   }, [id, allCategories]);
 
   const filteredProducts = useMemo(() => {
@@ -154,14 +348,21 @@ const CategoryPage = () => {
 
   // Reset to page 1 when search changes
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
+    const value = e.target.value;
+    setSearchQuery(value);
     setCurrentPage(1);
+    const params = new URLSearchParams(searchParams.toString());
+    if (value) {
+      params.set("search", value);
+    } else {
+      params.delete("search");
+    }
+    params.set("page", "1");
+    router.push(`?${params.toString()}`);
   };
 
   const wishlistIds: string[] =
     isAuthenticated && user?.wishlist ? user.wishlist : [];
-
-  console.log(user);
 
   const handleWishlist = async (e: React.MouseEvent, product: any) => {
     e.preventDefault();
@@ -194,9 +395,10 @@ const CategoryPage = () => {
 
   useEffect(() => {
     setCurrentPage(Number(searchParams.get("page")) || 1);
+    setSearchQuery(searchParams.get("search") || "");
   }, [searchParams]);
 
-  if (categoryLoading || loading) {
+  if (categoryLoading) {
     return <LoadingState />;
   }
 
@@ -235,6 +437,7 @@ const CategoryPage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-8 items-start">
             {/* LEFT FILTERS */}
             <aside className="lg:sticky lg:top-[128px] space-y-6">
+              {/* Container 1: Category & Rating Filters */}
               <div className="border border-border bg-surface rounded-[20px] overflow-hidden shadow-sm">
                 {/* Filter header */}
                 <div className="p-4 border-b border-border flex justify-between items-center">
@@ -252,75 +455,36 @@ const CategoryPage = () => {
                 </div>
 
                 {/* ── Category filter ── */}
-                <AccordionSection adminTitle="Category" title="Category">
+                <AccordionSection 
+                  adminTitle="Category" 
+                  title="Category" 
+                  initialOpen={true} 
+                  isPrimary={true}
+                  colorVariant="category"
+                  isLast={false}
+                >
                   <div className="space-y-2.5">
                     <Link
-                      href="/category/all"
+                      href="/shop"
                       className={`flex justify-between items-center text-sm font-bold hover:text-secondary transition-colors ${
-                        !id ? "text-secondary" : "text-muted"
+                        !id || id === "all" ? "text-secondary" : "text-muted"
                       }`}
                     >
                       All Products
                     </Link>
-                    {allCategories
-                      .filter((cat: any) => cat.parentId == null)
-                      .map((cat: any) => (
-                        <Link
-                          key={cat.id}
-                          href={`/category/${cat.slug}`}
-                          className={`flex justify-between items-center text-sm font-bold hover:text-secondary transition-colors ${
-                            id === cat.id ? "text-secondary" : "text-muted"
-                          }`}
-                        >
-                          {cat.title ? cat.title : cat.name}
-                        </Link>
-                      ))}
+                    {allCategories.length > 0 &&
+                      renderCategoryTree(allCategories)}
                   </div>
                 </AccordionSection>
-
-                {/* ── Dynamic CMS attribute filters ── */}
-                {cmsFilters?.map((filter: any) => {
-                  const key = `f_${filter.key}`;
-                  const values = searchParams.get(key);
-
-                  const arrayofValues = values
-                    ? values.split(",").map((d) => d.toLowerCase())
-                    : [];
-                  return (
-                    <AccordionSection
-                      key={filter._id || filter.key}
-                      adminTitle={filter.label}
-                      title={filter.label}
-                    >
-                      <div className="space-y-2.5">
-                        {filter.selectedValues?.map((value: string) => (
-                          <label
-                            key={value}
-                            className="flex items-center gap-2.5 text-sm font-bold text-foreground/80 cursor-pointer group"
-                          >
-                            <input
-                              type="checkbox"
-                              checked={arrayofValues.includes(
-                                value.toLowerCase(),
-                              )}
-                              onChange={() =>
-                                handleFilterChange(filter.key, value)
-                              }
-                              className="w-4 h-4 accent-secondary"
-                            />
-                            {value}
-                          </label>
-                        ))}
-                      </div>
-                    </AccordionSection>
-                  );
-                })}
 
                 {/* ── Rating filter ── */}
                 <AccordionSection
                   adminTitle="Rating"
                   title="Rating"
                   isLast={true}
+                  initialOpen={true}
+                  isPrimary={true}
+                  colorVariant="rating"
                 >
                   <div className="space-y-2.5">
                     {[4, 3, 2, 1].map((rating) => (
@@ -335,7 +499,7 @@ const CategoryPage = () => {
                         <span className="flex items-center gap-1">
                           <Star
                             size={11}
-                            className="text-secondary fill-secondary"
+                            className="text-amber-500 fill-amber-500"
                           />
                           {rating}+
                         </span>
@@ -344,6 +508,63 @@ const CategoryPage = () => {
                   </div>
                 </AccordionSection>
               </div>
+
+              {/* Container 2: Product Filters (CMS Attribute Filters) */}
+              {cmsFilters && cmsFilters.length > 0 && (
+                <div className="border border-border bg-surface rounded-[20px] overflow-hidden shadow-sm">
+                  {/* Product Filters header */}
+                  <div className="p-4 border-b border-border flex justify-between items-center">
+                    <div className="flex items-center gap-2">
+                      <Filter size={18} className="text-foreground/60" />
+                      <h3 className="text-[22px] font-black leading-none">
+                        Product Filters
+                      </h3>
+                    </div>
+                  </div>
+
+                  {/* ── Dynamic CMS attribute filters ── */}
+                  {cmsFilters.map((filter: any, index: number) => {
+                    const key = `f_${filter.key}`;
+                    const values = searchParams.get(key);
+
+                    const arrayofValues = values
+                      ? values.split(",").map((d) => d.toLowerCase())
+                      : [];
+                    
+                    const isLastCms = index === cmsFilters.length - 1;
+
+                    return (
+                      <AccordionSection
+                        key={filter._id || filter.key}
+                        adminTitle={filter.label}
+                        title={filter.label}
+                        isLast={isLastCms}
+                      >
+                        <div className="space-y-2.5">
+                          {filter.selectedValues?.map((value: string) => (
+                            <label
+                              key={value}
+                              className="flex items-center gap-2.5 text-sm font-bold text-foreground/80 cursor-pointer group"
+                            >
+                              <input
+                                type="checkbox"
+                                checked={arrayofValues.includes(
+                                  value.toLowerCase(),
+                                )}
+                                onChange={() =>
+                                  handleFilterChange(filter.key, value)
+                                }
+                                className="w-4 h-4 accent-secondary"
+                              />
+                              {value}
+                            </label>
+                          ))}
+                        </div>
+                      </AccordionSection>
+                    );
+                  })}
+                </div>
+              )}
             </aside>
 
             {/* RIGHT GRID */}
@@ -377,7 +598,7 @@ const CategoryPage = () => {
               </div>
 
               {/* Products Grid */}
-              {loading ? (
+              {loading || !hasFetched ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                   {Array.from({ length: itemsPerPage }).map((_, i) => (
                     <ProductCardSkeleton key={i} />
@@ -489,23 +710,36 @@ const CategoryPage = () => {
               )}
 
               {/* Empty State */}
-              {filteredProducts.length === 0 && !loading && !loadingMore && (
-                <div className="py-20 text-center">
-                  <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-muted/10 mb-6">
-                    <Search size={32} className="text-muted" />
+              {filteredProducts.length === 0 &&
+                !loading &&
+                !loadingMore &&
+                hasFetched && (
+                  <div className="py-20 text-center">
+                    <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-muted/10 mb-6">
+                      <Search size={32} className="text-muted" />
+                    </div>
+                    <h3 className="text-2xl font-bold mb-2">
+                      No products found
+                    </h3>
+                    <p className="text-muted font-semibold mb-8">
+                      We couldn&apos;t find any products matching your search.
+                    </p>
+                    <button
+                      onClick={() => {
+                        setSearchQuery("");
+                        const params = new URLSearchParams(
+                          searchParams.toString(),
+                        );
+                        params.delete("search");
+                        params.set("page", "1");
+                        router.push(`?${params.toString()}`);
+                      }}
+                      className="text-secondary font-black text-xs uppercase tracking-[2px] border-b border-secondary pb-1"
+                    >
+                      Clear Search
+                    </button>
                   </div>
-                  <h3 className="text-2xl font-bold mb-2">No products found</h3>
-                  <p className="text-muted font-semibold mb-8">
-                    We couldn&apos;t find any products matching your search.
-                  </p>
-                  <button
-                    onClick={() => setSearchQuery("")}
-                    className="text-secondary font-black text-xs uppercase tracking-[2px] border-b border-secondary pb-1"
-                  >
-                    Clear Search
-                  </button>
-                </div>
-              )}
+                )}
             </div>
           </div>
         </section>
