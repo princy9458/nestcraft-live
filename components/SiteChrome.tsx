@@ -346,29 +346,49 @@ const Header = ({
             {isAuthenticated ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className={`flex items-center gap-2 transition-colors cursor-pointer outline-none ${textColor} ${hoverColor}`}>
+                  <button
+                    className={`flex items-center gap-2 transition-colors cursor-pointer outline-none ${textColor} ${hoverColor}`}
+                  >
                     <User size={20} strokeWidth={1.5} />
                     <span className="text-[15px] font-normal hidden lg:block">
                       Account
                     </span>
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48 bg-surface border border-border p-2 rounded-[14px] shadow-lg mt-2 z-[1300] outline-none">
-                  <DropdownMenuItem asChild className="cursor-pointer focus:bg-secondary/10 focus:text-secondary hover:bg-secondary/10 hover:text-secondary transition-all rounded-lg p-2">
+                <DropdownMenuContent
+                  align="end"
+                  className="w-48 bg-surface border border-border p-2 rounded-[14px] shadow-lg mt-2 z-[1300] outline-none"
+                >
+                  <DropdownMenuItem
+                    asChild
+                    className="cursor-pointer focus:bg-secondary/10 focus:text-secondary hover:bg-secondary/10 hover:text-secondary transition-all rounded-lg p-2"
+                  >
                     <Link
-                      href={user?.role !== "customer" ? "/admin" : "/account"}
+                      // href={user?.role !== "customer" ? "/admin" : "/account"}
+                      href="/account"
                       className="flex items-center gap-2.5 px-2 py-1.5 text-sm font-semibold text-foreground/80"
                     >
-                      <User size={16} strokeWidth={1.5} className="text-secondary" />
+                      <User
+                        size={16}
+                        strokeWidth={1.5}
+                        className="text-secondary"
+                      />
                       Account Info
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild className="cursor-pointer focus:bg-secondary/10 focus:text-secondary hover:bg-secondary/10 hover:text-secondary transition-all rounded-lg p-2">
+                  <DropdownMenuItem
+                    asChild
+                    className="cursor-pointer focus:bg-secondary/10 focus:text-secondary hover:bg-secondary/10 hover:text-secondary transition-all rounded-lg p-2"
+                  >
                     <Link
                       href="/orders"
                       className="flex items-center gap-2.5 px-2 py-1.5 text-sm font-semibold text-foreground/80"
                     >
-                      <Package size={16} strokeWidth={1.5} className="text-secondary" />
+                      <Package
+                        size={16}
+                        strokeWidth={1.5}
+                        className="text-secondary"
+                      />
                       My Orders
                     </Link>
                   </DropdownMenuItem>
